@@ -23,8 +23,21 @@ import java.util.logging.Level;
 public class JADEService extends Service {
     private Logger logger;
     private MicroRuntimeServiceBinder microRuntimeServiceBinder;
-    private ServiceConnection serviceConnection;
     private boolean gatewayReady, containerReady;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            microRuntimeServiceBinder = (MicroRuntimeServiceBinder) service;
+            info("Gateway successfully bound to MicroRuntimeService");
+            gatewayReady = true;
+            startContainer();
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            microRuntimeServiceBinder = null;
+            info("Gateway unbound from MicroRuntimeService");
+        }
+    };
 
     @Override
     public void onCreate() {
@@ -45,19 +58,6 @@ public class JADEService extends Service {
     }
 
     private void bindMicroRuntimeService() {
-        serviceConnection = new ServiceConnection() {
-            public void onServiceConnected(ComponentName className, IBinder service) {
-                microRuntimeServiceBinder = (MicroRuntimeServiceBinder) service;
-                info("Gateway successfully bound to MicroRuntimeService");
-                gatewayReady = true;
-                startContainer();
-            }
-
-            public void onServiceDisconnected(ComponentName className) {
-                microRuntimeServiceBinder = null;
-                info("Gateway unbound from MicroRuntimeService");
-            }
-        };
         logger.log(Level.INFO, "Binding Gateway to MicroRuntimeService...");
         Intent intent = new Intent(getApplicationContext(), MicroRuntimeService.class);
         bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);

@@ -7,9 +7,10 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
+import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.jade.AgentManager;
+import edu.fudan.se.crowdservice.jade.DaemonAgent;
 import edu.fudan.se.crowdservice.jade.JADEService;
-import edu.fudan.se.crowdservice.jade.TemplateExecutingAgent;
 import jade.android.RuntimeCallback;
 import jade.util.Logger;
 import jade.wrapper.AgentController;
@@ -18,37 +19,50 @@ import jade.wrapper.StaleProxyException;
 import java.util.logging.Level;
 
 public class MainActivity extends Activity {
-    private AgentManager manager;
-    private ServiceConnection connection = new ServiceConnection() {
+    private AgentManager agent;
+    private AgentController agentController;
+    private ServiceConnection jadeConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            manager = (AgentManager) iBinder;
+            agent = (AgentManager) iBinder;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            manager = null;
+            agent = null;
         }
     };
-    private AgentController agentController;
+    private ServiceConnection felixConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        bindService(new Intent(getApplicationContext(), JADEService.class), connection, BIND_AUTO_CREATE);
+        bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
+        bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onDestroy() {
-        unbindService(connection);
+        unbindService(felixConnection);
+        unbindService(jadeConnection);
         super.onDestroy();
     }
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
 
     public void createAgent(final View v) {
-        manager.startAgent("echo-agent", TemplateExecutingAgent.class.getName(), new RuntimeCallback<AgentController>() {
+        agent.startAgent("echo-agent", DaemonAgent.class.getName(), new RuntimeCallback<AgentController>() {
             @Override
             public void onSuccess(AgentController agentController) {
                 MainActivity.this.agentController = agentController;
