@@ -1,0 +1,8 @@
+Manifest-Version: 1.0  
+Bundle-ManifestVersion: 2  
+Bundle-Name: Divide Service Implementation
+Bundle-SymbolicName: service.interfaces.DivideServiceImpl
+Bundle-Version: 1.0.0  
+Import-Package: org.osgi.framework, service.interfaces
+Export-Package: service.interfaces
+Export-Service: service.interfaces.DivideServiceImpl

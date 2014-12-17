@@ -1,0 +1,6 @@
+Manifest-Version: 1.0  
+Bundle-ManifestVersion: 2  
+Bundle-Name: Add Service
+Bundle-SymbolicName: service.interfaces.DivideService 
+Bundle-Version: 1.0.0
+Export-Package: service.interfaces

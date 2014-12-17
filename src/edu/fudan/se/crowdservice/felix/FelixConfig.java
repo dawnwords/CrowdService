@@ -153,7 +153,6 @@ public class FelixConfig extends Properties {
                     // Android OS Version?? ->her ends semicolon as seperator -> Why?
                     "version=1.5.0.r3," +
                     // MY OWN
-                    // TODO add template develop kit
-                    "edu.fudan.se.asof.engine"
+                    "edu.fudan.se.crowdservice.core"
     ).intern();
 }
