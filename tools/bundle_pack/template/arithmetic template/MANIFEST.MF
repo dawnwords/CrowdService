@@ -3,6 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Arithmetic Template
 Bundle-SymbolicName: service.template.ArithmeticTemplate 
 Bundle-Version: 1.0.0  
-Import-Package: service.interfaces, jade.util, jade.util.logging, edu.fudan.se.crowdservice.core
-Export-Package: edu.fudan.se.crowdservice.core
+Import-Package: jade.util, jade.util.logging, edu.fudan.se.crowdservice.core
+Import-Service: service.interfaces.AddService, service.interfaces.DivideService
 Export-Service: edu.fudan.se.crowdservice.core.Template

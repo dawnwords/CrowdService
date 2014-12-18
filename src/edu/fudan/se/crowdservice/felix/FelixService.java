@@ -48,12 +48,13 @@ public class FelixService extends Service {
     public IBinder onBind(Intent intent) {
         try {
             felix.start();
-            final BundleContext bundleContext = felix.getBundleContext();
+            BundleContext bundleContext = felix.getBundleContext();
             bundleContext.addFrameworkListener(new FrameworkListener() {
                 @Override
                 public void frameworkEvent(FrameworkEvent e) {
                     switch (e.getType()) {
                         case FrameworkEvent.STOPPED:
+                            info("Felix has Stopped!");
                             felix = null;
                             break;
                         case FrameworkEvent.STARTED:
@@ -86,65 +87,7 @@ public class FelixService extends Service {
                     info("Bundle Event " + bundleEvent.getType());
                 }
             });
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        RepositoryAdmin admin = bundleContext.getService(bundleContext.getServiceReference(RepositoryAdmin.class));
-                        Repository repo = admin.addRepository(new URL("http://10.131.252.156:8080/obr/template_repo.xml"));
-                        Resolver resolver = admin.resolver();
-
-                        info("Repo name is " + repo.getName());
-                        info("Repo last modified " + new Date(repo.getLastModified()));
-                        info("Repo URL is " + repo.getURL());
-                        Resource[] res = repo.getResources();
-                        if (res != null) {
-                            for (Resource re : res) {
-                                info("id:" + re.getId());
-                                info("" + re.getSymbolicName());
-                                if ("service.temlate.ArithmeticTemplate".equals(re.getSymbolicName())) {
-                                    resolver.add(re);
-                                }
-                            }
-                        }
-                        if (resolver.resolve()) {
-                            info("Deploying ...");
-                            resolver.deploy(true);
-                            info("Deploy Successfully!");
-                            sleep(3000);
-                            Template template = bundleContext.getService(bundleContext.getServiceReference(Template.class));
-                            for(Field field:template.getClass().getFields()){
-                                String fieldName = field.getClass().getName();
-                                field.setAccessible(true);
-                                if("service.interface.AddService".equals(fieldName)){
-                                    field.set(template,new AddService() {
-                                        @Override
-                                        public int add(int a, int b) {
-                                            return a+b;
-                                        }
-                                    });
-                                }else if("service.interface.DivideService".equals(fieldName)){
-                                    field.set(template,new DivideService() {
-                                        @Override
-                                        public double div(double a, double b) {
-                                            return a/b;
-                                        }
-                                    });
-                                }
-                            }
-                            template.execute();
-
-                        } else {
-                            info("Fail for");
-                            for (Requirement requirement : resolver.getUnsatisfiedRequirements()) {
-                                info(requirement.toString());
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();
+            new TemplateRepo(bundleContext).start();
 
 
         } catch (Exception ex) {

@@ -76,7 +76,7 @@ public class FelixConfig extends Properties {
                     "org.osgi.service.startlevel; version=1.0.0," +
                     "org.osgi.service.url; version=1.0.0," +
                     "org.osgi.util.tracker," +
-                    "org.osgi.service.obr; version=1.0,"+
+                    "org.osgi.service.obr; version=1.0," +
                     // ANDROID (here starts semicolon as separator -> Why?
                     "android; " +
                     "android.app;" +
@@ -152,6 +152,9 @@ public class FelixConfig extends Properties {
                     "org.xml.sax.helpers; " +
                     // Android OS Version?? ->her ends semicolon as seperator -> Why?
                     "version=1.5.0.r3," +
+                    // JADE
+                    "jade.util," +
+                    "jade.util.logging," +
                     // MY OWN
                     "edu.fudan.se.crowdservice.core"
     ).intern();

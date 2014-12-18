@@ -6,7 +6,7 @@ set remote=\\10.131.252.156\share\tomcat7\webapps\obr\
 java -cp %bindex% -jar %bindex% -n IGB -q -r %repoxml% %bundles_path%
 fart %repoxml% uri=' uri='%url%
 
-rmdir /q %remote%%bundles_path%
+rmdir /s /q %remote%%bundles_path%
 del /q %remote%%repoxml%
 
 mkdir %remote%%bundles_path%
