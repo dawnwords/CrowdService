@@ -1,6 +1,6 @@
 package service.template;
 
-import edu.fudan.se.crowdservice.core.Service;
+import edu.fudan.se.crowdservice.core.AbstractService;
 import edu.fudan.se.crowdservice.core.Template;
 import jade.util.Logger;
 import service.interfaces.AddService;
@@ -12,9 +12,9 @@ import java.util.logging.Level;
  * Created by Dawnwords on 2014/12/16.
  */
 public class ArithmeticTemplate extends Template {
-    @Service
+    @AbstractService
     private AddService addService;
-    @Service
+    @AbstractService
     private DivideService divideService;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
