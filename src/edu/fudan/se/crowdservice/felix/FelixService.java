@@ -3,12 +3,17 @@ package edu.fudan.se.crowdservice.felix;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import edu.fudan.se.crowdservice.core.AbstractService;
+import edu.fudan.se.crowdservice.core.Template;
 import jade.util.Logger;
 import org.apache.felix.framework.Felix;
 import org.osgi.framework.*;
 import org.osgi.service.obr.*;
+import service.interfaces.AddService;
+import service.interfaces.DivideService;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Date;
 import java.util.logging.Level;
@@ -86,7 +91,7 @@ public class FelixService extends Service {
                 public void run() {
                     try {
                         RepositoryAdmin admin = bundleContext.getService(bundleContext.getServiceReference(RepositoryAdmin.class));
-                        Repository repo = admin.addRepository(new URL("http://felix.apache.org/obr/releases.xml"));
+                        Repository repo = admin.addRepository(new URL("http://10.131.252.156:8080/obr/template_repo.xml"));
                         Resolver resolver = admin.resolver();
 
                         info("Repo name is " + repo.getName());
@@ -95,7 +100,9 @@ public class FelixService extends Service {
                         Resource[] res = repo.getResources();
                         if (res != null) {
                             for (Resource re : res) {
-                                if ("org.osgi.service.obr/1.0.0".equals(re.getId())) {
+                                info("id:" + re.getId());
+                                info("" + re.getSymbolicName());
+                                if ("service.temlate.ArithmeticTemplate".equals(re.getSymbolicName())) {
                                     resolver.add(re);
                                 }
                             }
@@ -104,6 +111,29 @@ public class FelixService extends Service {
                             info("Deploying ...");
                             resolver.deploy(true);
                             info("Deploy Successfully!");
+                            sleep(3000);
+                            Template template = bundleContext.getService(bundleContext.getServiceReference(Template.class));
+                            for(Field field:template.getClass().getFields()){
+                                String fieldName = field.getClass().getName();
+                                field.setAccessible(true);
+                                if("service.interface.AddService".equals(fieldName)){
+                                    field.set(template,new AddService() {
+                                        @Override
+                                        public int add(int a, int b) {
+                                            return a+b;
+                                        }
+                                    });
+                                }else if("service.interface.DivideService".equals(fieldName)){
+                                    field.set(template,new DivideService() {
+                                        @Override
+                                        public double div(double a, double b) {
+                                            return a/b;
+                                        }
+                                    });
+                                }
+                            }
+                            template.execute();
+
                         } else {
                             info("Fail for");
                             for (Requirement requirement : resolver.getUnsatisfiedRequirements()) {

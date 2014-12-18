@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <?xml-stylesheet type='text/xsl' href='http://www.osgi.org/www/obr2html.xsl'?>
 
-<repository lastmodified='20141218160930.921' name='IGB'>
+<repository lastmodified='20141218205938.823' name='IGB'>
   <resource id='service.interfaces.AddService/1.0.0' presentationname='Add Service' symbolicname='service.interfaces.AddService' uri='http://10.131.252.156:8080/obr/template/add_service.jar' version='1.0.0'>
     <size>
-      916
+      1257
     </size>
     <capability name='bundle'>
       <p n='manifestversion' v='2  '/>
@@ -19,7 +19,7 @@
   </resource>
   <resource id='service.interfaces.DivideService/1.0.0' presentationname='Add Service' symbolicname='service.interfaces.DivideService' uri='http://10.131.252.156:8080/obr/template/divide_service.jar' version='1.0.0'>
     <size>
-      928
+      1268
     </size>
     <capability name='bundle'>
       <p n='manifestversion' v='2  '/>
@@ -34,7 +34,7 @@
   </resource>
   <resource id='service.template.ArithmeticTemplate/1.0.0' presentationname='Arithmetic Template' symbolicname='service.template.ArithmeticTemplate' uri='http://10.131.252.156:8080/obr/template/arithmetic_template.jar' version='1.0.0'>
     <size>
-      1580
+      2541
     </size>
     <capability name='service'>
       <p n='service' v='edu.fudan.se.crowdservice.core.Template'/>
