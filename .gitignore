@@ -1,10 +1,4 @@
-/.idea
-/bin
-/gen
 /out
-/*.iml
-/ant.properties
-/build.xml
-/local.properties
-/proguard-project.txt
-/project.properties
+/.idea
+*.iml
+/AndroidClient/gen
