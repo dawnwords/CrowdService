@@ -1,3 +1,4 @@
+echo build %jar%
 mkdir classes
 javac *.java -cp ..\..\lib\* -d classes
 jar cfm %jar% MANIFEST.MF -C classes .

@@ -1,3 +1,5 @@
 @echo off
 set bundles_path=service
-call run.bat
+copy ..\bundle_pack\interface\*.jar bundles_path
+copy ..\bundle_pack\service\*.jar bundles_path
+call buildAndDeploy.bat

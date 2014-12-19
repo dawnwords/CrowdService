@@ -11,6 +11,7 @@ import service.interfaces.DivideService;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 /**
@@ -31,14 +32,13 @@ public class TemplateRepo extends Thread {
             Repository repo = admin.addRepository(new URL("http://10.131.252.156:8080/obr/template_repo.xml"));
             Resolver resolver = admin.resolver();
 
-            info("Repo name is " + repo.getName());
-            info("Repo last modified " + new Date(repo.getLastModified()));
-            info("Repo URL is " + repo.getURL());
+            info("Repo name is %s", repo.getName());
+            info("Repo last modified %s", new Date(repo.getLastModified()));
+            info("Repo URL is %s", repo.getURL());
             Resource[] res = repo.getResources();
             if (res != null) {
                 for (Resource re : res) {
-                    info("id:" + re.getId());
-                    info("" + re.getSymbolicName());
+                    info("id:%s, SymbolicName:%s", re.getId(), re.getSymbolicName());
                     if ("service.template.ArithmeticTemplate".equals(re.getSymbolicName())) {
                         resolver.add(re);
                     }
@@ -50,19 +50,34 @@ public class TemplateRepo extends Thread {
                 info("Deploy Successfully!");
                 sleep(3000);
                 for (Bundle bundle : bundleContext.getBundles()) {
-                    info("Symbolic Name:" + bundle.getSymbolicName() + ",Location:" + bundle.getLocation());
+                    info("[%s]Symbolic Name:%s,Location:%s", stateToString(bundle.getState()), bundle.getSymbolicName(), bundle.getLocation());
                 }
                 Template template = bundleContext.getService(bundleContext.getServiceReference(Template.class));
                 injectService(template);
             } else {
                 info("Fail for");
                 for (Requirement requirement : resolver.getUnsatisfiedRequirements()) {
-                    info("Name:" + requirement.getName() + ",Comment:" + requirement.getComment() + ",Filter:" + requirement.getFilter());
+                    info("Name: %s,Comment: %s,Filter: %s", requirement.getName(), requirement.getComment(), requirement.getFilter());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static final HashMap<Integer, String> STATE_STRING_MAP = new HashMap<>();
+
+    static {
+        STATE_STRING_MAP.put(1, "UNINSTALLED");
+        STATE_STRING_MAP.put(2, "INSTALLED");
+        STATE_STRING_MAP.put(4, "RESOLVED");
+        STATE_STRING_MAP.put(8, "STARTING");
+        STATE_STRING_MAP.put(16, "STOPPING");
+        STATE_STRING_MAP.put(32, "ACTIVE");
+    }
+
+    private String stateToString(int state) {
+        return STATE_STRING_MAP.get(state);
     }
 
     private void injectService(Template template) throws IllegalAccessException {
@@ -90,5 +105,9 @@ public class TemplateRepo extends Thread {
 
     private void info(String msg) {
         logger.log(Level.INFO, msg);
+    }
+
+    private void info(String format, Object... msg) {
+        info(String.format(format + "\n", msg));
     }
 }

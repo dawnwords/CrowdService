@@ -12,5 +12,3 @@ del /q %remote%%repoxml%
 mkdir %remote%%bundles_path%
 copy %bundles_path%\* %remote%%bundles_path%
 copy %repoxml% %remote%%repoxml%
-
-pause
