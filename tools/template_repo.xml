@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type='text/xsl' href='http://www.osgi.org/www/obr2html.xsl'?>
+
+<repository lastmodified='20141219185505.588' name='TEMPLATE_REPO'>
+  <resource id='Add/1.0.0' presentationname='Add Service Interface' symbolicname='Add' uri='http://10.131.252.156:8080/obr/template/add_service.jar' version='1.0.0'>
+    <size>
+      1061
+    </size>
+    <capability name='service'>
+      <p n='service' v='crowdservice.interfaces.AddService'/>
+    </capability>
+    <capability name='bundle'>
+      <p n='manifestversion' v='2'/>
+      <p n='presentationname' v='Add Service Interface'/>
+      <p n='symbolicname' v='Add'/>
+      <p n='version' t='version' v='1.0.0'/>
+    </capability>
+    <capability name='package'>
+      <p n='package' v='crowdservice.interfaces'/>
+      <p n='version' t='version' v='1.0.0'/>
+    </capability>
+  </resource>
+  <resource id='Divide/1.0.0' presentationname='Divide Service Interfaces' symbolicname='Divide' uri='http://10.131.252.156:8080/obr/template/divide_service.jar' version='1.0.0'>
+    <size>
+      1072
+    </size>
+    <capability name='service'>
+      <p n='service' v='crowdservice.interfaces.DivideService'/>
+    </capability>
+    <capability name='bundle'>
+      <p n='manifestversion' v='2'/>
+      <p n='presentationname' v='Divide Service Interfaces'/>
+      <p n='symbolicname' v='Divide'/>
+      <p n='version' t='version' v='1.0.0'/>
+    </capability>
+    <capability name='package'>
+      <p n='package' v='crowdservice.interfaces'/>
+      <p n='version' t='version' v='1.0.0'/>
+    </capability>
+  </resource>
+</repository>
