@@ -48,14 +48,14 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
+//        bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
         bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onDestroy() {
         unbindService(felixConnection);
-        unbindService(jadeConnection);
+//        unbindService(jadeConnection);
         super.onDestroy();
     }
 
