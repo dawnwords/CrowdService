@@ -4,6 +4,7 @@ copy ..\out\%bundles_path%\*.jar %bundles_path%
 
 for /f "delims=|" %%i in ('dir /b %bundles_path%') do (
 	set jar=%bundles_path%\%%i
+	call modifyManifest.bat
 	call jar2dex.bat
 )
 
