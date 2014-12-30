@@ -1,5 +1,4 @@
 mkdir %bundles_path%
-copy ..\interfaces\*.jar %bundles_path%
 copy ..\out\%bundles_path%\*.jar %bundles_path%
 
 for /f "delims=|" %%i in ('dir /b %bundles_path%') do (

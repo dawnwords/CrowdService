@@ -1,14 +1,11 @@
 package edu.fudan.se.crowdservice.felix;
 
-import crowdservice.interfaces.AddService;
-import crowdservice.interfaces.DivideService;
 import edu.fudan.se.crowdservice.core.Template;
 import jade.util.Logger;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.obr.*;
 
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,13 +37,14 @@ public class TemplateRepo extends Thread {
     public void run() {
         try {
             RepositoryAdmin admin = bundleContext.getService(bundleContext.getServiceReference(RepositoryAdmin.class));
-            Repository repo = admin.addRepository(new URL("http://10.131.252.156:8080/obr/template_repo.xml"));
+            Repository templateRepo = admin.addRepository(new URL("http://10.131.252.156:8080/obr/template_repo.xml"));
+            admin.addRepository(new URL("http://10.131.252.156:8080/obr/service_repo.xml"));
             Resolver resolver = admin.resolver();
 
-            info("Repo name is %s", repo.getName());
-            info("Repo last modified %s", new Date(repo.getLastModified()));
-            info("Repo URL is %s", repo.getURL());
-            Resource[] res = repo.getResources();
+            info("Repo name is %s", templateRepo.getName());
+            info("Repo last modified %s", new Date(templateRepo.getLastModified()));
+            info("Repo URL is %s", templateRepo.getURL());
+            Resource[] res = templateRepo.getResources();
             if (res != null) {
                 for (Resource re : res) {
                     info("id:%s, SymbolicName:%s", re.getId(), re.getSymbolicName());
@@ -63,7 +61,7 @@ public class TemplateRepo extends Thread {
                     info("[%s]Symbolic Name:%s,Location:%s", stateToString(bundle.getState()), bundle.getSymbolicName(), bundle.getLocation());
                 }
                 Template template = bundleContext.getService(bundleContext.getServiceReference(Template.class));
-                injectService(template);
+                template.executeTemplate();
             } else {
                 info("Fail for");
                 for (Requirement requirement : resolver.getUnsatisfiedRequirements()) {
@@ -77,31 +75,6 @@ public class TemplateRepo extends Thread {
 
     private String stateToString(int state) {
         return STATE_STRING_MAP.get(state);
-    }
-
-    private void injectService(Template template) throws IllegalAccessException {
-        info("template class:" + template.getClass());
-        for (Field field : template.getClass().getDeclaredFields()) {
-            String fieldName = field.getName();
-            field.setAccessible(true);
-            info("field:" + fieldName);
-            if ("AddService".equals(fieldName)) {
-                field.set(template, new AddService() {
-                    @Override
-                    public int add(int a, int b) {
-                        return a + b;
-                    }
-                });
-            } else if ("DivideService".equals(fieldName)) {
-                field.set(template, new DivideService() {
-                    @Override
-                    public double div(double a, double b) {
-                        return a / b;
-                    }
-                });
-            }
-        }
-        template.execute();
     }
 
     private void info(String msg) {

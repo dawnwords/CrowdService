@@ -1,6 +1,6 @@
-package crowdservice.impl;
+package service.add.impl;
 
-import crowdservice.interfaces.AddService;
+import service.add.interfaces.AddService;
 import edu.fudan.se.crowdservice.core.ConcreteService;
 
 /**

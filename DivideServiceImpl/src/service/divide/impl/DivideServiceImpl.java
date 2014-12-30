@@ -1,7 +1,7 @@
-package crowdservice.impl;
+package service.divide.impl;
 
-import crowdservice.interfaces.DivideService;
 import edu.fudan.se.crowdservice.core.ConcreteService;
+import service.divide.interfaces.DivideService;
 
 /**
  * Created by Dawnwords on 2014/12/16.
