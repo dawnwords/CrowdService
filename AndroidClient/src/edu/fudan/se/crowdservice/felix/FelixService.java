@@ -5,22 +5,13 @@ import android.content.Intent;
 import android.os.IBinder;
 import jade.util.Logger;
 import org.apache.felix.framework.Felix;
-import org.osgi.framework.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 
 public class FelixService extends Service {
 
     private Felix felix;
-    private ServiceInjector serviceInjector;
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
 
     @Override
@@ -34,7 +25,6 @@ public class FelixService extends Service {
         createOptimizedDir();
 
         felix = new Felix(new FelixConfig(this));
-//        serviceInjector = new ServiceInjector(felix.getBundleContext());
     }
 
     @Override
@@ -45,55 +35,16 @@ public class FelixService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        TemplateManager manager = null;
         try {
             felix.start();
             info("Felix Version:" + felix.getVersion());
-            BundleContext bundleContext = felix.getBundleContext();
-            bundleContext.addFrameworkListener(new FrameworkListener() {
-                @Override
-                public void frameworkEvent(FrameworkEvent e) {
-                    switch (e.getType()) {
-                        case FrameworkEvent.STOPPED:
-                            info("Felix has Stopped!");
-                            felix = null;
-                            break;
-                        case FrameworkEvent.STARTED:
-                            info("Felix has Started!");
-                            break;
-                    }
-                    info("Framework Event " + e.getType());
-                }
-            });
-            bundleContext.addBundleListener(new BundleListener() {
-                @Override
-                public void bundleChanged(BundleEvent bundleEvent) {
-                    Bundle bundle = bundleEvent.getBundle();
-                    switch (bundleEvent.getType()) {
-                        case BundleEvent.STARTED:
-                            String bundleName = new File(bundle.getLocation()).getName();
-                            info("Bundle:" + bundleName + " has started!");
-//                      BundleContext bundleContext = bundle.getBundleContext();
-//                      AbstractService abstractService = (AbstractService) bundleContext.getService(bundle.getRegisteredServices()[0]);
-//                      serviceInjector.getServiceListener(bundleName).onServiceStart(abstractService);
-                            break;
-                        case BundleEvent.STOPPED:
-                            try {
-                                bundle.uninstall();
-                            } catch (BundleException e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                    }
-                    info("Bundle Event " + bundleEvent.getType());
-                }
-            });
-            new TemplateRepo(bundleContext).start();
+            manager = new TemplateManager(felix.getBundleContext());
         } catch (Exception ex) {
-            logger.log(Level.INFO, "Could not create framework: " + ex.getMessage());
+            info("Could not create framework: " + ex.getMessage());
             ex.printStackTrace();
         }
-
-        return serviceInjector;
+        return manager;
     }
 
     private void info(String msg) {

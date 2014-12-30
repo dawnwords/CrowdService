@@ -12,6 +12,7 @@ import java.util.logging.Level;
 public abstract class Template implements BundleActivator {
 
     private BundleContext context;
+    private OnTemplateStopListener listener;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
 
@@ -26,11 +27,17 @@ public abstract class Template implements BundleActivator {
     public void stop(BundleContext bundleContext) throws Exception {
     }
 
+    public void setListener(OnTemplateStopListener listener) {
+        this.listener = listener;
+    }
+
     public void executeTemplate() {
         log("Resolve Service...");
         resolveService(new ServiceResolver());
         log("Execute Template");
         execute();
+        log("Stop Template");
+        listener.onTemplateStop(this);
     }
 
     protected abstract void resolveService(ServiceResolver serviceResolver);
@@ -39,6 +46,10 @@ public abstract class Template implements BundleActivator {
 
     protected void log(String msg) {
         logger.log(Level.INFO, msg);
+    }
+
+    public static interface OnTemplateStopListener {
+        void onTemplateStop(Template template);
     }
 
     protected class ServiceResolver {

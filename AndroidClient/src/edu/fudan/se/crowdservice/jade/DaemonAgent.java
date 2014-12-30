@@ -1,42 +1,39 @@
 package edu.fudan.se.crowdservice.jade;
 
+import edu.fudan.se.crowdservice.core.Template;
 import jade.core.Agent;
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.util.Logger;
 
 /**
  * Created by Dawnwords on 2014/12/13.
  */
-public class DaemonAgent extends Agent {
+public class DaemonAgent extends Agent implements TemplateExecutor {
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
+    private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
 
-    public DaemonAgent() {
+    public DaemonAgent(){
         super();
-        setEnabledO2ACommunication(true, 0);
     }
 
     @Override
     protected void setup() {
-        addBehaviour(new CyclicBehaviour(this) {
-            @Override
-            public void action() {
-                info("thread name:"+Thread.currentThread().getName());
-                //TODO deal with template
-                String name = (String) getAgent().getO2AObject();
-                if (name != null) {
-                    info("getO2AObject:" + name);
-                } else {
-                    block();
-                    info("block");
-                }
-            }
-
-        });
+        info("Register TemplateExecutor O2AInterface...");
+        registerO2AInterface(TemplateExecutor.class, this);
     }
 
     private void info(String msg) {
         logger.log(Logger.INFO, msg);
     }
 
-
+    @Override
+    public void executeTemplate(final Template template) {
+        addBehaviour(tbf.wrap(new OneShotBehaviour() {
+            @Override
+            public void action() {
+                template.executeTemplate();
+            }
+        }));
+    }
 }
