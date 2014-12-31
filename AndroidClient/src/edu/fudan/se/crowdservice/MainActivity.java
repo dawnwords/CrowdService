@@ -71,8 +71,10 @@ public class MainActivity extends Activity {
                     @Override
                     public void onTemplateResolved(Template template) {
                         try {
-                            //TODO unable to getO2AInterface
-                            agentController.getO2AInterface(TemplateExecutor.class).executeTemplate(template);
+                            TemplateExecutor executor = agentController.getO2AInterface(TemplateExecutor.class);
+                            if (executor != null) {
+                                executor.executeTemplate(template);
+                            }
                         } catch (StaleProxyException e) {
                             showMessage(e.getMessage());
                         }
@@ -102,6 +104,7 @@ public class MainActivity extends Activity {
         agentManager.startAgent("echo-agent", DaemonAgent.class.getName(), new RuntimeCallback<AgentController>() {
             @Override
             public void onSuccess(AgentController agentController) {
+                MainActivity.this.agentController = agentController;
             }
 
             @Override

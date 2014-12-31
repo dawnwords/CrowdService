@@ -37,6 +37,7 @@ public class TemplateManager extends Binder {
             } catch (BundleException e) {
                 e.printStackTrace();
             }
+            listBundles();
         }
     };
 

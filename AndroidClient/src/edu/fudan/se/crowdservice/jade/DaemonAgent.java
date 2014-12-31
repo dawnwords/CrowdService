@@ -13,10 +13,6 @@ public class DaemonAgent extends Agent implements TemplateExecutor {
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
     private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
 
-    public DaemonAgent(){
-        super();
-    }
-
     @Override
     protected void setup() {
         info("Register TemplateExecutor O2AInterface...");
