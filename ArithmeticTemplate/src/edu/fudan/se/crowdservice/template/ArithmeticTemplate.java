@@ -20,9 +20,12 @@ public class ArithmeticTemplate extends Template {
     @Override
     public void execute() {
         double result;
-        result = addService.add(3, 5);
-        result = divideService.div(result, 2);
-        log("result is " + result);
+        int add1 = Integer.parseInt(requestUserInput("Input Add 1"));
+        int add2 = Integer.parseInt(requestUserInput("Input Add 2"));
+        int divisor = Integer.parseInt(requestUserInput("Input Divisor"));
+        result = addService.add(add1, add2);
+        result = divideService.div(result, divisor);
+        showMessage("result is " + result);
     }
 
 }

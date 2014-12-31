@@ -1,7 +1,10 @@
 package edu.fudan.se.crowdservice.felix;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Handler;
+import android.os.Looper;
 import edu.fudan.se.crowdservice.core.Template;
 import jade.util.Logger;
 import org.osgi.framework.Bundle;
@@ -72,7 +75,7 @@ public class TemplateManager extends Binder {
         }.execute();
     }
 
-    public void resolveTemplate(Resource resource, final OnTemplateResolvedListener listener) {
+    public void resolveTemplate(Resource resource, final Context context, final OnTemplateResolvedListener listener) {
         new AsyncTask<Resource, Void, Template>() {
             @Override
             protected Template doInBackground(Resource... resources) {
@@ -85,7 +88,9 @@ public class TemplateManager extends Binder {
                     listBundles();
                     ServiceReference<Template> serviceReference = bundleContext.getServiceReference(Template.class);
                     Template template = bundleContext.getService(serviceReference);
-                    template.setListener(templateStopListener);
+                    template.setStopListener(templateStopListener);
+                    template.setUiHandler(new Handler(Looper.getMainLooper()));
+                    template.setContext(context);
                     templateRefMap.put(template, serviceReference);
                     return template;
                 }

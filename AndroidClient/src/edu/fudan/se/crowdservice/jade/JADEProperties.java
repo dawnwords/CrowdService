@@ -8,7 +8,7 @@ import jade.util.leap.Properties;
  * Created by Dawnwords on 2014/12/13.
  */
 public class JADEProperties {
-    private static final String HOST = "10.131.253.211";
+    private static final String HOST = "10.222.182.227";
     private static final String PORT = "1099";
     private static Properties instance;
 

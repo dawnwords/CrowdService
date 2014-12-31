@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice.util;
+package edu.fudan.se.crowdservice.core;
 
 /**
  * Created by Dawnwords on 2014/4/19.

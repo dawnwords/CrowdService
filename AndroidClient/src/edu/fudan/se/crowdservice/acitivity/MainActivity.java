@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice;
+package edu.fudan.se.crowdservice.acitivity;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Toast;
+import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
@@ -18,7 +21,6 @@ import edu.fudan.se.crowdservice.jade.JADEService;
 import edu.fudan.se.crowdservice.jade.TemplateExecutor;
 import edu.fudan.se.crowdservice.view.TemplateListView;
 import jade.android.RuntimeCallback;
-import jade.util.Logger;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 import org.osgi.service.obr.Requirement;
@@ -50,10 +52,9 @@ public class MainActivity extends Activity {
             templateManager = null;
         }
     };
-    private Logger logger = Logger.getJADELogger(this.getClass().getName());
-
 
     private TemplateListView templateListView;
+    private EditText agentNameEditText;
     private Resource[] templateResources;
 
     @Override
@@ -63,32 +64,34 @@ public class MainActivity extends Activity {
         bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
         bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
 
+        agentNameEditText = (EditText) findViewById(R.id.agent_name);
         templateListView = (TemplateListView) findViewById(R.id.template_list);
         templateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                templateManager.resolveTemplate(templateResources[i], new TemplateManager.OnTemplateResolvedListener() {
-                    @Override
-                    public void onTemplateResolved(Template template) {
-                        try {
-                            TemplateExecutor executor = agentController.getO2AInterface(TemplateExecutor.class);
-                            if (executor != null) {
-                                executor.executeTemplate(template);
+                templateManager.resolveTemplate(templateResources[i], MainActivity.this,
+                        new TemplateManager.OnTemplateResolvedListener() {
+                            @Override
+                            public void onTemplateResolved(Template template) {
+                                try {
+                                    TemplateExecutor executor = agentController.getO2AInterface(TemplateExecutor.class);
+                                    if (executor != null) {
+                                        executor.executeTemplate(template);
+                                    }
+                                } catch (StaleProxyException e) {
+                                    showMessage(e.getMessage());
+                                }
                             }
-                        } catch (StaleProxyException e) {
-                            showMessage(e.getMessage());
-                        }
-                    }
 
-                    @Override
-                    public void onFailure(Requirement[] unsatisfiedRequirements) {
-                        String output = "";
-                        for (Requirement requirement : unsatisfiedRequirements) {
-                            output += String.format("%s:%s\n", requirement.getName(), requirement.getComment());
-                        }
-                        showMessage(output);
-                    }
-                });
+                            @Override
+                            public void onFailure(Requirement[] unsatisfiedRequirements) {
+                                String output = "";
+                                for (Requirement requirement : unsatisfiedRequirements) {
+                                    output += String.format("%s:%s\n", requirement.getName(), requirement.getComment());
+                                }
+                                showMessage(output);
+                            }
+                        });
             }
         });
     }
@@ -101,17 +104,21 @@ public class MainActivity extends Activity {
     }
 
     public void createAgent(final View v) {
-        agentManager.startAgent("echo-agent", DaemonAgent.class.getName(), new RuntimeCallback<AgentController>() {
-            @Override
-            public void onSuccess(AgentController agentController) {
-                MainActivity.this.agentController = agentController;
-            }
+        Editable agentName = agentNameEditText.getText();
+        if (agentName != null && !"".equals(agentName.toString())) {
+            agentManager.startAgent(agentName.toString(), DaemonAgent.class.getName(),
+                    new RuntimeCallback<AgentController>() {
+                        @Override
+                        public void onSuccess(AgentController agentController) {
+                            MainActivity.this.agentController = agentController;
+                        }
 
-            @Override
-            public void onFailure(Throwable throwable) {
-                showMessage("Unable to start daemon agent!");
-            }
-        });
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            showMessage("Unable to start daemon agent!");
+                        }
+                    });
+        }
     }
 
 
