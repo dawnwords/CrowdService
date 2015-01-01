@@ -1,5 +1,9 @@
 package edu.fudan.se.crowdservice.core;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import jade.util.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -11,6 +15,8 @@ import java.util.logging.Level;
  */
 public abstract class ConcreteService implements BundleActivator {
     private Logger logger = Logger.getJADELogger(ConcreteService.class.getName());
+    private Context context;
+    private Handler uiHandler;
 
     @Override
     public final void start(BundleContext context) throws Exception {
@@ -23,5 +29,42 @@ public abstract class ConcreteService implements BundleActivator {
     public final void stop(BundleContext context) throws Exception {
     }
 
+    void setContext(Context context) {
+        this.context = context;
+    }
+
+    void setUiHandler(Handler uiHandler) {
+        this.uiHandler = uiHandler;
+    }
+
     protected abstract Class getServiceInterface();
+
+    protected Class<? extends ServiceActivity> getServiceActivity() {
+        return null;
+    }
+
+    protected void postUIRunnable(Runnable runnable) {
+        uiHandler.post(runnable);
+    }
+
+    protected void startServiceActivity(final Bundle extraBundle) {
+        if (getServiceActivity() != null) {
+            postUIRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(context, AdapterActivity.class);
+                    intent.putExtra(ServiceActivity.SERVICE_ACTIVITY_CLASS, getServiceActivity().getName());
+                    intent.putExtra(ServiceActivity.EXTRA_BUNDLE, extraBundle);
+                    context.startActivity(intent);
+                }
+            });
+        }
+    }
+
+    protected <T> T startServiceActivityForResult(final Bundle extraBundle) {
+        ResultHolder<T> resultHolder = new ResultHolder<T>();
+        ActivityResult.getInstance().setServiceActivityResultHolder(resultHolder);
+        startServiceActivity(extraBundle);
+        return resultHolder.get();
+    }
 }

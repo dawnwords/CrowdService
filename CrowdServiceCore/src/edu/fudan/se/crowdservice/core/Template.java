@@ -13,6 +13,7 @@ import android.widget.Toast;
 import jade.util.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 
 import java.util.logging.Level;
 
@@ -151,7 +152,12 @@ public abstract class Template implements BundleActivator {
 
     protected class ServiceResolver {
         public <T> T resolveService(Class<T> serviceClass) {
-            return bundleContext.getService(bundleContext.getServiceReference(serviceClass));
+            ServiceReference<T> serviceReference = bundleContext.getServiceReference(serviceClass);
+            T service = bundleContext.getService(serviceReference);
+            ConcreteService concreteService = (ConcreteService)service;
+            concreteService.setContext(context);
+            concreteService.setUiHandler(uiHandler);
+            return service;
         }
     }
 }
