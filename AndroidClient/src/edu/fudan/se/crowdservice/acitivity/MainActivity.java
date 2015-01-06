@@ -5,10 +5,12 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
@@ -55,7 +57,10 @@ public class MainActivity extends Activity {
 
     private TemplateListView templateListView;
     private EditText agentNameEditText;
+    private Button createAgentBtn, getTemplateListBtn;
     private Resource[] templateResources;
+
+    private Handler handler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,8 @@ public class MainActivity extends Activity {
         bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
 
         agentNameEditText = (EditText) findViewById(R.id.agent_name);
+        createAgentBtn = (Button)findViewById(R.id.create_agent_btn);
+        getTemplateListBtn = (Button)findViewById(R.id.get_template_list_btn);
         templateListView = (TemplateListView) findViewById(R.id.template_list);
         templateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,6 +99,7 @@ public class MainActivity extends Activity {
                                 showMessage(output);
                             }
                         });
+                templateListView.setClickable(false);
             }
         });
     }
@@ -111,6 +119,16 @@ public class MainActivity extends Activity {
                         @Override
                         public void onSuccess(AgentController agentController) {
                             MainActivity.this.agentController = agentController;
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    templateListView.setClickable(true);
+                                    createAgentBtn.setEnabled(false);
+                                    getTemplateListBtn.setEnabled(true);
+                                    agentNameEditText.setEnabled(false);
+                                }
+                            });
                         }
 
                         @Override
