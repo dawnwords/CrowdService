@@ -14,9 +14,10 @@ import java.util.logging.Level;
  * Created by Dawnwords on 2014/12/18.
  */
 public abstract class ConcreteService implements BundleActivator {
-    private Logger logger = Logger.getJADELogger(ConcreteService.class.getName());
-    private Context context;
+    protected Context context;
     private Handler uiHandler;
+
+    private Logger logger = Logger.getJADELogger(ConcreteService.class.getName());
 
     @Override
     public final void start(BundleContext context) throws Exception {
@@ -52,12 +53,13 @@ public abstract class ConcreteService implements BundleActivator {
             postUIRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(context, AdapterActivity.class);
                     try {
                         AdapterActivity.ServiceActivityHolder.setActivity(getServiceActivity().newInstance());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    Intent intent = new Intent(context, AdapterActivity.class);
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     intent.putExtra(ServiceActivity.EXTRA_BUNDLE, extraBundle);
                     context.startActivity(intent);
                 }

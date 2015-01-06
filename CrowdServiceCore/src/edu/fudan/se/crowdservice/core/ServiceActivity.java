@@ -7,10 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.Toast;
 
 /**
@@ -115,6 +112,14 @@ public abstract class ServiceActivity {
 
     protected Bundle getInputParameterBundle() {
         return activity.getIntent().getBundleExtra(EXTRA_BUNDLE);
+    }
+
+    protected WindowManager getWindowManager(){
+        return activity.getWindowManager();
+    }
+
+    protected Window getWindow(){
+        return activity.getWindow();
     }
 
     protected void toast(String format,Object... args){

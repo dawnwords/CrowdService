@@ -1,10 +1,10 @@
 package service.shcomputer.ns.showpic.interfaces;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
 /**
  * Created by Dawnwords on 2015/1/6.
  */
 public interface ShowPictureService {
-    void showPic(Bitmap pic);
+    void showPic(String pic);
 }

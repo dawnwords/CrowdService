@@ -14,6 +14,6 @@ public class JudgeWorthOfComputerServiceImpl extends ConcreteService implements 
 
     @Override
     public boolean judgeWorthOfComputer(String url) {
-        return false;
+        return true;
     }
 }
