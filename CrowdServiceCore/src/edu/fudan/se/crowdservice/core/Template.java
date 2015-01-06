@@ -137,7 +137,7 @@ public abstract class Template implements BundleActivator {
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
             }
         });
     }

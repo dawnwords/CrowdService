@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 /**
  * Created by Dawnwords on 2014/4/21.
@@ -114,6 +115,10 @@ public abstract class ServiceActivity {
 
     protected Bundle getInputParameterBundle() {
         return activity.getIntent().getBundleExtra(EXTRA_BUNDLE);
+    }
+
+    protected void toast(String format,Object... args){
+        Toast.makeText(getContext(),String.format(format,args),Toast.LENGTH_LONG).show();
     }
 
     protected int dp2px(float dp) {

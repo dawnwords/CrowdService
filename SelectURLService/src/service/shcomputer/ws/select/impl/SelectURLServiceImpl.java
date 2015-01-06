@@ -1,12 +1,17 @@
 package service.shcomputer.ws.select.impl;
 
+import android.os.Bundle;
 import edu.fudan.se.crowdservice.core.ConcreteService;
+import edu.fudan.se.crowdservice.core.ServiceActivity;
+import service.shcomputer.ws.select.activity.WebViewerActivity;
 import service.shcomputer.ws.select.interfaces.SelectURLService;
 
 /**
  * Created by Dawnwords on 2015/1/6.
  */
 public class SelectURLServiceImpl extends ConcreteService implements SelectURLService {
+
+    public static final String START_URL = "START_URL";
 
     @Override
     protected Class getServiceInterface() {
@@ -15,6 +20,13 @@ public class SelectURLServiceImpl extends ConcreteService implements SelectURLSe
 
     @Override
     public String getSelectedURL(String sourceURL) {
-        return null;
+        Bundle bundle = new Bundle();
+        bundle.putString(START_URL, sourceURL);
+        return startServiceActivityForResult(bundle);
+    }
+
+    @Override
+    protected Class<? extends ServiceActivity> getServiceActivity() {
+        return WebViewerActivity.class;
     }
 }

@@ -15,6 +15,9 @@ public class GetLocationFromURLServiceImpl extends ConcreteService implements Ge
 
     @Override
     public Location getLocationFromURL(String url) {
-        return null;
+        Location l = new Location("");
+        l.setLongitude(121.6004);
+        l.setLatitude(31.1977);
+        return l;
     }
 }
