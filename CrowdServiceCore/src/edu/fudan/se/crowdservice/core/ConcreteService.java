@@ -53,7 +53,11 @@ public abstract class ConcreteService implements BundleActivator {
                 @Override
                 public void run() {
                     Intent intent = new Intent(context, AdapterActivity.class);
-                    intent.putExtra(ServiceActivity.SERVICE_ACTIVITY_CLASS, getServiceActivity().getName());
+                    try {
+                        AdapterActivity.ServiceActivityHolder.setActivity(getServiceActivity().newInstance());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     intent.putExtra(ServiceActivity.EXTRA_BUNDLE, extraBundle);
                     context.startActivity(intent);
                 }

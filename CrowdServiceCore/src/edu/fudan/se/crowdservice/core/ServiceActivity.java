@@ -17,7 +17,6 @@ import android.view.ViewGroup;
  */
 public abstract class ServiceActivity {
 
-    public static final String SERVICE_ACTIVITY_CLASS = "ServiceActivityClass";
     public static final String EXTRA_BUNDLE = "ExtraBundle";
 
     private Activity activity;
@@ -111,6 +110,10 @@ public abstract class ServiceActivity {
 
     protected PackageManager getPackageManager() {
         return activity.getPackageManager();
+    }
+
+    protected Bundle getInputParameterBundle() {
+        return activity.getIntent().getBundleExtra(EXTRA_BUNDLE);
     }
 
     protected int dp2px(float dp) {

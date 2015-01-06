@@ -132,7 +132,8 @@ public abstract class Template implements BundleActivator {
         return result.get();
     }
 
-    protected void showMessage(final String message) {
+    protected void showMessage(String format, Object... args) {
+        final String message = String.format(format, args);
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -154,7 +155,7 @@ public abstract class Template implements BundleActivator {
         public <T> T resolveService(Class<T> serviceClass) {
             ServiceReference<T> serviceReference = bundleContext.getServiceReference(serviceClass);
             T service = bundleContext.getService(serviceReference);
-            ConcreteService concreteService = (ConcreteService)service;
+            ConcreteService concreteService = (ConcreteService) service;
             concreteService.setContext(context);
             concreteService.setUiHandler(uiHandler);
             return service;
