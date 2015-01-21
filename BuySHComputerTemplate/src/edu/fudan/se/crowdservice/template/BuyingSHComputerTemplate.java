@@ -1,7 +1,6 @@
 package edu.fudan.se.crowdservice.template;
 
 import android.location.Location;
-import android.net.Uri;
 import edu.fudan.se.crowdservice.core.Template;
 import service.shcomputer.cs.judgeworth.interfaces.JudgeWorthOfComputerService;
 import service.shcomputer.cs.takepic.interfaces.TakePictureOfURLService;

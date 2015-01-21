@@ -3,7 +3,7 @@
           package="edu.fudan.se.crowdservice"
           android:versionCode="1"
           android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="14"/>
 
     <!--IO Permission-->
     <uses-permission android:name="android.permission.INTERNET"/>
