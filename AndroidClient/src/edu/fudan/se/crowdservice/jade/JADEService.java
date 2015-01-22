@@ -1,18 +1,17 @@
 package edu.fudan.se.crowdservice.jade;
 
 import android.app.Service;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.*;
 import android.os.IBinder;
+import edu.fudan.se.crowdservice.CrowdServiceApplication;
+import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
+import edu.fudan.se.crowdservice.jade.agent.DaemonAgent;
 import jade.android.MicroRuntimeService;
 import jade.android.MicroRuntimeServiceBinder;
 import jade.android.RuntimeCallback;
 import jade.core.MicroRuntime;
 import jade.util.Logger;
 import jade.util.leap.Properties;
-import jade.wrapper.AgentController;
 import jade.wrapper.ControllerException;
 
 import java.util.logging.Level;
@@ -23,13 +22,12 @@ import java.util.logging.Level;
 public class JADEService extends Service {
     private Logger logger;
     private MicroRuntimeServiceBinder microRuntimeServiceBinder;
-    private boolean gatewayReady, containerReady;
+    private SharedPreferences setting;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             microRuntimeServiceBinder = (MicroRuntimeServiceBinder) service;
             info("Gateway successfully bound to MicroRuntimeService");
-            gatewayReady = true;
             startContainer();
         }
 
@@ -38,17 +36,21 @@ public class JADEService extends Service {
             info("Gateway unbound from MicroRuntimeService");
         }
     };
+    private AgentManager agentManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         logger = Logger.getJADELogger(this.getClass().getName());
+        setting = getSharedPreferences(CrowdServiceApplication.CROWD_SERVICE, 0);
+
+        bindMicroRuntimeService();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        bindMicroRuntimeService();
-        return new AgentManager(this);
+        agentManager = new AgentManager();
+        return agentManager;
     }
 
     @Override
@@ -67,29 +69,23 @@ public class JADEService extends Service {
         logger.log(Level.INFO, "Starting JADE container...");
         if (!MicroRuntime.isRunning()) {
             Properties profile = JADEProperties.getInstance();
-            microRuntimeServiceBinder.startAgentContainer(profile,
-                    new RuntimeCallback<Void>() {
-                        @Override
-                        public void onSuccess(Void ignore) {
-                            containerReady = true;
-                            info("Successfully start of the container...");
-                        }
+            microRuntimeServiceBinder.startAgentContainer(profile, new RuntimeCallback<Void>() {
+                @Override
+                public void onSuccess(Void ignore) {
+                    startAgent();
+                }
 
-                        @Override
-                        public void onFailure(Throwable throwable) {
-                            err("Failed to start the container...");
-                        }
-                    });
-        } else {
-            containerReady = true;
+                @Override
+                public void onFailure(Throwable throwable) {
+                    err("Failed to start the container...");
+                }
+            });
         }
     }
 
-    void startAgent(final String agentName, final String agentClassName, final RuntimeCallback<AgentController> callback) {
-        if (!(gatewayReady && containerReady)) {
-            err("JADE is not ready...");
-            return;
-        }
+    void startAgent() {
+        final String agentName = getTextStored(CrowdServiceApplication.AGENT_NAME);
+        final String agentClassName = DaemonAgent.class.getName();
         info("Starting " + agentClassName + "...");
         microRuntimeServiceBinder.startAgent(agentName, agentClassName, new Object[]{getApplicationContext()},
                 new RuntimeCallback<Void>() {
@@ -97,9 +93,10 @@ public class JADEService extends Service {
                     public void onSuccess(Void aVoid) {
                         info("Successfully start of the " + agentClassName + "...");
                         try {
-                            callback.onSuccess(MicroRuntime.getAgent(agentName));
+                            agentManager.setAgent(MicroRuntime.getAgent(agentName).getO2AInterface(AgentInterface.class));
+                            agentManager.sendCapacity(getTextStored(CrowdServiceApplication.CAPACITY));
                         } catch (ControllerException e) {
-                            err("Failed to start the " + agentClassName + ":" + e.getMessage());
+                            onFailure(e);
                         }
                     }
 
@@ -117,5 +114,9 @@ public class JADEService extends Service {
 
     private void err(String reason) {
         logger.log(Level.SEVERE, reason);
+    }
+
+    private String getTextStored(String key) {
+        return setting.getString(key, "");
     }
 }

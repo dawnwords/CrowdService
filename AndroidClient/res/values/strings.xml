@@ -5,4 +5,8 @@
     <string name="create_agent">Create Agent</string>
     <string name="get_template_list">Get Template List</string>
     <string name="agent_name">Agent Name</string>
+    <string name="login">Login</string>
+    <string name="capacity">Capacity</string>
+    <string name="worker">Worker</string>
+    <string name="consumer">Consumer</string>
 </resources>
