@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice.bean.kv;
+package edu.fudan.se.crowdservice.kv;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

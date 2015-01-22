@@ -1,10 +1,10 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.bean.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.jade.agent.ConversationType;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.DelegateMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
+import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 
 import java.util.ArrayList;
 

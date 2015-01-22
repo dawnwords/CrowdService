@@ -1,7 +1,6 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import android.os.Message;
 import edu.fudan.se.crowdservice.jade.agent.ConversationType;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import jade.core.behaviours.CyclicBehaviour;
@@ -32,7 +31,7 @@ public abstract class MessageReceivingBehaviour<T extends Serializable> extends 
         ACLMessage aclMsg = myAgent.receive(mt);
         if (aclMsg != null) {
             try {
-                UIMessage message = prepareMessage((T) aclMsg.getContentObject()) ;
+                UIMessage message = prepareMessage((T) aclMsg.getContentObject());
                 handler.sendMessage(message.asMessage());
             } catch (UnreadableException e) {
                 e.printStackTrace();

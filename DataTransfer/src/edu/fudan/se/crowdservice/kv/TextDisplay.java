@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice.bean.kv;
+package edu.fudan.se.crowdservice.kv;
 
 /**
  * Created by Jiahuan on 2015/1/22.
