@@ -2,6 +2,8 @@ package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
 import edu.fudan.se.crowdservice.jade.agent.ConversationType;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.RequestMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 
 /**
  * Created by Jiahuan on 2015/1/22.
@@ -12,7 +14,7 @@ public class ReceiveRequestBehaviour extends MessageReceivingBehaviour<String> {
     }
 
     @Override
-    protected void handleMessage(Handler handler, String request) {
-        //TODO finish handle request logic
+    protected UIMessage prepareMessage(String content) {
+        return new RequestMessage(content);
     }
 }
