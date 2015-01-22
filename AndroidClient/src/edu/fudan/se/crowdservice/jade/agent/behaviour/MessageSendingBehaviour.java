@@ -1,7 +1,7 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
+import edu.fudan.se.crowdservice.jade.agent.ConversationType;
 import jade.core.AID;
-import jade.core.Agent;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
@@ -15,27 +15,24 @@ import java.util.logging.Level;
  */
 public abstract class MessageSendingBehaviour<T extends Serializable> extends OneShotBehaviour {
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
-    private AID targetId;
-    private Agent agent;
-    private ConversationType conversationId;
+    private ConversationType conversationType;
     private T content;
 
-    public MessageSendingBehaviour(Agent agent, String targetAgentName, ConversationType conversationId,T content) {
-        this.targetId = new AID(targetAgentName, true);
-        this.agent = agent;
-        this.conversationId = conversationId;
+    public MessageSendingBehaviour(ConversationType conversationType, T content) {
+        this.conversationType = conversationType;
         this.content = content;
     }
 
     @Override
     public void action() {
+        AID targetAgent = conversationType.target();
         ACLMessage aclMsg = new ACLMessage(ACLMessage.INFORM);
-        aclMsg.setConversationId(conversationId.name());
-        aclMsg.addReceiver(targetId);
+        aclMsg.setConversationId(conversationType.name());
+        aclMsg.addReceiver(targetAgent);
         try {
-            info("Sending Message to %s:%s", targetId, content);
+            info("Sending Message to %s:%s", targetAgent, content);
             aclMsg.setContentObject(content);
-            agent.send(aclMsg);
+            myAgent.send(aclMsg);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -44,9 +41,4 @@ public abstract class MessageSendingBehaviour<T extends Serializable> extends On
     protected void info(String format, Object... args) {
         logger.log(Level.INFO, String.format(format + "\n", args));
     }
-
-    public static enum ConversationType {
-        REGISTER_CAPACITY, RESPONSE, OFFER
-    }
-
 }
