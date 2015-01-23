@@ -24,6 +24,6 @@ public enum ConversationType {
     }
 
     public AID target() {
-        return new AID(targetAgent, true);
+        return new AID(targetAgent, false);
     }
 }

@@ -2,11 +2,11 @@ package edu.fudan.se.crowdservice.jade.agent;
 
 import android.location.Location;
 import android.os.Handler;
-import edu.fudan.se.crowdservice.bean.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.jade.agent.behaviour.SendCapacityBehaviour;
 import edu.fudan.se.crowdservice.jade.agent.behaviour.SendResponseBehaviour;
 import edu.fudan.se.crowdservice.jade.agent.behaviour.TemplateExecutingBehaviour;
+import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 import jade.core.Agent;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.core.behaviours.TickerBehaviour;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by Dawnwords on 2014/12/13.
  */
 public class DaemonAgent extends Agent implements AgentInterface {
-    private static final long HEARTBEAT_FREQUENCE = 1000;
+    private static final long HEARTBEAT_FREQUENCY = 1000;
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
     private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
 
@@ -41,7 +41,7 @@ public class DaemonAgent extends Agent implements AgentInterface {
     @Override
     public void sendCapacity(String capacity) {
         addBehaviour(new SendCapacityBehaviour(capacity));
-        addBehaviour(new TickerBehaviour(this, HEARTBEAT_FREQUENCE) {
+        addBehaviour(new TickerBehaviour(this, HEARTBEAT_FREQUENCY) {
             @Override
             protected void onTick() {
                 sendHeartbeat();
@@ -74,8 +74,8 @@ public class DaemonAgent extends Agent implements AgentInterface {
     }
 
     @Override
-    public void sendResponse(ArrayList<KeyValueHolder> response) {
-        addBehaviour(new SendResponseBehaviour(response));
+    public void sendResponse(long taskid, ArrayList<KeyValueHolder> response) {
+        addBehaviour(new SendResponseBehaviour(taskid, response));
     }
 
     @Override

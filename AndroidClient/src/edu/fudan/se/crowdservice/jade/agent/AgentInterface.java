@@ -2,8 +2,8 @@ package edu.fudan.se.crowdservice.jade.agent;
 
 import android.location.Location;
 import android.os.Handler;
-import edu.fudan.se.crowdservice.bean.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public interface AgentInterface {
 
     void setLocation(Location myLocation);
 
-    void sendResponse(ArrayList<KeyValueHolder> response);
+    void sendResponse(long taskId, ArrayList<KeyValueHolder> response);
 
     void executeTemplate(Template template);
 }
