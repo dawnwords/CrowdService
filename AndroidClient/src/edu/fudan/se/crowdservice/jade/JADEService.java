@@ -3,7 +3,7 @@ package edu.fudan.se.crowdservice.jade;
 import android.app.Service;
 import android.content.*;
 import android.os.IBinder;
-import edu.fudan.se.crowdservice.CrowdServiceApplication;
+import edu.fudan.se.crowdservice.data.SavedProperty;
 import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 import edu.fudan.se.crowdservice.jade.agent.DaemonAgent;
 import jade.android.MicroRuntimeService;
@@ -42,14 +42,16 @@ public class JADEService extends Service {
     public void onCreate() {
         super.onCreate();
         logger = Logger.getJADELogger(this.getClass().getName());
-        setting = getSharedPreferences(CrowdServiceApplication.CROWD_SERVICE, 0);
+        setting = getSharedPreferences(SavedProperty.CROWD_SERVICE, 0);
 
         bindMicroRuntimeService();
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        agentManager = new AgentManager();
+        if (agentManager == null) {
+            agentManager = new AgentManager();
+        }
         return agentManager;
     }
 
@@ -83,8 +85,8 @@ public class JADEService extends Service {
         }
     }
 
-    void startAgent() {
-        final String agentName = getTextStored(CrowdServiceApplication.AGENT_NAME);
+    private void startAgent() {
+        final String agentName = getTextStored(SavedProperty.AGENT_NAME);
         final String agentClassName = DaemonAgent.class.getName();
         info("Starting " + agentClassName + "...");
         microRuntimeServiceBinder.startAgent(agentName, agentClassName, new Object[]{getApplicationContext()},
@@ -94,7 +96,7 @@ public class JADEService extends Service {
                         info("Successfully start of the " + agentClassName + "...");
                         try {
                             agentManager.setAgent(MicroRuntime.getAgent(agentName).getO2AInterface(AgentInterface.class));
-                            agentManager.sendCapacity(getTextStored(CrowdServiceApplication.CAPACITY));
+                            agentManager.sendCapacity(getTextStored(SavedProperty.CAPACITY));
                         } catch (ControllerException e) {
                             onFailure(e);
                         }
@@ -103,6 +105,8 @@ public class JADEService extends Service {
                     @Override
                     public void onFailure(Throwable throwable) {
                         err("Failed to start the " + agentClassName + "...");
+                        throwable.printStackTrace();
+                        agentManager.setAgent(null);
                     }
 
                 });

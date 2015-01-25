@@ -3,18 +3,17 @@ package edu.fudan.se.crowdservice.jade.agent;
 import android.location.Location;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.Template;
-import edu.fudan.se.crowdservice.jade.agent.behaviour.SendCapacityBehaviour;
-import edu.fudan.se.crowdservice.jade.agent.behaviour.SendResponseBehaviour;
-import edu.fudan.se.crowdservice.jade.agent.behaviour.TemplateExecutingBehaviour;
-import edu.fudan.se.crowdservice.kv.KeyValueHolder;
+import edu.fudan.se.crowdservice.jade.agent.behaviour.*;
+import edu.fudan.se.crowdservice.wrapper.OfferWrapper;
+import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.util.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by Dawnwords on 2014/12/13.
@@ -25,7 +24,6 @@ public class DaemonAgent extends Agent implements AgentInterface {
     private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
 
     private Location location;
-    private Handler handler;
 
     @Override
     protected void setup() {
@@ -37,7 +35,6 @@ public class DaemonAgent extends Agent implements AgentInterface {
         logger.log(Logger.INFO, msg);
     }
 
-
     @Override
     public void sendCapacity(String capacity) {
         addBehaviour(new SendCapacityBehaviour(capacity));
@@ -47,6 +44,11 @@ public class DaemonAgent extends Agent implements AgentInterface {
                 sendHeartbeat();
             }
         });
+    }
+
+    @Override
+    public void sendOffer(OfferWrapper offer) {
+        addBehaviour(new SendOfferBehaviour(offer));
     }
 
     private synchronized void sendHeartbeat() {
@@ -65,7 +67,9 @@ public class DaemonAgent extends Agent implements AgentInterface {
 
     @Override
     public void registerHandler(Handler handler) {
-        this.handler = handler;
+        addBehaviour(new ReceiveDelegateBehaviour(handler));
+        addBehaviour(new ReceiveRefuseBehaviour(handler));
+        addBehaviour(new ReceiveRequestBehaviour(handler));
     }
 
     @Override
@@ -74,8 +78,8 @@ public class DaemonAgent extends Agent implements AgentInterface {
     }
 
     @Override
-    public void sendResponse(long taskid, ArrayList<KeyValueHolder> response) {
-        addBehaviour(new SendResponseBehaviour(taskid, response));
+    public void sendResponse(ResponseWrapper response) {
+        addBehaviour(new SendResponseBehaviour(response));
     }
 
     @Override
@@ -83,4 +87,8 @@ public class DaemonAgent extends Agent implements AgentInterface {
         addBehaviour(tbf.wrap(new TemplateExecutingBehaviour(template)));
     }
 
+    @Override
+    public void addBehaviour(Behaviour b) {
+        super.addBehaviour(tbf.wrap(b));
+    }
 }

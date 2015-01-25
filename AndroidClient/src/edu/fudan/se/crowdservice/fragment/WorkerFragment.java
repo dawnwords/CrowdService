@@ -1,18 +1,56 @@
 package edu.fudan.se.crowdservice.fragment;
 
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.text.Editable;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
+import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
+import edu.fudan.se.crowdservice.wrapper.OfferWrapper;
+import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
 
 /**
  * Created by Jiahuan on 2015/1/21.
  */
-public class WorkerFragment extends Fragment {
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_worker, container, false);
+public class WorkerFragment extends BaseFragment<RequestWrapper> {
+
+    public WorkerFragment() {
+        super(R.string.no_task, R.layout.list_item_task);
     }
+
+    @Override
+    protected void onItemSelected(final RequestWrapper task) {
+        final EditText input = new EditText(getActivity());
+        input.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+
+        String title = getResources().getString(R.string.offer_price);
+        new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
+                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                Editable text = input.getText();
+                if (text != null && !text.toString().isEmpty()) {
+                    try {
+                        int offer = Integer.parseInt(text.toString());
+                        agent.sendOffer(new OfferWrapper(task.taskId, offer));
+                        dialog.dismiss();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        showMessage("Please Input an integer for task price!");
+                    }
+                }
+                showMessage("Please offer a task price!");
+            }
+        }).create().show();
+
+    }
+
+    @Override
+    protected void setItemView(RequestWrapper task, View view) {
+        TextView taskDescription = (TextView) view.findViewById(R.id.task_description);
+        taskDescription.setText(task.description);
+    }
+
 }
