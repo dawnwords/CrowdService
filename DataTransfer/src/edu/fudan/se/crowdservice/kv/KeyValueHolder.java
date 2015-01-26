@@ -6,6 +6,9 @@ import java.io.Serializable;
  * Created by Jiahuan on 2015/1/22.
  */
 public class KeyValueHolder<T> implements Serializable {
+
+    private static final long serialVersionUID = 1984215843007904910L;
+
     private String key;
     private T value;
 
@@ -20,5 +23,9 @@ public class KeyValueHolder<T> implements Serializable {
 
     public T getValue() {
         return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
     }
 }

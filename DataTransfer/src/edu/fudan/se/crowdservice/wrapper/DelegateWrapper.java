@@ -8,6 +8,8 @@ import java.util.ArrayList;
  * Created by Jiahuan on 2015/1/23.
  */
 public class DelegateWrapper extends Wrapper {
+    private static final long serialVersionUID = 5024381597298577179L;
+
     public final ArrayList<KeyValueHolder> keyValueHolders;
 
     public DelegateWrapper(long taskId, ArrayList<KeyValueHolder> keyValueHolders) {
