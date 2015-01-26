@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.View;
 import edu.fudan.se.crowdservice.R;
+import edu.fudan.se.crowdservice.data.GPSLocator;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
 import edu.fudan.se.crowdservice.fragment.BaseFragment;
@@ -20,6 +21,9 @@ import edu.fudan.se.crowdservice.jade.JADEService;
 
 public class MainActivity extends Activity {
     private ConsumerFragment consumerFragment;
+    private WorkerFragment workerFragment;
+    private FragmentManager fragmentManager;
+    private GPSLocator locator;
     private ServiceConnection felixConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -32,27 +36,29 @@ public class MainActivity extends Activity {
             consumerFragment.setTemplateManager(null);
         }
     };
-    private WorkerFragment workerFragment;
     private ServiceConnection jadeConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             AgentManager am = (AgentManager) iBinder;
             workerFragment.setAgent(am);
             consumerFragment.setAgent(am);
+            locator.enableGPS(MainActivity.this, am);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             workerFragment.setAgent(null);
             consumerFragment.setAgent(null);
+            locator.disableGPS();
         }
     };
-    private FragmentManager fragmentManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        locator = new GPSLocator();
 
         consumerFragment = new ConsumerFragment();
         workerFragment = new WorkerFragment();
@@ -67,6 +73,7 @@ public class MainActivity extends Activity {
         bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
         bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
     }
+
 
     @Override
     protected void onDestroy() {
