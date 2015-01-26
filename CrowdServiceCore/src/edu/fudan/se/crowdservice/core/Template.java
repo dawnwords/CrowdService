@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.method.DigitsKeyListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import jade.util.Logger;
@@ -15,6 +17,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import java.util.HashMap;
 import java.util.logging.Level;
 
 /**
@@ -26,8 +29,10 @@ public abstract class Template implements BundleActivator {
     private Context context;
     private Handler uiHandler;
     private OnTemplateStopListener listener;
+    private HashMap<String, TimeCost> serviceTimeCostMap;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
+    private TimeCost totalTimeCost;
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
@@ -53,6 +58,9 @@ public abstract class Template implements BundleActivator {
     }
 
     public void executeTemplate() {
+        totalTimeCost = requestTotalTimeCost();
+        log("Total Time=" + totalTimeCost.time + ",Cost=" + totalTimeCost.cost);
+        planTotalTimeCost(getTemplateName(), totalTimeCost);
         log("Resolve Service...");
         resolveService(new ServiceResolver());
         log("Execute Template");
@@ -60,6 +68,57 @@ public abstract class Template implements BundleActivator {
         log("Stop Template");
         listener.onTemplateStop(this);
     }
+
+    private TimeCost requestTotalTimeCost() {
+        final ResultHolder<TimeCost> result = new ResultHolder<TimeCost>();
+        uiHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout wrapper = new LinearLayout(context);
+                LinearLayout timeWrapper = new LinearLayout(context);
+                LinearLayout costWrapper = new LinearLayout(context);
+                TextView timeText = new TextView(context);
+                TextView costText = new TextView(context);
+                final EditText timeInput = new EditText(context);
+                final EditText costInput = new EditText(context);
+                timeInput.setKeyListener(new DigitsKeyListener());
+                costInput.setKeyListener(new DigitsKeyListener());
+                LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 3);
+                LinearLayout.LayoutParams inputParam = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 7);
+                timeText.setLayoutParams(textParam);
+                costText.setLayoutParams(textParam);
+                timeInput.setLayoutParams(inputParam);
+                costInput.setLayoutParams(inputParam);
+                timeWrapper.addView(timeText);
+                timeWrapper.addView(timeInput);
+                costWrapper.addView(costText);
+                costWrapper.addView(costInput);
+                wrapper.addView(timeWrapper);
+                wrapper.addView(costWrapper);
+
+                getBuilder("Please input total time & cost for this template").setView(wrapper)
+                        .setPositiveButton("OK", new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                result.set(new TimeCost(getIntFromEditText(timeInput), getIntFromEditText(costInput)));
+                            }
+
+                            int getIntFromEditText(EditText text) {
+                                Editable e = text.getText();
+                                return e == null ? 0 : Integer.parseInt(e.toString());
+                            }
+                        }).create().show();
+            }
+        });
+        return result.get();
+    }
+
+    private void planTotalTimeCost(String templateName, TimeCost total) {
+        //TODO invoke tfws1
+        serviceTimeCostMap = new HashMap<String, TimeCost>();
+    }
+
+    protected abstract String getTemplateName();
 
     protected abstract void resolveService(ServiceResolver serviceResolver);
 
@@ -152,13 +211,30 @@ public abstract class Template implements BundleActivator {
     }
 
     protected class ServiceResolver {
-        public <T> T resolveService(Class<T> serviceClass) {
+        public <T> T resolveService(Class<T> serviceClass, double timePersent, double costPersent) {
             ServiceReference<T> serviceReference = bundleContext.getServiceReference(serviceClass);
             T service = bundleContext.getService(serviceReference);
             ConcreteService concreteService = (ConcreteService) service;
             concreteService.setContext(context);
             concreteService.setUiHandler(uiHandler);
+            //TODO After tfws1 Added
+//            TimeCost timeCost = serviceTimeCostMap.get(serviceClass.getName());
+//            concreteService.setTime(timeCost.time);
+//            concreteService.setCost(timeCost.cost);
+            concreteService.setTime((int) (totalTimeCost.time * timePersent));
+            concreteService.setCost((int) (totalTimeCost.cost * costPersent));
+            concreteService.setTemplateName(getTemplateName());
+
             return service;
+        }
+    }
+
+    private class TimeCost {
+        final int time, cost;
+
+        public TimeCost(int time, int cost) {
+            this.time = time;
+            this.cost = cost;
         }
     }
 }

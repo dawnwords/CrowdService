@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice.data;
+package edu.fudan.se.crowdservice.core;
 
 import android.content.SharedPreferences;
 

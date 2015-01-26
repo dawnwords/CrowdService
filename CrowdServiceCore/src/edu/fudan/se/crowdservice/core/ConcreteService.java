@@ -2,6 +2,7 @@ package edu.fudan.se.crowdservice.core;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import jade.util.Logger;
@@ -15,19 +16,23 @@ import java.util.logging.Level;
  */
 public abstract class ConcreteService implements BundleActivator {
     protected Context context;
+    protected String consumerId;
+    protected int time, cost;
+    protected String templateName;
     private Handler uiHandler;
-
     private Logger logger = Logger.getJADELogger(ConcreteService.class.getName());
 
     @Override
-    public final void start(BundleContext context) throws Exception {
+    public void start(BundleContext bundleContext) throws Exception {
         String serviceName = getServiceInterface().getName();
         logger.log(Level.INFO, "Register Service:" + serviceName);
-        context.registerService(serviceName, this, null);
+        bundleContext.registerService(serviceName, this, null);
+        SharedPreferences setting = context.getSharedPreferences(SavedProperty.CROWD_SERVICE, 0);
+        consumerId = setting.getString(SavedProperty.AGENT_NAME, "");
     }
 
     @Override
-    public final void stop(BundleContext context) throws Exception {
+    public void stop(BundleContext context) throws Exception {
     }
 
     void setContext(Context context) {
@@ -36,6 +41,18 @@ public abstract class ConcreteService implements BundleActivator {
 
     void setUiHandler(Handler uiHandler) {
         this.uiHandler = uiHandler;
+    }
+
+    void setTime(int time) {
+        this.time = time;
+    }
+
+    void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 
     protected abstract Class getServiceInterface();
