@@ -20,57 +20,6 @@ import java.util.logging.Level;
  */
 public class FelixConfig extends Properties {
 
-    private Logger logger = Logger.getJADELogger(this.getClass().getName());
-
-    public FelixConfig(Context context) {
-        analyzeClassPath();
-
-        String absFilePath = context.getFilesDir().getAbsolutePath();
-        InitActivator initActivator = new InitActivator(context.getResources());
-
-        put("org.osgi.framework.storage", absFilePath + File.separator + "felix" + File.separator + "cache");
-        put("felix.cache.rootdir", absFilePath + File.separator + "felix");
-        put("felix.fileinstall.dir", absFilePath + File.separator + "felix" + File.separator + "newbundle");
-        put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, Arrays.asList(initActivator));
-        put("felix.fileinstall.debug", "1");
-        put("org.osgi.framework.system.packages.extra", ANDROID_FRAMEWORK_PACKAGES_ext);
-        put("felix.log.level", "4");
-        put("felix.auto.deploy.action", "install,start");
-        put("felix.startlevel.bundle", "1");
-        put("felix.service.urlhandlers", "false"); //java.net.MalformedURLException: java.lang.IllegalStateException: Unknown protocol: http
-        put("eecap-1.7", "osgi.ee;osgi.ee=\"JavaSE\";version:=\"1.7\"");
-    }
-
-
-    // package scanner
-    private void analyzeClassPath() {
-        PackageScanner pkgScanner = new PackageScanner();
-        pkgScanner.useClassLoader(PackageScanner.class.getClassLoader().getParent());
-
-        Collection<ExportPackage> exports = pkgScanner.select(
-                PackageScanner.jars(
-                        PackageScanner.include("*.jar"),
-                        PackageScanner.exclude("felix.jar", "package*.jar")
-                ),
-                PackageScanner.packages(
-                        PackageScanner.include(
-                                "org.*", "com.*", "javax.*", "android", "android.*", "com.android.*",
-                                "dalvik.*", "java.*", "junit.*", "org.apache.*", "org.json", "org.xml.*",
-                                "org.xmlpull.*", "org.w3c.*"
-                        )
-                )
-        ).scan();
-        info("HIER: " + exports.size());
-        // now fill analyzedExportString
-        while (exports.iterator().hasNext()) {
-            info("exports: " + exports.iterator().next().getPackageName());
-        }
-    }
-
-    private void info(String s) {
-        logger.log(Level.INFO, s);
-    }
-
     private static final String ANDROID_FRAMEWORK_PACKAGES_ext = (
             "org.osgi.framework; version=1.4.0," +
                     "org.osgi.service.packageadmin; version=1.2.0," +
@@ -153,10 +102,68 @@ public class FelixConfig extends Properties {
                     "org.xml.sax.helpers; " +
                     // Android OS Version?? ->her ends semicolon as seperator -> Why?
                     "version=1.5.0.r3," +
+                    // KSOAP
+                    "org.ksoap2," +
+                    "org.ksoap2.serialization," +
+                    "org.ksoap2.serialization," +
+                    "org.ksoap2.transport," +
                     // JADE
                     "jade.util," +
                     "jade.util.logging," +
                     // MY OWN
-                    "edu.fudan.se.crowdservice.core"
+                    "edu.fudan.se.crowdservice.core," +
+                    "edu.fudan.se.crowdservice.core.dui," +
+                    "edu.fudan.se.crowdservice.kv," +
+                    "edu.fudan.se.crowdservice.util"
     ).intern();
+    private Logger logger = Logger.getJADELogger(this.getClass().getName());
+
+
+    public FelixConfig(Context context) {
+        analyzeClassPath();
+
+        String absFilePath = context.getFilesDir().getAbsolutePath();
+        InitActivator initActivator = new InitActivator(context.getResources());
+
+        put("org.osgi.framework.storage", absFilePath + File.separator + "felix" + File.separator + "cache");
+        put("felix.cache.rootdir", absFilePath + File.separator + "felix");
+        put("felix.fileinstall.dir", absFilePath + File.separator + "felix" + File.separator + "newbundle");
+        put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, Arrays.asList(initActivator));
+        put("felix.fileinstall.debug", "1");
+        put("org.osgi.framework.system.packages.extra", ANDROID_FRAMEWORK_PACKAGES_ext);
+        put("felix.log.level", "4");
+        put("felix.auto.deploy.action", "install,start");
+        put("felix.startlevel.bundle", "1");
+        put("felix.service.urlhandlers", "false"); //java.net.MalformedURLException: java.lang.IllegalStateException: Unknown protocol: http
+        put("eecap-1.7", "osgi.ee;osgi.ee=\"JavaSE\";version:=\"1.7\"");
+    }
+
+    // package scanner
+    private void analyzeClassPath() {
+        PackageScanner pkgScanner = new PackageScanner();
+        pkgScanner.useClassLoader(PackageScanner.class.getClassLoader().getParent());
+
+        Collection<ExportPackage> exports = pkgScanner.select(
+                PackageScanner.jars(
+                        PackageScanner.include("*.jar"),
+                        PackageScanner.exclude("felix.jar", "package*.jar")
+                ),
+                PackageScanner.packages(
+                        PackageScanner.include(
+                                "org.*", "com.*", "javax.*", "android", "android.*", "com.android.*",
+                                "dalvik.*", "java.*", "junit.*", "org.apache.*", "org.json", "org.xml.*",
+                                "org.xmlpull.*", "org.w3c.*"
+                        )
+                )
+        ).scan();
+        info("HIER: " + exports.size());
+        // now fill analyzedExportString
+        while (exports.iterator().hasNext()) {
+            info("exports: " + exports.iterator().next().getPackageName());
+        }
+    }
+
+    private void info(String s) {
+        logger.log(Level.INFO, s);
+    }
 }
