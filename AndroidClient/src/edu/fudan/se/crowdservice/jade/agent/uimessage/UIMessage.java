@@ -20,6 +20,14 @@ public class UIMessage<T extends Serializable> {
         message.setData(bundle);
     }
 
+    public UIMessage(Message message) {
+        this.message = message;
+    }
+
+    public int what() {
+        return message.what;
+    }
+
     public Message asMessage() {
         return message;
     }
