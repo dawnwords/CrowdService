@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Osmorc" name="OSGi">
+      <configuration manifestGenerationMode="OsmorcControlled" manifestLocation="" jarfileLocation="E:\CrowdService\out\service\TakePictureOfURLService.jar" outputPathType="SpecificOutputPath" bndFileLocation="" bundlorFileLocation="" bundleActivator="service.shcomputer.cs.takepic.impl.TakePictureOfURLServiceImpl" bundleSymbolicName="TakePictureOfURLService" bundleVersion="1.0.0" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="true" doNotSynchronizeWithMaven="false">
+        <additionalProperties>
+          <property key="Export-Package" value="service.shcomputer.cs.takepic.interfaces" />
+          <property key="Export-Service" value="service.shcomputer.cs.takepic.interfaces.TakePictureOfURLServie" />
+        </additionalProperties>
+        <additionalJARContents />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="libs" level="project" />
+  </component>
+</module>

@@ -48,15 +48,4 @@ public class TakePictureOfURLServiceImpl extends ConcreteService implements Take
         }
         return path;
     }
-
-
-    private void close(Closeable closeable) {
-        if (closeable != null) {
-            try {
-                closeable.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }
