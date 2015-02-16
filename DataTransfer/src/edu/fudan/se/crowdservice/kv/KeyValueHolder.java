@@ -28,4 +28,12 @@ public class KeyValueHolder<T> implements Serializable {
     public void setValue(T value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "KeyValueHolder{" +
+                "key='" + key + '\'' +
+                ", value=" + value +
+                '}';
+    }
 }
