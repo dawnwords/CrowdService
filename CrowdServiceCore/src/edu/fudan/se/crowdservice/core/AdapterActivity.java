@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 /**
@@ -69,6 +70,16 @@ public class AdapterActivity extends Activity {
     public boolean onTouchEvent(MotionEvent event) {
         ServiceActivityHolder.activity.onTouchEvent(event);
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            ServiceActivityHolder.activity.finish();
+            return false;
+        }
+        ServiceActivityHolder.activity.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
     }
 
     static class ServiceActivityHolder {
