@@ -7,9 +7,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.method.DigitsKeyListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import jade.util.Logger;
@@ -75,26 +75,30 @@ public abstract class Template implements BundleActivator {
             @Override
             public void run() {
                 LinearLayout wrapper = new LinearLayout(context);
+                wrapper.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout timeWrapper = new LinearLayout(context);
+                timeWrapper.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout costWrapper = new LinearLayout(context);
+                costWrapper.setOrientation(LinearLayout.HORIZONTAL);
                 TextView timeText = new TextView(context);
+                timeText.setText("Total Time:");
                 TextView costText = new TextView(context);
+                costText.setText("Total Cost:");
                 final EditText timeInput = new EditText(context);
                 final EditText costInput = new EditText(context);
                 timeInput.setKeyListener(new DigitsKeyListener());
                 costInput.setKeyListener(new DigitsKeyListener());
-                LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 3);
-                LinearLayout.LayoutParams inputParam = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 7);
-                timeText.setLayoutParams(textParam);
-                costText.setLayoutParams(textParam);
-                timeInput.setLayoutParams(inputParam);
-                costInput.setLayoutParams(inputParam);
-                timeWrapper.addView(timeText);
-                timeWrapper.addView(timeInput);
-                costWrapper.addView(costText);
-                costWrapper.addView(costInput);
-                wrapper.addView(timeWrapper);
-                wrapper.addView(costWrapper);
+
+                LayoutParams leftParams = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 3);
+                LayoutParams rightParams = new LayoutParams(0, LayoutParams.WRAP_CONTENT, 7);
+                LayoutParams matchParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
+                timeWrapper.addView(timeText, leftParams);
+                timeWrapper.addView(timeInput, rightParams);
+                costWrapper.addView(costText, leftParams);
+                costWrapper.addView(costInput, rightParams);
+                wrapper.addView(timeWrapper, matchParams);
+                wrapper.addView(costWrapper, matchParams);
 
                 getBuilder("Please input total time & cost for this template").setView(wrapper)
                         .setPositiveButton("OK", new OnClickListener() {
@@ -105,7 +109,7 @@ public abstract class Template implements BundleActivator {
 
                             int getIntFromEditText(EditText text) {
                                 Editable e = text.getText();
-                                return e == null ? 0 : Integer.parseInt(e.toString());
+                                return e == null || "".equals(e.toString()) ? 0 : Integer.parseInt(e.toString());
                             }
                         }).create().show();
             }
