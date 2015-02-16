@@ -1,5 +1,6 @@
 package edu.fudan.se.crowdservice.jade.agent;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.Template;
@@ -19,6 +20,8 @@ public interface AgentInterface {
     void setLocation(Location myLocation);
 
     void sendResponse(ResponseWrapper response);
+
+    void setContext(Context context);
 
     void executeTemplate(Template template);
 }

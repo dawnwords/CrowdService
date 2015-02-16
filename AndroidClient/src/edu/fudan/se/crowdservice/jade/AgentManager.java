@@ -1,5 +1,6 @@
 package edu.fudan.se.crowdservice.jade;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Handler;
@@ -51,6 +52,10 @@ public class AgentManager extends Binder implements AgentInterface {
     @Override
     public void sendResponse(ResponseWrapper response) {
         agent.sendResponse(response);
+    }
+
+    @Override
+    public void setContext(Context context) {
     }
 
     @Override

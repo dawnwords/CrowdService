@@ -1,5 +1,6 @@
 package edu.fudan.se.crowdservice.jade.agent;
 
+import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.Template;
@@ -19,14 +20,13 @@ import java.io.IOException;
  * Created by Dawnwords on 2014/12/13.
  */
 public class DaemonAgent extends Agent implements AgentInterface {
-    private static final long HEARTBEAT_FREQUENCY = 1000;
+    private static final long HEARTBEAT_FREQUENCY = 5 * 1000;
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
     private ThreadedBehaviourFactory tbf = new ThreadedBehaviourFactory();
-
+    private Context context;
     private Location location;
 
-    @Override
-    protected void setup() {
+    public DaemonAgent() {
         info("Register TemplateExecutor O2AInterface...");
         registerO2AInterface(AgentInterface.class, this);
     }
@@ -67,7 +67,7 @@ public class DaemonAgent extends Agent implements AgentInterface {
 
     @Override
     public void registerHandler(Handler handler) {
-        addBehaviour(new ReceiveDelegateBehaviour(handler));
+        addBehaviour(new ReceiveDelegateBehaviour(handler, context));
         addBehaviour(new ReceiveRefuseBehaviour(handler));
         addBehaviour(new ReceiveRequestBehaviour(handler));
     }
@@ -80,6 +80,11 @@ public class DaemonAgent extends Agent implements AgentInterface {
     @Override
     public void sendResponse(ResponseWrapper response) {
         addBehaviour(new SendResponseBehaviour(response));
+    }
+
+    @Override
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override
