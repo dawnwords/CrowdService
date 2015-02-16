@@ -12,9 +12,14 @@ public class ArithmeticTemplate extends Template {
     private DivideService divideService;
 
     @Override
+    protected String getTemplateName() {
+        return getClass().getName();
+    }
+
+    @Override
     protected void resolveService(ServiceResolver serviceResolver) {
-        addService = serviceResolver.resolveService(AddService.class);
-        divideService = serviceResolver.resolveService(DivideService.class);
+        addService = serviceResolver.resolveService(AddService.class, 0.5, 0.5);
+        divideService = serviceResolver.resolveService(DivideService.class, 0.5, 0.5);
     }
 
     @Override

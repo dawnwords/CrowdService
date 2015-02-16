@@ -22,12 +22,17 @@ public class BuyingSHComputerTemplate extends Template {
     private JudgeWorthOfComputerService judgeWorthOfComputerService;//CS
 
     @Override
+    protected String getTemplateName() {
+        return getClass().getName();
+    }
+
+    @Override
     protected void resolveService(ServiceResolver serviceResolver) {
-        selectURLService = serviceResolver.resolveService(SelectURLService.class);
-        getLocationFromURLService = serviceResolver.resolveService(GetLocationFromURLService.class);
-        takePictureOfURLService = serviceResolver.resolveService(TakePictureOfURLService.class);
-        showPictureService = serviceResolver.resolveService(ShowPictureService.class);
-        judgeWorthOfComputerService = serviceResolver.resolveService(JudgeWorthOfComputerService.class);
+        selectURLService = serviceResolver.resolveService(SelectURLService.class, 0.2, 0);
+        getLocationFromURLService = serviceResolver.resolveService(GetLocationFromURLService.class, 0, 0.1);
+        takePictureOfURLService = serviceResolver.resolveService(TakePictureOfURLService.class, 0.35, 0.5);
+        showPictureService = serviceResolver.resolveService(ShowPictureService.class, 0.1, 0);
+        judgeWorthOfComputerService = serviceResolver.resolveService(JudgeWorthOfComputerService.class, 0.35, 0.4);
     }
 
     @Override
