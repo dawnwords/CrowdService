@@ -22,7 +22,7 @@ public class SelectURLServiceImpl extends ConcreteService implements SelectURLSe
     public String getSelectedURL(String sourceURL) {
         Bundle bundle = new Bundle();
         bundle.putString(START_URL, sourceURL);
-        return startServiceActivityForResult(bundle);
+        return startServiceActivity(bundle);
     }
 
     @Override

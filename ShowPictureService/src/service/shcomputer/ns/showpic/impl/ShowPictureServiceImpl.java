@@ -26,6 +26,6 @@ public class ShowPictureServiceImpl extends ConcreteService implements ShowPictu
     public void showPic(String pic) {
         Bundle bundle = new Bundle();
         bundle.putString(ShowBitmapActivity.BITMAP, pic);
-        startServiceActivityForResult(bundle);
+        startServiceActivity(bundle);
     }
 }
