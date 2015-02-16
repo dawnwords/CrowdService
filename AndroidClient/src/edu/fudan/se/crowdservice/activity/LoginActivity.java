@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
-import edu.fudan.se.crowdservice.data.SavedProperty;
+import edu.fudan.se.crowdservice.core.SavedProperty;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
@@ -26,10 +26,11 @@ public class LoginActivity extends Activity {
     private EditText agentNameEditText, capacityEditText;
     private SharedPreferences settings;
     private ProgressDialog dialog;
+    private AgentManager am;
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            final AgentManager am = (AgentManager) iBinder;
+            am = (AgentManager) iBinder;
             am.registerOnAgentReadyInterface(new AgentManager.OnAgentReadyInterface() {
                 @Override
                 public void onAgentReady() {
@@ -60,7 +61,7 @@ public class LoginActivity extends Activity {
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-
+            am = null;
         }
     };
 
@@ -74,7 +75,9 @@ public class LoginActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        unbindService(connection);
+        if (am != null) {
+            unbindService(connection);
+        }
         super.onDestroy();
     }
 
