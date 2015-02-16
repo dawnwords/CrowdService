@@ -3,6 +3,7 @@ package edu.fudan.se.crowdservice.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.Editable;
+import android.text.method.DigitsKeyListener;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ public class WorkerFragment extends BaseFragment<RequestWrapper> {
     @Override
     protected void onItemSelected(final RequestWrapper task) {
         final EditText input = new EditText(getActivity());
+        input.setKeyListener(new DigitsKeyListener());
         input.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         String title = getResources().getString(R.string.offer_price);
@@ -40,8 +42,9 @@ public class WorkerFragment extends BaseFragment<RequestWrapper> {
                         e.printStackTrace();
                         showMessage("Please Input an integer for task price!");
                     }
+                } else {
+                    showMessage("Please offer a task price!");
                 }
-                showMessage("Please offer a task price!");
             }
         }).create().show();
 
@@ -53,4 +56,7 @@ public class WorkerFragment extends BaseFragment<RequestWrapper> {
         taskDescription.setText(task.description);
     }
 
+    public void addRequest(RequestWrapper value) {
+        addData(value);
+    }
 }

@@ -78,6 +78,11 @@ public abstract class BaseFragment<T> extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
+    protected final void addData(T data) {
+        this.data.add(data);
+        adapter.notifyDataSetChanged();
+    }
+
     protected abstract void onItemSelected(T item);
 
     protected abstract void setItemView(T item, View convertView);
