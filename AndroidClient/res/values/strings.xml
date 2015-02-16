@@ -14,4 +14,6 @@
     <string name="no_template">No Templates Yet</string>
     <string name="loggingin">Logging in...</string>
     <string name="jade_fail">JADE Fail</string>
+    <string name="submit">Submit</string>
+    <string name="please_complete_task_form">Please complete this task form!</string>
 </resources>
