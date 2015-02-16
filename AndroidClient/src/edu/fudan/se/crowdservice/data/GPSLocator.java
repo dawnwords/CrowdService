@@ -27,7 +27,7 @@ public class GPSLocator implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if (agent != null) {
+        if (agent != null && location != null) {
             agent.setLocation(location);
         }
     }
