@@ -5,6 +5,7 @@ import android.content.Context;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -12,11 +13,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import edu.fudan.se.crowdservice.kv.ImageDisplay;
+import edu.fudan.se.crowdservice.core.IOUtil;
+import edu.fudan.se.crowdservice.kv.ImageInput;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
-import edu.fudan.se.crowdservice.util.IOUtil;
-
-import java.io.File;
 
 /**
  * Created by Jiahuan on 2015/1/26.
@@ -32,10 +31,7 @@ public class ImageInputView extends KeyValueView<byte[]> {
 
     public ImageInputView(Context context, KeyValueHolder<byte[]> holder) {
         super(context, holder);
-    }
 
-    @Override
-    protected void render(String key, byte[] value) {
         setOrientation(VERTICAL);
 
         Button takePic = new Button(getContext());
@@ -47,10 +43,10 @@ public class ImageInputView extends KeyValueView<byte[]> {
             }
         });
 
-        previewLayout = new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(500));
+        previewLayout = new LayoutParams(LayoutParams.MATCH_PARENT, dp2px(300));
 
         description = new TextView(getContext());
-        description.setText(key);
+        description.setText(holder.getKey());
 
         LinearLayout wrapper = new LinearLayout(getContext());
         wrapper.addView(description, new LayoutParams(0, LayoutParams.WRAP_CONTENT, 3));
@@ -58,6 +54,7 @@ public class ImageInputView extends KeyValueView<byte[]> {
 
         addView(wrapper, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
     }
+
 
     private int dp2px(int dp) {
         final float scale = getContext().getResources().getDisplayMetrics().densityDpi;
@@ -84,7 +81,7 @@ public class ImageInputView extends KeyValueView<byte[]> {
                     if (imageView == null) {
                         imageView = new ImageView(getContext());
                     }
-                    imageView.setImageURI(Uri.fromFile(new File(imgPath)));
+                    imageView.setImageURI(Uri.fromFile(getContext().getFileStreamPath(imgPath)));
                     addView(imageView, previewLayout);
                 }
             });
@@ -103,7 +100,10 @@ public class ImageInputView extends KeyValueView<byte[]> {
 
     @Override
     public KeyValueHolder<byte[]> submit() {
-        return new ImageDisplay(description.getText().toString(), imagePath);
+        Log.i("imageInputView", "submit imagePath:" + imagePath);
+        ImageInput imageInput = new ImageInput(description.getText().toString(), imagePath);
+        imageInput.setValue(IOUtil.loadByteArray(imagePath, getContext()));
+        return imageInput;
     }
 
     interface OnPictureTakenListener {
@@ -111,19 +111,19 @@ public class ImageInputView extends KeyValueView<byte[]> {
     }
 
     @TargetApi(Build.VERSION_CODES.FROYO)
-    class TakePicView extends View implements SurfaceHolder.Callback, Camera.ShutterCallback, Camera.PictureCallback {
+    class TakePicView extends LinearLayout implements SurfaceHolder.Callback, Camera.ShutterCallback, Camera.PictureCallback {
         private Camera camera;
         private SurfaceView preview;
         private OnPictureTakenListener listener;
 
         public TakePicView(Context context) {
             super(context);
+            camera = Camera.open();
             preview = new SurfaceView(context);
+            preview.getHolder().addCallback(this);
+            addView(preview, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         }
 
-        public void startPreview() {
-            camera = Camera.open();
-        }
 
         public void takePicture(OnPictureTakenListener listener) {
             camera.takePicture(this, null, null, this);
@@ -132,8 +132,9 @@ public class ImageInputView extends KeyValueView<byte[]> {
 
         @Override
         public void onPictureTaken(byte[] bytes, Camera camera) {
-            listener.onPictureTaken(IOUtil.saveByteArray(bytes));
             camera.stopPreview();
+            String imageFileName = IOUtil.compressAndSaveImage(bytes, getContext());
+            listener.onPictureTaken(imageFileName);
         }
 
         @Override

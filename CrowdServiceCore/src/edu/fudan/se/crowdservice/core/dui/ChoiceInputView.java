@@ -17,26 +17,22 @@ public class ChoiceInputView extends KeyValueView<String[]> {
     private Spinner spinner;
     private TextView description;
 
-    public ChoiceInputView(Context context, KeyValueHolder<String[]> holder) {
+    public ChoiceInputView(Context context, final KeyValueHolder<String[]> holder) {
         super(context, holder);
-    }
-
-    @Override
-    protected void render(String key, final String[] value) {
         setOrientation(HORIZONTAL);
         description = new TextView(getContext());
-        description.setText(key);
+        description.setText(holder.getKey());
 
         spinner = new Spinner(getContext());
         spinner.setAdapter(new BaseAdapter() {
             @Override
             public int getCount() {
-                return value.length;
+                return holder.getValue().length;
             }
 
             @Override
             public String getItem(int i) {
-                return value[i];
+                return holder.getValue()[i];
             }
 
             @Override
@@ -46,14 +42,17 @@ public class ChoiceInputView extends KeyValueView<String[]> {
 
             @Override
             public View getView(int i, View view, ViewGroup viewGroup) {
-                if (view != null) {
+                if (view == null) {
                     view = new TextView(getContext());
                 }
                 ((TextView) view).setText(getItem(i));
                 return view;
             }
         });
+        addView(description, new LayoutParams(0, LayoutParams.WRAP_CONTENT, 3));
+        addView(spinner, new LayoutParams(0, LayoutParams.WRAP_CONTENT, 7));
     }
+
 
     @Override
     public boolean needSubmit() {
@@ -62,7 +61,7 @@ public class ChoiceInputView extends KeyValueView<String[]> {
 
     @Override
     public boolean isReady() {
-        return true;
+        return spinner.getSelectedItem() != null && !"".equals(spinner.getSelectedItem().toString());
     }
 
     @Override

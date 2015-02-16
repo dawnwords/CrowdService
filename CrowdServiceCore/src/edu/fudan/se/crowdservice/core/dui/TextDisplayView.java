@@ -10,20 +10,17 @@ import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 public class TextDisplayView extends KeyValueView<String> {
     public TextDisplayView(Context context, KeyValueHolder<String> holder) {
         super(context, holder);
-    }
-
-    @Override
-    protected void render(String key, String value) {
         setOrientation(HORIZONTAL);
         TextView keyView = new TextView(getContext());
         TextView valueView = new TextView(getContext());
 
-        keyView.setText(key);
-        valueView.setText(value);
+        keyView.setText(holder.getKey());
+        valueView.setText(holder.getValue());
 
         addView(keyView, new LayoutParams(0, LayoutParams.WRAP_CONTENT, 3));
         addView(valueView, new LayoutParams(0, LayoutParams.WRAP_CONTENT, 7));
     }
+
 
     @Override
     public boolean needSubmit() {

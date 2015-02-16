@@ -13,14 +13,11 @@ public class DescriptionView extends KeyValueView<String> {
 
     public DescriptionView(Context context, KeyValueHolder<String> holder) {
         super(context, holder);
-    }
-
-    @Override
-    protected void render(String key, String value) {
         descriptionText = new TextView(getContext());
-        descriptionText.setText(value);
+        descriptionText.setText(holder.getValue());
         addView(descriptionText, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
     }
+
 
     @Override
     public boolean needSubmit() {

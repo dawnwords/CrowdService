@@ -2,33 +2,38 @@ package edu.fudan.se.crowdservice.core.dui;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import edu.fudan.se.crowdservice.kv.ImageDisplay;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
+
+import java.io.FileNotFoundException;
 
 /**
  * Created by Jiahuan on 2015/1/26.
  */
 public class ImageDisplayView extends KeyValueView<byte[]> {
 
-    private TextView description;
-
     public ImageDisplayView(Context context, KeyValueHolder<byte[]> holder) {
         super(context, holder);
-    }
-
-    @Override
-    protected void render(String key, byte[] value) {
         setOrientation(VERTICAL);
 
-        description = new TextView(getContext());
-        description.setText(key);
+        TextView description = new TextView(getContext());
+        description.setText(holder.getKey());
         ImageView image = new ImageView(getContext());
-        image.setImageBitmap(BitmapFactory.decodeByteArray(value, 0, value.length));
+        try {
+            String imagePath = ((ImageDisplay) holder).imagePath;
+            Log.i("imagePath", imagePath);
+            image.setImageBitmap(BitmapFactory.decodeStream(context.openFileInput(imagePath)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         addView(description, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         addView(image, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
     }
+
 
     @Override
     public boolean needSubmit() {

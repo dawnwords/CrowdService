@@ -9,12 +9,12 @@ import edu.fudan.se.crowdservice.kv.KeyValueHolder;
  */
 public abstract class KeyValueView<T> extends LinearLayout {
 
+    protected KeyValueHolder<T> holder;
+
     public KeyValueView(Context context, KeyValueHolder<T> holder) {
         super(context);
-        render(holder.getKey(), holder.getValue());
+        this.holder = holder;
     }
-
-    protected abstract void render(String key, T value);
 
     public abstract boolean needSubmit();
 
