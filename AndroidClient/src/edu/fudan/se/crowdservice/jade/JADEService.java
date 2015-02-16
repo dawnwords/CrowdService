@@ -3,6 +3,7 @@ package edu.fudan.se.crowdservice.jade;
 import android.app.Service;
 import android.content.*;
 import android.os.IBinder;
+import android.util.Log;
 import edu.fudan.se.crowdservice.core.SavedProperty;
 import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 import edu.fudan.se.crowdservice.jade.agent.DaemonAgent;
@@ -52,13 +53,14 @@ public class JADEService extends Service {
         if (agentManager == null) {
             agentManager = new AgentManager();
         }
+        Log.i("onBind", "agent manager:" + agentManager);
         return agentManager;
     }
 
     @Override
-    public boolean onUnbind(Intent intent) {
+    public void onDestroy() {
         unbindService(serviceConnection);
-        return super.onUnbind(intent);
+        super.onDestroy();
     }
 
     private void bindMicroRuntimeService() {
@@ -96,9 +98,9 @@ public class JADEService extends Service {
                         info("Successfully start of the " + agentClassName);
                         try {
                             AgentInterface agent = MicroRuntime.getAgent(agentName).getO2AInterface(AgentInterface.class);
-                            //TODO non-reproducible bug?
                             info("agent interface=" + agent);
                             agentManager.setAgent(agent);
+                            agent.setContext(JADEService.this);
                             agent.sendCapacity(getTextStored(SavedProperty.CAPACITY));
                         } catch (ControllerException e) {
                             onFailure(e);
