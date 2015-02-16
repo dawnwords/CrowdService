@@ -53,16 +53,19 @@ public abstract class ServiceActivity {
     public void onTouchEvent(MotionEvent event) {
     }
 
+    public void onKeyDown(int keyCode, KeyEvent event) {
+    }
+
     public void runOnUiThread(Runnable r) {
         activity.runOnUiThread(r);
     }
 
     protected void finish() {
-        activity.finish();
+        finish(null);
     }
 
     protected void finish(Object value) {
-        finish();
+        activity.finish();
         ResultHolder holder = ActivityResult.getInstance().getServiceActivityResultHolder();
         if (holder == null) {
             throw new IllegalAccessError("ResultHolder is Null!");
