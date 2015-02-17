@@ -17,8 +17,15 @@ public class GPSLocator implements LocationListener {
     public void enableGPS(Context context, final AgentInterface agent) {
         this.agent = agent;
         lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        if (checkAndStartGPS(LocationManager.GPS_PROVIDER) || checkAndStartGPS(LocationManager.NETWORK_PROVIDER)) ;
+    }
+
+    private boolean checkAndStartGPS(String provider) {
+        if (lm.isProviderEnabled(provider)) {
+            lm.requestLocationUpdates(provider, 0, 0, this);
+            return true;
+        }
+        return false;
     }
 
     public void disableGPS() {
