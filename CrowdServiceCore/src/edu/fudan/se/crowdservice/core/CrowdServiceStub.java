@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class CrowdServiceStub {
 
-    public static final int WAITING_TIME_SECOND = 5;
+    public static final int WAITING_TIME_SECOND = 20;
     private final SoapObject soapObject;
     private final HttpTransportSE http;
     private ConcreteService service;

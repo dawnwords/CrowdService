@@ -11,7 +11,10 @@ import java.util.ArrayList;
  * Created by Jiahuan on 2015/1/27.
  */
 public class PriceAssessmentServiceImpl extends ConcreteService implements PriceAssessmentService {
-    public static final String URL = "http://10.131.253.172:8887/priceassess?wsdl";
+//    public static final String IP = "10.131.253.172";
+    public static final String IP = "192.168.0.103";
+    public static final int PORT = 8888;
+    public static final String URL = String.format("http://%s:%d/priceassess?wsdl", IP, PORT);
     public static final String NS = "http://priceassessment.crowdservice.se.fudan.edu/";
     public static final String METHOD = "assessPrice";
 

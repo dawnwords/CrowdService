@@ -1,7 +1,9 @@
 set bindex="org.osgi.impl.bundle.bindex-2.2.0.jar"
 set repoxml=%bundles_path%_repo.xml
-set url=http://10.131.252.156:8080/obr/
-set remote=\\10.131.252.156\share\tomcat7\webapps\obr\
+rem set url=http://10.131.252.156:8080/obr/
+rem set remote=\\10.131.252.156\share\tomcat7\webapps\obr\
+set url=http://192.168.0.103/obr/
+set remote=D:\Development\Workspace\OBR\obr\
 
 del /q %remote%%repoxml%
 rmdir /s /q %remote%%bundles_path%
