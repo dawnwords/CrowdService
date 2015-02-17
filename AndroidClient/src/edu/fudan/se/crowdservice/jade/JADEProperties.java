@@ -8,15 +8,13 @@ import jade.util.leap.Properties;
  * Created by Dawnwords on 2014/12/13.
  */
 public class JADEProperties {
-    private static final String HOST = "10.131.253.172";
-    private static final String PORT = "1099";
     private static Properties instance;
 
-    public static Properties getInstance() {
+    public static Properties getInstance(String jadeIP, int jadePort) {
         if (instance == null) {
             instance = new Properties();
-            instance.setProperty(Profile.MAIN_HOST, HOST);
-            instance.setProperty(Profile.MAIN_PORT, PORT);
+            instance.setProperty(Profile.MAIN_HOST, jadeIP);
+            instance.setProperty(Profile.MAIN_PORT, String.valueOf(jadePort));
             instance.setProperty(Profile.MAIN, Boolean.FALSE.toString());
             instance.setProperty(Profile.JVM, Profile.ANDROID);
 

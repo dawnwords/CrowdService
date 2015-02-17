@@ -2,7 +2,9 @@ package edu.fudan.se.crowdservice.felix;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import edu.fudan.se.crowdservice.core.SavedProperty;
 import jade.util.Logger;
 import org.apache.felix.framework.Felix;
 
@@ -13,6 +15,7 @@ public class FelixService extends Service {
 
     private Felix felix;
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
+    private SharedPreferences setting;
 
     @Override
     public void onCreate() {
@@ -25,6 +28,7 @@ public class FelixService extends Service {
         createOptimizedDir();
 
         felix = new Felix(new FelixConfig(this));
+        setting = getSharedPreferences(SavedProperty.CROWD_SERVICE, 0);
     }
 
     @Override
@@ -39,7 +43,9 @@ public class FelixService extends Service {
         try {
             felix.start();
             info("Felix Version:" + felix.getVersion());
-            manager = new TemplateManager(felix.getBundleContext());
+            String obrIp = setting.getString(SavedProperty.OBR_IP, "");
+            int obrPort = setting.getInt(SavedProperty.OBR_PORT, 8080);
+            manager = new TemplateManager(felix.getBundleContext(), obrIp, obrPort);
         } catch (Exception ex) {
             info("Could not create framework: " + ex.getMessage());
             ex.printStackTrace();
@@ -104,5 +110,4 @@ public class FelixService extends Service {
         }
         file.delete();
     }
-
 }

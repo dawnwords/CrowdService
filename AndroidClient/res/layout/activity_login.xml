@@ -19,11 +19,44 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/capacity"
                 android:id="@+id/capacity"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/jade_ip"
+                    android:id="@+id/jade_ip"/>
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/port"
+                    android:id="@+id/jade_port"/>
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/obr_ip"
+                    android:id="@+id/obr_ip"/>
+            <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/port"
+                    android:id="@+id/obr_port"/>
+        </LinearLayout>
         <Button
-                android:layout_marginTop="50dp"
-                android:layout_width="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:onClick="doLogin"
                 android:text="@string/login"/>
     </LinearLayout>

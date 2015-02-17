@@ -23,7 +23,8 @@ import edu.fudan.se.crowdservice.view.LoadingDialog;
  * Created by Jiahuan on 2015/1/22.
  */
 public class LoginActivity extends Activity {
-    private EditText agentNameEditText, capacityEditText;
+    private EditText agentNameEditText, capacityEditText, jadeIPEditText,
+            jadePortEditText, obrIPEditText, obrPortEditText;
     private SharedPreferences settings;
     private ProgressDialog dialog;
     private AgentManager am;
@@ -84,9 +85,17 @@ public class LoginActivity extends Activity {
     private void initEditText() {
         agentNameEditText = (EditText) findViewById(R.id.agent_name);
         capacityEditText = (EditText) findViewById(R.id.capacity);
+        jadeIPEditText = (EditText) findViewById(R.id.jade_ip);
+        jadePortEditText = (EditText) findViewById(R.id.jade_port);
+        obrIPEditText = (EditText) findViewById(R.id.obr_ip);
+        obrPortEditText = (EditText) findViewById(R.id.obr_port);
 
         agentNameEditText.setText(settings.getString(SavedProperty.AGENT_NAME, ""));
         capacityEditText.setText(settings.getString(SavedProperty.CAPACITY, ""));
+        jadeIPEditText.setText(settings.getString(SavedProperty.JADE_IP, ""));
+        jadePortEditText.setText(String.valueOf(settings.getInt(SavedProperty.JADE_PORT, 1099)));
+        obrIPEditText.setText(settings.getString(SavedProperty.OBR_IP, ""));
+        obrPortEditText.setText(String.valueOf(settings.getInt(SavedProperty.OBR_PORT, 80)));
     }
 
     public void doLogin(View v) {
@@ -95,11 +104,19 @@ public class LoginActivity extends Activity {
             public void run() {
                 String agentName = agentNameEditText.getText().toString();
                 String capacity = capacityEditText.getText().toString();
+                String jadeIp = jadeIPEditText.getText().toString();
+                String obrIp = obrIPEditText.getText().toString();
+                int jadePort = Integer.parseInt(jadePortEditText.getText().toString());
+                int obrPort = Integer.parseInt(obrPortEditText.getText().toString());
 
                 //TODO check input
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(SavedProperty.AGENT_NAME, agentName);
                 editor.putString(SavedProperty.CAPACITY, capacity);
+                editor.putString(SavedProperty.JADE_IP, jadeIp);
+                editor.putString(SavedProperty.OBR_IP, obrIp);
+                editor.putInt(SavedProperty.JADE_PORT, jadePort);
+                editor.putInt(SavedProperty.OBR_PORT, obrPort);
                 editor.commit();
 
                 bindService(new Intent(getApplicationContext(), JADEService.class), connection, BIND_AUTO_CREATE);

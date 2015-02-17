@@ -16,4 +16,7 @@
     <string name="jade_fail">JADE Fail</string>
     <string name="submit">Submit</string>
     <string name="please_complete_task_form">Please complete this task form!</string>
+    <string name="jade_ip">JADE Server IP</string>
+    <string name="obr_ip">OBR IP</string>
+    <string name="port">Port</string>
 </resources>

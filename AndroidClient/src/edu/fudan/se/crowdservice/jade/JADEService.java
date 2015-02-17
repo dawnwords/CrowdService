@@ -72,7 +72,9 @@ public class JADEService extends Service {
     private void startContainer() {
         logger.log(Level.INFO, "Starting JADE container...");
         if (!MicroRuntime.isRunning()) {
-            Properties profile = JADEProperties.getInstance();
+            String jadeIP = getTextStored(SavedProperty.JADE_IP);
+            int jadePort = setting.getInt(SavedProperty.JADE_PORT, 1099);
+            Properties profile = JADEProperties.getInstance(jadeIP, jadePort);
             microRuntimeServiceBinder.startAgentContainer(profile, new RuntimeCallback<Void>() {
                 @Override
                 public void onSuccess(Void ignore) {

@@ -21,10 +21,8 @@ import java.util.logging.Level;
  * Created by Dawnwords on 2014/12/30.
  */
 public class TemplateManager extends Binder {
-    private static final String OBR_REPO_URL = "http://10.131.252.156:8080/obr/${TYPE}_repo.xml";
-    private static final String OBR_TEMPLATE_REPO_URL = OBR_REPO_URL.replace("${TYPE}", "template");
-    private static final String OBR_SERVICE_REPO_URL = OBR_REPO_URL.replace("${TYPE}", "service");
-
+    private String templateRepoURL;
+    private String serviceRepoUrl;
     private RepositoryAdmin admin;
     private BundleContext bundleContext;
     private ConcurrentHashMap<Template, ServiceReference<Template>> templateRefMap;
@@ -44,10 +42,12 @@ public class TemplateManager extends Binder {
         }
     };
 
-    public TemplateManager(BundleContext bundleContext) {
+    public TemplateManager(BundleContext bundleContext, String obrIp, int obrPort) {
         this.bundleContext = bundleContext;
         this.templateRefMap = new ConcurrentHashMap<Template, ServiceReference<Template>>();
         this.admin = bundleContext.getService(bundleContext.getServiceReference(RepositoryAdmin.class));
+        this.templateRepoURL = String.format("http://%s:%d/obr/%s_repo.xml", obrIp, obrPort, "template");
+        this.serviceRepoUrl = String.format("http://%s:%d/obr/%s_repo.xml", obrIp, obrPort, "service");
     }
 
     public void getAvailableTemplateResource(final OnResourcesReceivedListener listener) {
@@ -55,8 +55,8 @@ public class TemplateManager extends Binder {
             @Override
             protected Resource[] doInBackground(Void... voids) {
                 try {
-                    Repository templateRepo = admin.addRepository(new URL(OBR_TEMPLATE_REPO_URL));
-                    admin.addRepository(new URL(OBR_SERVICE_REPO_URL));
+                    Repository templateRepo = admin.addRepository(new URL(templateRepoURL));
+                    admin.addRepository(new URL(serviceRepoUrl));
                     return templateRepo.getResources();
                 } catch (Exception e) {
                     return null;
