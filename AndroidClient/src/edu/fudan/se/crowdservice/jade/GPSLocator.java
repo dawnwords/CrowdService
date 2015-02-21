@@ -5,6 +5,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 
 /**
@@ -17,7 +18,10 @@ public class GPSLocator implements LocationListener {
     public void enableGPS(Context context, final AgentInterface agent) {
         this.agent = agent;
         lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        Looper.prepare();
         if (checkAndStartGPS(LocationManager.GPS_PROVIDER) || checkAndStartGPS(LocationManager.NETWORK_PROVIDER)) ;
+        Looper.loop();
     }
 
     private boolean checkAndStartGPS(String provider) {

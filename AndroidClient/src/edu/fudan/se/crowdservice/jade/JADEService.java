@@ -55,7 +55,6 @@ public class JADEService extends Service {
         if (agentManager == null) {
             agentManager = new AgentManager();
         }
-        locator.enableGPS(this, agentManager);
         Log.i("onBind", "agent manager:" + agentManager);
         return agentManager;
     }
@@ -106,6 +105,7 @@ public class JADEService extends Service {
                             AgentInterface agent = MicroRuntime.getAgent(agentName).getO2AInterface(AgentInterface.class);
                             info("agent interface=" + agent);
                             agentManager.setAgent(agent);
+                            locator.enableGPS(JADEService.this, agent);
                             agent.setContext(JADEService.this);
                             agent.sendCapacity(getTextStored(SavedProperty.CAPACITY));
                         } catch (ControllerException e) {

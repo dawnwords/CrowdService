@@ -99,7 +99,7 @@ public class LoginActivity extends Activity {
     }
 
     public void doLogin(View v) {
-        dialog = LoadingDialog.show(this, getString(R.string.loggingin), new Handler(), new Runnable() {
+        dialog = LoadingDialog.show(this, getString(R.string.logging_in), new Handler(), new Runnable() {
             @Override
             public void run() {
                 String agentName = agentNameEditText.getText().toString();

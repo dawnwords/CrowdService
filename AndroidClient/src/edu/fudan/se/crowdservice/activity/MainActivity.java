@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.felix.FelixService;
@@ -32,7 +35,7 @@ public class MainActivity extends Activity {
     private ConsumerFragment consumerFragment;
     private WorkerFragment workerFragment;
     private FragmentManager fragmentManager;
-//    private GPSLocator locator;
+    private Spinner switcher;
     private ServiceConnection felixConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -91,8 +94,44 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
 
+        initFragments();
+        initSwitcher();
+
+        bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
+        bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
+    }
+
+    private void initSwitcher() {
+        switcher = (Spinner) findViewById(R.id.switcher);
+        switcher.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("onItemSelected", "position = " + position);
+                if (position == 0) {
+                    replaceFragment(consumerFragment, workerFragment);
+                } else {
+                    replaceFragment(workerFragment, consumerFragment);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+
+            private void replaceFragment(BaseFragment newFragment, BaseFragment oldFragment) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.hide(oldFragment);
+                transaction.show(newFragment);
+                transaction.commit();
+            }
+        });
+        switcher.setSelection(0);
+    }
+
+
+    private void initFragments() {
         consumerFragment = new ConsumerFragment();
         workerFragment = new WorkerFragment();
 
@@ -102,9 +141,6 @@ public class MainActivity extends Activity {
         transaction.add(R.id.main_content, workerFragment);
         transaction.hide(workerFragment);
         transaction.commit();
-
-        bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
-        bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
     }
 
 
@@ -113,22 +149,6 @@ public class MainActivity extends Activity {
         unbindService(felixConnection);
         unbindService(jadeConnection);
         super.onDestroy();
-    }
-
-    public void workerFragment(View v) {
-        replaceFragment(workerFragment, consumerFragment);
-    }
-
-    public void consumerFragment(View v) {
-        replaceFragment(consumerFragment, workerFragment);
-        consumerFragment.loadAvailableTemplates();
-    }
-
-    private void replaceFragment(BaseFragment newFragment, BaseFragment oldFragment) {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.hide(oldFragment);
-        transaction.show(newFragment);
-        transaction.commit();
     }
 
     private void toast(String msg) {

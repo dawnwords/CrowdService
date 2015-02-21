@@ -12,11 +12,16 @@
     <string name="no_task">No Tasks Yet</string>
     <string name="offer_price">Please offer the price for this task</string>
     <string name="no_template">No Templates Yet</string>
-    <string name="loggingin">Logging in...</string>
+    <string name="logging_in">Logging in...</string>
     <string name="jade_fail">JADE Fail</string>
     <string name="submit">Submit</string>
     <string name="please_complete_task_form">Please complete this task form!</string>
     <string name="jade_ip">JADE Server IP</string>
     <string name="obr_ip">OBR IP</string>
     <string name="port">Port</string>
+    <string-array name="switcher">
+        <item>Consumer</item>
+        <item>Worker</item>
+    </string-array>
+    <string name="add_template">+</string>
 </resources>
