@@ -24,6 +24,7 @@ public class JADEService extends Service {
     private Logger logger;
     private MicroRuntimeServiceBinder microRuntimeServiceBinder;
     private SharedPreferences setting;
+    private GPSLocator locator;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -44,6 +45,7 @@ public class JADEService extends Service {
         super.onCreate();
         logger = Logger.getJADELogger(this.getClass().getName());
         setting = getSharedPreferences(SavedProperty.CROWD_SERVICE, 0);
+        locator = new GPSLocator();
 
         bindMicroRuntimeService();
     }
@@ -53,12 +55,14 @@ public class JADEService extends Service {
         if (agentManager == null) {
             agentManager = new AgentManager();
         }
+        locator.enableGPS(this, agentManager);
         Log.i("onBind", "agent manager:" + agentManager);
         return agentManager;
     }
 
     @Override
     public void onDestroy() {
+        locator.disableGPS();
         unbindService(serviceConnection);
         super.onDestroy();
     }

@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice.data;
+package edu.fudan.se.crowdservice.jade;
 
 import android.content.Context;
 import android.location.Location;

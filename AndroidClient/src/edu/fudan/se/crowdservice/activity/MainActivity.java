@@ -13,7 +13,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
-import edu.fudan.se.crowdservice.data.GPSLocator;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
 import edu.fudan.se.crowdservice.fragment.BaseFragment;
@@ -33,7 +32,7 @@ public class MainActivity extends Activity {
     private ConsumerFragment consumerFragment;
     private WorkerFragment workerFragment;
     private FragmentManager fragmentManager;
-    private GPSLocator locator;
+//    private GPSLocator locator;
     private ServiceConnection felixConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -80,7 +79,6 @@ public class MainActivity extends Activity {
             am.registerHandler(handler);
             workerFragment.setAgent(am);
             consumerFragment.setAgent(am);
-            locator.enableGPS(MainActivity.this, am);
         }
 
         @Override
@@ -94,8 +92,6 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        locator = new GPSLocator();
 
         consumerFragment = new ConsumerFragment();
         workerFragment = new WorkerFragment();
@@ -114,7 +110,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        locator.disableGPS();
         unbindService(felixConnection);
         unbindService(jadeConnection);
         super.onDestroy();
