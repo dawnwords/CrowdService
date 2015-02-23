@@ -86,6 +86,7 @@ public class TemplateManager extends Binder {
                     resolver.deploy(true);
                     info("Deploy Successfully!");
                     listBundles();
+                    //TODO fix bug:template parallel
                     ServiceReference<Template> serviceReference = bundleContext.getServiceReference(Template.class);
                     Template template = bundleContext.getService(serviceReference);
                     template.setStopListener(templateStopListener);

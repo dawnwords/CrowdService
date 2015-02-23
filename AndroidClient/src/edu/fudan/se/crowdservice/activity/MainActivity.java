@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
+import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
 import edu.fudan.se.crowdservice.fragment.BaseFragment;
@@ -32,10 +33,7 @@ import edu.fudan.se.crowdservice.wrapper.RefuseWrapper;
 import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
-    //    private ConsumerFragment consumerFragment;
-//    private WorkerFragment workerFragment;
-//    private FragmentManager fragmentManager;
-//    private TemplateListView templateList;
+
     private static final String[] FRAGMENT_TAG = {"Consumer", "Worker"};
     private NavigationFragment navigationFragment;
     private Fragment lastFragment;
@@ -44,22 +42,12 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             TemplateManager tm = (TemplateManager) iBinder;
             setTemplateManager(tm);
-//            TODO change to fragment
-//            templateList.setTemplateResolveListener(new TemplateManager.OnTemplateResolvedListener() {
-//                @Override
-//                public void onTemplateResolved(Template template) {
-//                    toast(template.getClass().getName());
-//                }
-//
-//                @Override
-//                public void onFailure(Requirement[] unsatisfiedRequirements) {
-//                    String output = "";
-//                    for (Requirement requirement : unsatisfiedRequirements) {
-//                        output += String.format("%s:%s\n", requirement.getName(), requirement.getComment());
-//                    }
-//                    toast(output);
-//                }
-//            });
+            navigationFragment.setTemplateSelectCallBack(new NavigationFragment.TemplateSelectCallbacks() {
+                @Override
+                public void onTemplateSelected(Template template) {
+                    //TODO finish this method
+                }
+            });
         }
 
         @Override
@@ -69,7 +57,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
         private void setTemplateManager(TemplateManager tm) {
             ((ConsumerFragment) getSupportFragmentManager().findFragmentByTag("Consumer")).setTemplateManager(tm);
-//            templateList.setTemplateManager(tm);
+            navigationFragment.setTemplateManager(tm);
         }
 
     };
@@ -142,49 +130,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private void initUI() {
         setContentView(R.layout.activity_main);
-//        templateList = (TemplateListView) findViewById(R.id.template_list);
-//
         initFragments();
-//        initSwitcher();
     }
 
-    //
-//    private void initSwitcher() {
-//        Spinner switcher = (Spinner) findViewById(R.id.switcher);
-//        switcher.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                Log.i("onItemSelected", "position = " + position);
-//                if (position == 0) {
-//                    replaceFragment(consumerFragment, workerFragment);
-//                } else {
-//                    replaceFragment(workerFragment, consumerFragment);
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//
-//            private void replaceFragment(BaseFragment newFragment, BaseFragment oldFragment) {
-//                FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                transaction.hide(oldFragment);
-//                transaction.show(newFragment);
-//                transaction.commit();
-//            }
-//        });
-//        switcher.setSelection(0);
-//    }
-//
     private void initFragments() {
-//        consumerFragment = new ConsumerFragment();
-//        workerFragment = new WorkerFragment();
-//
-//        fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction()
-//                .add(R.id.content_frame, consumerFragment)
-//                .add(R.id.content_frame, workerFragment)
-//                .hide(workerFragment).commit();
         navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         navigationFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
         for (String fragmentTitle : FRAGMENT_TAG) {
@@ -198,11 +147,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         unbindService(jadeConnection);
         super.onDestroy();
     }
-
-//    public void addTemplate(View v) {
-//        templateList.setVisibility(View.VISIBLE);
-//        templateList.loadAvailableTemplates();
-//    }
 
     private void toast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();

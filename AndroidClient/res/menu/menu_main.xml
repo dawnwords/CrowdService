@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_switch_fragment"
           android:icon="@drawable/ic_launcher"
-          android:title="@string/consumer"
+          android:title="@string/app_name"
           android:showAsAction="ifRoom|withText"/>
 </menu>

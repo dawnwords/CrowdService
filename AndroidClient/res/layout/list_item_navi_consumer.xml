@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:descendantFocusability="blocksDescendants"
+              android:background="@drawable/activated_background">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+
+        <TextView android:layout_width="0dp"
+                  android:layout_weight="8"
+                  android:layout_height="wrap_content"
+                  android:padding="16dp"
+                  android:text="@string/consumer"/>
+
+        <Button android:id="@+id/add_template"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="@string/add_template"/>
+    </LinearLayout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:background="@android:color/white">
+        <RelativeLayout
+                android:id="@+id/loading_template"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:gravity="center">
+
+            <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"/>
+        </RelativeLayout>
+
+        <edu.fudan.se.crowdservice.view.ExpandableListView
+                android:id="@+id/template_list"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <TextView android:id="@+id/no_template"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/no_template"
+                  android:visibility="gone"
+                  android:padding="16dp"/>
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -12,8 +12,12 @@ import android.view.*;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
+import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.felix.TemplateManager;
+import edu.fudan.se.crowdservice.view.ConsumerDrawerView;
+import org.osgi.service.obr.Requirement;
 
 /**
  * Created by Dawnwords on 2015/2/23.
@@ -25,6 +29,8 @@ public class NavigationFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
     private NavigationDrawerCallbacks mCallbacks;
+    private View workerView;
+    private ConsumerDrawerView consumerView;
     private DrawerAdapter adapter = new DrawerAdapter();
 
     @Override
@@ -35,6 +41,9 @@ public class NavigationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        consumerView = new ConsumerDrawerView(inflater);
+        workerView = inflater.inflate(R.layout.list_item_navi_worker, null);
+
         mDrawerListView = (ListView) inflater.inflate(R.layout.list_navigation, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -45,6 +54,10 @@ public class NavigationFragment extends Fragment {
         mDrawerListView.setAdapter(adapter);
         selectItem(0);
         return mDrawerListView;
+    }
+
+    private void toast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -153,14 +166,40 @@ public class NavigationFragment extends Fragment {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
 
+    public void setTemplateSelectCallBack(final TemplateSelectCallbacks callBack) {
+        consumerView.setTemplateResolveListener(new TemplateManager.OnTemplateResolvedListener() {
+            @Override
+            public void onTemplateResolved(Template template) {
+                toast(template.getClass().getName());
+                callBack.onTemplateSelected(template);
+                selectItem(1); // Set Consumer Tag As Checked
+            }
 
+            @Override
+            public void onFailure(Requirement[] unsatisfiedRequirements) {
+                String output = "";
+                for (Requirement requirement : unsatisfiedRequirements) {
+                    output += String.format("%s:%s\n", requirement.getName(), requirement.getComment());
+                }
+                toast(output);
+            }
+        });
+    }
+
+    public void setTemplateManager(TemplateManager tm) {
+        consumerView.setTemplateManager(tm);
+    }
 
     public static interface NavigationDrawerCallbacks {
         void onNavigationDrawerItemSelected(String title);
     }
 
+    public static interface TemplateSelectCallbacks {
+        void onTemplateSelected(Template template);
+    }
+
     private class DrawerAdapter extends BaseAdapter {
-        final String[] data = {"Consumer", "Worker"};
+        final String[] data = {"Worker", "Consumer"};
 
         @Override
         public int getCount() {
@@ -179,12 +218,7 @@ public class NavigationFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.list_item_navigation, null);
-            }
-            TextView navigationName = (TextView) convertView.findViewById(R.id.navigation_name);
-            navigationName.setText(getItem(position));
-            return convertView;
+            return position == 0 ? workerView : consumerView;
         }
     }
 }
