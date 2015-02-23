@@ -24,4 +24,6 @@
         <item>Worker</item>
     </string-array>
     <string name="add_template">+</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
 </resources>

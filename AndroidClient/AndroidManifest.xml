@@ -15,10 +15,11 @@
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <!-- Locating Permission -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application android:hardwareAccelerated="false"
+                 android:theme="@style/CustomActionBarTheme"
                  android:icon="@drawable/ic_launcher"
                  android:label="@string/app_name">
         <service android:name="jade.android.MicroRuntimeService"/>
