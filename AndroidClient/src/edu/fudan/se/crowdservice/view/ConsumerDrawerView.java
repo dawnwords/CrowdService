@@ -19,6 +19,7 @@ public class ConsumerDrawerView extends FrameLayout {
     private TemplateAdapter adapter;
     private View loadingView, noTemplateView;
     private ListView templateList;
+    private boolean isExpanded;
 
     public ConsumerDrawerView(LayoutInflater inflater) {
         super(inflater.getContext());
@@ -37,29 +38,36 @@ public class ConsumerDrawerView extends FrameLayout {
     }
 
     private void initAddTemplateButton() {
-        Button addTemplate = (Button) findViewById(R.id.add_template);
-        addTemplate.setOnClickListener(new OnClickListener() {
+        final Button loadTemplate = (Button) findViewById(R.id.load_template);
+        loadTemplate.setText("+");
+        loadTemplate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchView(loadingView);
-                post(new Runnable() {
-                    @Override
-                    public void run() {
-                        tm.getAvailableTemplateResource(new TemplateManager.OnResourcesReceivedListener() {
-                            @Override
-                            public void onResourcesReceived(Resource[] resources) {
-                                adapter.setResources(resources);
-                                switchView(templateList);
-                                templateList.getParent().requestLayout();
-                            }
+                if (isExpanded) {
+                    switchView(null);
+                    loadTemplate.setText("+");
+                } else {
+                    switchView(loadingView);
+                    loadTemplate.setText("-");
+                    post(new Runnable() {
+                        @Override
+                        public void run() {
+                            tm.getAvailableTemplateResource(new TemplateManager.OnResourcesReceivedListener() {
+                                @Override
+                                public void onResourcesReceived(Resource[] resources) {
+                                    adapter.setResources(resources);
+                                    switchView(templateList);
+                                }
 
-                            @Override
-                            public void onFailure() {
-                                switchView(noTemplateView);
-                            }
-                        });
-                    }
-                });
+                                @Override
+                                public void onFailure() {
+                                    switchView(noTemplateView);
+                                }
+                            });
+                        }
+                    });
+                }
+                isExpanded = !isExpanded;
             }
         });
     }
