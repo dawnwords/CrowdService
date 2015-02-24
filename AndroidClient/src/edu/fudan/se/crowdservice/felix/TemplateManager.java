@@ -7,13 +7,11 @@ import android.os.Handler;
 import android.os.Looper;
 import edu.fudan.se.crowdservice.core.Template;
 import jade.util.Logger;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 import org.osgi.service.obr.*;
 
 import java.net.URL;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -79,23 +77,36 @@ public class TemplateManager extends Binder {
         new AsyncTask<Resource, Void, Template>() {
             @Override
             protected Template doInBackground(Resource... resources) {
+                Resource resource = resources[0];
                 resolver = admin.resolver();
-                resolver.add(resources[0]);
+                resolver.add(resource);
                 if (resolver.resolve()) {
                     info("Deploying ...");
                     resolver.deploy(true);
                     info("Deploy Successfully!");
                     listBundles();
                     //TODO fix bug:template parallel
-                    ServiceReference<Template> serviceReference = bundleContext.getServiceReference(Template.class);
-                    Template template = bundleContext.getService(serviceReference);
-                    template.setStopListener(templateStopListener);
-                    template.setUiHandler(new Handler(Looper.getMainLooper()));
-                    template.setContext(context);
-                    templateRefMap.put(template, serviceReference);
-                    return template;
+
+                    String filter = String.format("(%s=%s)", Constants.BUNDLE_SYMBOLICNAME, resource.getSymbolicName());
+                    try {
+                        Iterator<ServiceReference<Template>> iterator = bundleContext.getServiceReferences(Template.class, filter).iterator();
+                        if (iterator.hasNext()) {
+                            return resolveServiceReference(iterator.next());
+                        }
+                    } catch (InvalidSyntaxException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return null;
+            }
+
+            private Template resolveServiceReference(ServiceReference<Template> serviceReference) {
+                Template template = bundleContext.getService(serviceReference);
+                template.setStopListener(templateStopListener);
+                template.setUiHandler(new Handler(Looper.getMainLooper()));
+                template.setContext(context);
+                templateRefMap.put(template, serviceReference);
+                return template;
             }
 
             @Override

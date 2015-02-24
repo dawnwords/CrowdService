@@ -15,9 +15,11 @@ import android.widget.Toast;
 import jade.util.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.logging.Level;
 
 /**
@@ -38,7 +40,9 @@ public abstract class Template implements BundleActivator {
     public void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
         log("Start Template...");
-        this.bundleContext.registerService(Template.class, this, null);
+        Hashtable properties = new Hashtable();
+        properties.put(Constants.BUNDLE_SYMBOLICNAME,getTemplateName());
+        this.bundleContext.registerService(Template.class, this, properties);
     }
 
     @Override

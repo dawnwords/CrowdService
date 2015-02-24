@@ -2,7 +2,7 @@
 <module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Osmorc" name="OSGi">
-      <configuration manifestGenerationMode="OsmorcControlled" manifestLocation="" jarfileLocation="E:\CrowdService\out\template\BuySHComputerTemplateV2.jar" outputPathType="SpecificOutputPath" bndFileLocation="" bundlorFileLocation="" bundleActivator="edu.fudan.se.crowdservice.template.BuyingSHComputerTemplateV2" bundleSymbolicName="BuySHComputerTemplateV2" bundleVersion="1.0.0" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="true" doNotSynchronizeWithMaven="false">
+      <configuration manifestGenerationMode="OsmorcControlled" manifestLocation="" jarfileLocation="E:\CrowdService\out\template\BuySHComputerTemplateV2.jar" outputPathType="SpecificOutputPath" bndFileLocation="" bundlorFileLocation="" bundleActivator="edu.fudan.se.crowdservice.template.BuySHComputerTemplateV2" bundleSymbolicName="BuySHComputerTemplateV2" bundleVersion="1.0.0" ignoreFilePattern="" useProjectDefaultManifestFileLocation="true" alwaysRebuildBundleJAR="true" doNotSynchronizeWithMaven="false">
         <additionalProperties>
           <property key="Export-Service" value="edu.fudan.se.crowdservice.core.Template" />
           <property key="Export-Package" value="edu.fudan.se.crowdservice.core" />

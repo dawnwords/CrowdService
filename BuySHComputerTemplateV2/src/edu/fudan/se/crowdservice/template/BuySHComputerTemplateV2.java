@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Jiahuan on 2015/1/25.
  */
-public class BuyingSHComputerTemplateV2 extends Template {
+public class BuySHComputerTemplateV2 extends Template {
 
     private ItemSelectionService itemSelectionService;
     private SiteInspectionService siteInspectionService;
@@ -24,7 +24,7 @@ public class BuyingSHComputerTemplateV2 extends Template {
 
     @Override
     protected String getTemplateName() {
-        return getClass().getName();
+        return getClass().getSimpleName();
     }
 
     @Override

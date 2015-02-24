@@ -13,7 +13,7 @@ public class ArithmeticTemplate extends Template {
 
     @Override
     protected String getTemplateName() {
-        return getClass().getName();
+        return getClass().getSimpleName();
     }
 
     @Override
