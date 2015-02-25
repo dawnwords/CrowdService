@@ -17,11 +17,13 @@ public interface AgentInterface {
 
     void sendOffer(OfferWrapper offer);
 
-    void setLocation(Location myLocation);
-
     void sendResponse(ResponseWrapper response);
+
+    void setLocation(Location myLocation);
 
     void setContext(Context context);
 
-    void executeTemplate(Template template);
+    void setResultInput(int sessionId, String resultInput);
+
+    int executeTemplate(Template template);
 }

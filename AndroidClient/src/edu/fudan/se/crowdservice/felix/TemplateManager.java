@@ -3,8 +3,6 @@ package edu.fudan.se.crowdservice.felix;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Binder;
-import android.os.Handler;
-import android.os.Looper;
 import edu.fudan.se.crowdservice.core.Template;
 import jade.util.Logger;
 import org.osgi.framework.*;
@@ -12,7 +10,6 @@ import org.osgi.service.obr.*;
 
 import java.net.URL;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
@@ -23,26 +20,11 @@ public class TemplateManager extends Binder {
     private String serviceRepoUrl;
     private RepositoryAdmin admin;
     private BundleContext bundleContext;
-    private ConcurrentHashMap<Template, ServiceReference<Template>> templateRefMap;
     private Resolver resolver;
     private Logger logger = Logger.getJADELogger(TemplateManager.class.getName());
-    private Template.OnTemplateStopListener templateStopListener = new Template.OnTemplateStopListener() {
-        @Override
-        public void onTemplateStop(Template template) {
-            Bundle bundle = templateRefMap.remove(template).getBundle();
-            info("Uninstall Bundle:%s\n", bundle.getSymbolicName());
-            try {
-                bundle.uninstall();
-            } catch (BundleException e) {
-                e.printStackTrace();
-            }
-            listBundles();
-        }
-    };
 
     public TemplateManager(BundleContext bundleContext, String obrIp, int obrPort) {
         this.bundleContext = bundleContext;
-        this.templateRefMap = new ConcurrentHashMap<Template, ServiceReference<Template>>();
         this.admin = bundleContext.getService(bundleContext.getServiceReference(RepositoryAdmin.class));
         this.templateRepoURL = String.format("http://%s:%d/obr/%s_repo.xml", obrIp, obrPort, "template");
         this.serviceRepoUrl = String.format("http://%s:%d/obr/%s_repo.xml", obrIp, obrPort, "service");
@@ -85,28 +67,20 @@ public class TemplateManager extends Binder {
                     resolver.deploy(true);
                     info("Deploy Successfully!");
                     listBundles();
-                    //TODO fix bug:template parallel
 
                     String filter = String.format("(%s=%s)", Constants.BUNDLE_SYMBOLICNAME, resource.getSymbolicName());
                     try {
                         Iterator<ServiceReference<Template>> iterator = bundleContext.getServiceReferences(Template.class, filter).iterator();
                         if (iterator.hasNext()) {
-                            return resolveServiceReference(iterator.next());
+                            Template template = bundleContext.getService(iterator.next());
+                            template.setContext(context);
+                            return template;
                         }
                     } catch (InvalidSyntaxException e) {
                         e.printStackTrace();
                     }
                 }
                 return null;
-            }
-
-            private Template resolveServiceReference(ServiceReference<Template> serviceReference) {
-                Template template = bundleContext.getService(serviceReference);
-                template.setStopListener(templateStopListener);
-                template.setUiHandler(new Handler(Looper.getMainLooper()));
-                template.setContext(context);
-                templateRefMap.put(template, serviceReference);
-                return template;
             }
 
             @Override
