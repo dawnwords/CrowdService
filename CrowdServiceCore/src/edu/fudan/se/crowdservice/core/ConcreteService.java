@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Base64;
 import jade.util.Logger;
 import org.osgi.framework.BundleActivator;
@@ -31,6 +32,7 @@ public abstract class ConcreteService implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         String serviceName = getServiceInterface().getName();
+        this.uiHandler = new Handler(Looper.getMainLooper());
         logger.log(Level.INFO, "Register Service:" + serviceName);
         bundleContext.registerService(serviceName, this, null);
     }
@@ -42,10 +44,6 @@ public abstract class ConcreteService implements BundleActivator {
     void setContext(Context context) {
         this.context = context;
         this.consumerId = context.getSharedPreferences(SavedProperty.CROWD_SERVICE, 0).getString(SavedProperty.AGENT_NAME, "");
-    }
-
-    void setUiHandler(Handler uiHandler) {
-        this.uiHandler = uiHandler;
     }
 
     void setTime(int time) {
@@ -94,7 +92,7 @@ public abstract class ConcreteService implements BundleActivator {
     }
 
     @TargetApi(Build.VERSION_CODES.FROYO)
-    protected String loadDataAsBase64ByPath(String imagePath){
+    protected String loadDataAsBase64ByPath(String imagePath) {
         BufferedInputStream in = null;
         ByteArrayOutputStream out = null;
         String result = null;
@@ -116,8 +114,8 @@ public abstract class ConcreteService implements BundleActivator {
         return result;
     }
 
-    protected void close(Closeable closeable){
-        if(closeable!=null){
+    protected void close(Closeable closeable) {
+        if (closeable != null) {
             try {
                 closeable.close();
             } catch (IOException e) {
