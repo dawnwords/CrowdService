@@ -13,13 +13,14 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import jade.util.Logger;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Stack;
 import java.util.logging.Level;
 
 /**
@@ -30,8 +31,9 @@ public abstract class Template implements BundleActivator {
     private BundleContext bundleContext;
     private Context context;
     private Handler uiHandler;
-    private OnTemplateStopListener listener;
+    private ServiceExecutionListener listener;
     private HashMap<String, TimeCost> serviceTimeCostMap;
+    private Stack<ServiceReference> serviceReferences;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
     private TimeCost totalTimeCost;
@@ -39,18 +41,15 @@ public abstract class Template implements BundleActivator {
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
+        this.serviceReferences = new Stack<ServiceReference>();
         log("Start Template...");
         Hashtable properties = new Hashtable();
-        properties.put(Constants.BUNDLE_SYMBOLICNAME,getTemplateName());
-        this.bundleContext.registerService(Template.class, this, properties);
+        properties.put(Constants.BUNDLE_SYMBOLICNAME, getTemplateName());
+        serviceReferences.push(this.bundleContext.registerService(Template.class, this, properties).getReference());
     }
 
     @Override
     public void stop(BundleContext bundleContext) throws Exception {
-    }
-
-    public void setStopListener(OnTemplateStopListener listener) {
-        this.listener = listener;
     }
 
     public void setUiHandler(Handler uiHandler) {
@@ -61,8 +60,9 @@ public abstract class Template implements BundleActivator {
         this.context = context;
     }
 
-    public void executeTemplate() {
-        totalTimeCost = requestTotalTimeCost();
+    public void executeTemplate(ServiceExecutionListener listener) {
+        this.listener = listener;
+        this.totalTimeCost = requestTotalTimeCost();
         log("Total Time=" + totalTimeCost.time + ",Cost=" + totalTimeCost.cost);
         planTotalTimeCost(getTemplateName(), totalTimeCost);
         log("Resolve Service...");
@@ -70,7 +70,20 @@ public abstract class Template implements BundleActivator {
         log("Execute Template");
         execute();
         log("Stop Template");
-        listener.onTemplateStop(this);
+        listener.onTemplateStop();
+        uninstallTemplate();
+    }
+
+    private void uninstallTemplate() {
+        while (!serviceReferences.empty()) {
+            Bundle bundle = serviceReferences.pop().getBundle();
+            log("Uninstall Bundle:" + bundle.getSymbolicName());
+            try {
+                bundle.uninstall();
+            } catch (BundleException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private TimeCost requestTotalTimeCost() {
@@ -214,26 +227,60 @@ public abstract class Template implements BundleActivator {
         return builder.setTitle(message).setCancelable(false);
     }
 
-    public static interface OnTemplateStopListener {
-        void onTemplateStop(Template template);
+    public static interface ServiceExecutionListener {
+        void onServiceStart(Class serviceClass);
+
+        void onServiceStop(Class serviceClass);
+
+        void onServiceException(Class serviceClass, String reason);
+
+        void onTemplateStop();
     }
 
     protected class ServiceResolver {
-        public <T> T resolveService(Class<T> serviceClass, double timePersent, double costPersent) {
+        public <T> T resolveService(Class<T> serviceClass, double timePercent, double costPercent) {
             ServiceReference<T> serviceReference = bundleContext.getServiceReference(serviceClass);
+            serviceReferences.push(serviceReference);
             T service = bundleContext.getService(serviceReference);
-            ConcreteService concreteService = (ConcreteService) service;
+            initConcreteService(timePercent, costPercent, (ConcreteService) service);
+            return new ServiceHandler<T>().newProxyInstance(service);
+        }
+
+        private void initConcreteService(double timePercent, double costPercent, ConcreteService concreteService) {
             concreteService.setContext(context);
             concreteService.setUiHandler(uiHandler);
             //TODO After tfws1 Added
 //            TimeCost timeCost = serviceTimeCostMap.get(serviceClass.getName());
 //            concreteService.setTime(timeCost.time);
 //            concreteService.setCost(timeCost.cost);
-            concreteService.setTime((int) (totalTimeCost.time * timePersent));
-            concreteService.setCost((int) (totalTimeCost.cost * costPersent));
+            concreteService.setTime((int) (totalTimeCost.time * timePercent));
+            concreteService.setCost((int) (totalTimeCost.cost * costPercent));
             concreteService.setTemplateName(getTemplateName());
+        }
+    }
 
-            return service;
+    private class ServiceHandler<T> implements InvocationHandler {
+        private T target;
+
+        public T newProxyInstance(T target) {
+            this.target = target;
+            return (T) Proxy.newProxyInstance(target.getClass().getClassLoader(),
+                    target.getClass().getInterfaces(), this);
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            Object result = null;
+            Class targetClass = target.getClass();
+            listener.onServiceStart(targetClass);
+            try {
+                result = method.invoke(target, args);
+                listener.onServiceStop(targetClass);
+            } catch (Exception e) {
+                listener.onServiceException(targetClass, e.getMessage());
+                e.printStackTrace();
+            }
+            return result;
         }
     }
 
