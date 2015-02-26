@@ -66,13 +66,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         public void handleMessage(Message msg) {
             UIMessage message = new UIMessage(msg);
             switch (message.what()) {
-                case RefuseMessage.REFUSE:
+                case RefuseMessage.WHAT:
                     refuseMessage(message);
                     break;
-                case RequestMessage.REQUEST:
+                case RequestMessage.WHAT:
                     requestMessage(message);
                     break;
-                case DelegateMessage.DELEGATE:
+                case DelegateMessage.WHAT:
                     delegateMessage(message);
                     break;
             }
