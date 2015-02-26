@@ -23,39 +23,39 @@ public class ConsumerSession implements Serializable {
         this.messages = new ArrayList<Message>();
     }
 
-    public static Message buildServiceStartMessage(Class service) {
-        return new Message(MessageType.SERVICE_START, service.getSimpleName() + " Started.");
+    public static Message buildServiceStartMessage(int sessionID, Class service) {
+        return new Message(sessionID, MessageType.SERVICE_START, service.getSimpleName() + " Started.");
     }
 
-    public static Message buildServiceStopMessage(Class service) {
-        return new Message(MessageType.SERVICE_STOP, service.getSimpleName() + " Stopped.");
+    public static Message buildServiceStopMessage(int sessionID, Class service) {
+        return new Message(sessionID, MessageType.SERVICE_STOP, service.getSimpleName() + " Stopped.");
     }
 
-    public static Message buildServiceExceptionMessage(Class service, String reason) {
+    public static Message buildServiceExceptionMessage(int sessionID, Class service, String reason) {
         reason = String.format("Exception Occurs in %s for %s. ", service.getSimpleName(), reason);
-        return new Message(MessageType.SERVICE_STOP, reason);
+        return new Message(sessionID, MessageType.SERVICE_STOP, reason);
     }
 
-    public static Message buildTemplateStopMessage() {
-        return new Message(MessageType.TEMPLATE_STOP, "Template Stopped.");
+    public static Message buildTemplateStopMessage(int sessionID) {
+        return new Message(sessionID, MessageType.TEMPLATE_STOP, "Template Stopped.");
     }
 
-    public static Message buildRequestInputMessage(String hint) {
-        return new Message(MessageType.REQUEST_INPUT, hint);
+    public static Message buildRequestInputMessage(int sessionID, String hint) {
+        return new Message(sessionID, MessageType.REQUEST_INPUT, hint);
     }
 
-    public static Message buildRequestConfirmMessage(String hint) {
-        return new Message(MessageType.REQUEST_CONFIRM, hint);
+    public static Message buildRequestConfirmMessage(int sessionID, String hint) {
+        return new Message(sessionID, MessageType.REQUEST_CONFIRM, hint);
     }
 
-    public static Message buildRequestChooseMessage(String hint, String[] choices) {
-        Message message = new Message(MessageType.REQUEST_CHOOSE, hint);
+    public static Message buildRequestChooseMessage(int sessionID, String hint, String[] choices) {
+        Message message = new Message(sessionID, MessageType.REQUEST_CHOOSE, hint);
         message.choices = choices;
         return message;
     }
 
-    public static Message buildShowMessageMessage(String content) {
-        return new Message(MessageType.SHOW_MESSAGE, content);
+    public static Message buildShowMessageMessage(int sessionID, String content) {
+        return new Message(sessionID, MessageType.SHOW_MESSAGE, content);
     }
 
     @Override
@@ -77,12 +77,14 @@ public class ConsumerSession implements Serializable {
     }
 
     public static class Message implements Serializable {
+        public final int sessionID;
         public final MessageType type;
         public final String content;
         public final String createTime;
         private String[] choices;
 
-        private Message(MessageType type, String content) {
+        private Message(int sessionID, MessageType type, String content) {
+            this.sessionID = sessionID;
             this.type = type;
             this.content = content;
             this.createTime = format.format(new Date());
@@ -95,7 +97,8 @@ public class ConsumerSession implements Serializable {
         @Override
         public String toString() {
             return "Message{" +
-                    "type=" + type +
+                    "sessionID=" + sessionID +
+                    ", type=" + type +
                     ", content='" + content + '\'' +
                     ", createTime='" + createTime + '\'' +
                     (choices == null ? "" : (", choices=" + Arrays.toString(choices))) +

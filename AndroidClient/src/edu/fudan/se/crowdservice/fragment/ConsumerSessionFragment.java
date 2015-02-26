@@ -13,6 +13,31 @@ import edu.fudan.se.crowdservice.data.ConsumerSession;
 public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Message> {
     public ConsumerSessionFragment() {
         super(R.string.no_service_in_execution, R.layout.list_item_consumer_session);
+        addViewByLastMessage();
+    }
+
+    private void addViewByLastMessage() {
+        ConsumerSession.Message lastMessage = data.get(data.size() - 1);
+        switch (lastMessage.type) {
+            case CONSUMER_INPUT:
+            case SERVICE_START:
+            case SERVICE_STOP:
+            case SERVICE_EXCEPTION:
+            case SHOW_MESSAGE:
+            case TEMPLATE_STOP:
+                break;
+            case REQUEST_INPUT:
+                //TODO addBottomView and setResultInput
+                String result = "";
+                agent.setResultInput(lastMessage.sessionID, result);
+                break;
+            case REQUEST_CONFIRM:
+                //TODO addBottomView and setResultInput
+                break;
+            case REQUEST_CHOOSE:
+                //TODO addBottomView and setResultInput
+                break;
+        }
     }
 
     @Override

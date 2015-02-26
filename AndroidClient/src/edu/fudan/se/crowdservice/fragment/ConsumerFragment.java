@@ -51,4 +51,14 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
         int sessionId = agent.executeTemplate(template);
         addData(new ConsumerSession(sessionId, templateName));
     }
+
+    public void addConsumerSessionMessage(ConsumerSession.Message message) {
+        for (ConsumerSession session : data) {
+            if (session.sessionID == message.sessionID) {
+                session.messages.add(message);
+                setData(data);
+                break;
+            }
+        }
+    }
 }

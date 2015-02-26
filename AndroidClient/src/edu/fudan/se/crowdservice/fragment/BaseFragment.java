@@ -17,8 +17,8 @@ import java.util.ArrayList;
  */
 public abstract class BaseFragment<T> extends ListFragment {
     protected AgentInterface agent;
+    protected ArrayList<T> data;
     private int emptyStringResId, itemLayoutId;
-    private ArrayList<T> data;
     private BaseAdapter adapter = new BaseAdapter() {
         @Override
         public int getCount() {

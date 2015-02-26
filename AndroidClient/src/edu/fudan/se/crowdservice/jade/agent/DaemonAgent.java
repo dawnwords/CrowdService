@@ -102,8 +102,8 @@ public class DaemonAgent extends Agent implements AgentInterface {
 
     @Override
     public int executeTemplate(Template template) {
-        TemplateExecutingBehaviour behaviour = new TemplateExecutingBehaviour(template, handler);
         int id = sessionID.incrementAndGet();
+        TemplateExecutingBehaviour behaviour = new TemplateExecutingBehaviour(id, template, handler);
         templateSession.put(id, behaviour);
         addBehaviour(tbf.wrap(behaviour));
         return id;

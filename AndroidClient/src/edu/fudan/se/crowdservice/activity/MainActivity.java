@@ -121,27 +121,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     }
 
     private void consumerSessionMessage(UIMessage message) {
-        switch (ConsumerSession.MessageType.valueOf(message.what())) {
-            case CONSUMER_INPUT:
-                //TODO addMessage
-                break;
-            case SERVICE_START:
-                break;
-            case SERVICE_STOP:
-                break;
-            case SERVICE_EXCEPTION:
-                break;
-            case REQUEST_INPUT:
-                break;
-            case REQUEST_CONFIRM:
-                break;
-            case REQUEST_CHOOSE:
-                break;
-            case SHOW_MESSAGE:
-                break;
-            case TEMPLATE_STOP:
-                break;
-        }
+        ConsumerSession.Message csm = (ConsumerSession.Message) message.getValue();
+        ((ConsumerFragment) getSupportFragmentManager().findFragmentByTag("Consumer")).addConsumerSessionMessage(csm);
     }
 
     @Override

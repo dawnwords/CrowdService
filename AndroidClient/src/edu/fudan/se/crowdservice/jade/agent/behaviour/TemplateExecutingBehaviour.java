@@ -13,50 +13,51 @@ import jade.core.behaviours.OneShotBehaviour;
 public class TemplateExecutingBehaviour extends OneShotBehaviour {
 
     private Template template;
+    private int sessionID;
     private Handler handler;
     private ResultHolder<String> result = new ResultHolder<String>();
     private Template.ServiceExecutionListener listener = new Template.ServiceExecutionListener() {
         @Override
         public void onServiceStart(Class serviceClass) {
-            sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(serviceClass));
+            sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(sessionID, serviceClass));
         }
 
         @Override
         public void onServiceStop(Class serviceClass) {
-            sendConsumerSessionMessage(ConsumerSession.buildServiceStopMessage(serviceClass));
+            sendConsumerSessionMessage(ConsumerSession.buildServiceStopMessage(sessionID, serviceClass));
         }
 
         @Override
         public void onServiceException(Class serviceClass, String reason) {
-            sendConsumerSessionMessage(ConsumerSession.buildServiceExceptionMessage(serviceClass, reason));
+            sendConsumerSessionMessage(ConsumerSession.buildServiceExceptionMessage(sessionID, serviceClass, reason));
         }
 
         @Override
         public void onTemplateStop() {
-            sendConsumerSessionMessage(ConsumerSession.buildTemplateStopMessage());
+            sendConsumerSessionMessage(ConsumerSession.buildTemplateStopMessage(sessionID));
         }
 
         @Override
         public String onRequestUserInput(String hint) {
-            sendConsumerSessionMessage(ConsumerSession.buildRequestInputMessage(hint));
+            sendConsumerSessionMessage(ConsumerSession.buildRequestInputMessage(sessionID, hint));
             return result.get();
         }
 
         @Override
         public boolean onRequestUserConfirm(String hint) {
-            sendConsumerSessionMessage(ConsumerSession.buildRequestConfirmMessage(hint));
+            sendConsumerSessionMessage(ConsumerSession.buildRequestConfirmMessage(sessionID, hint));
             return result.get().equals(Boolean.TRUE.toString());
         }
 
         @Override
         public int onRequestUserChoose(String hint, String[] choices) {
-            sendConsumerSessionMessage(ConsumerSession.buildRequestChooseMessage(hint, choices));
+            sendConsumerSessionMessage(ConsumerSession.buildRequestChooseMessage(sessionID, hint, choices));
             return Integer.parseInt(result.get());
         }
 
         @Override
         public void onShowMessage(String content) {
-            sendConsumerSessionMessage(ConsumerSession.buildShowMessageMessage(content));
+            sendConsumerSessionMessage(ConsumerSession.buildShowMessageMessage(sessionID, content));
         }
 
         private void sendConsumerSessionMessage(ConsumerSession.Message message) {
@@ -64,7 +65,8 @@ public class TemplateExecutingBehaviour extends OneShotBehaviour {
         }
     };
 
-    public TemplateExecutingBehaviour(Template template, Handler handler) {
+    public TemplateExecutingBehaviour(int sessionID, Template template, Handler handler) {
+        this.sessionID = sessionID;
         this.template = template;
         this.handler = handler;
     }
