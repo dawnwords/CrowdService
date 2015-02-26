@@ -25,4 +25,6 @@
     </string-array>
     <string name="navigation_drawer_open">Open Navigation Drawer</string>
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="back">Back</string>
+    <string name="no_service_in_execution">No Service in Execution</string>
 </resources>

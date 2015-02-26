@@ -1,21 +1,26 @@
 package edu.fudan.se.crowdservice.data;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Created by Dawnwords on 2015/2/26.
  */
 public class ConsumerSession implements Serializable {
+    private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm");
     public final int sessionID;
     public final String templateName;
-    public final List<Message> messages;
+    public final String createTime;
+    public final ArrayList<Message> messages;
 
     public ConsumerSession(int sessionID, String templateName) {
         this.sessionID = sessionID;
         this.templateName = templateName;
-        this.messages = new LinkedList<Message>();
+        this.createTime = format.format(new Date());
+        this.messages = new ArrayList<Message>();
     }
 
     public static Message buildServiceStartMessage(Class service) {
@@ -64,17 +69,23 @@ public class ConsumerSession implements Serializable {
 
     public static enum MessageType {
         CONSUMER_INPUT, SERVICE_START, SERVICE_STOP, SERVICE_EXCEPTION, TEMPLATE_STOP,
-        REQUEST_INPUT, REQUEST_CONFIRM, REQUEST_CHOOSE, SHOW_MESSAGE
+        REQUEST_INPUT, REQUEST_CONFIRM, REQUEST_CHOOSE, SHOW_MESSAGE;
+
+        public static MessageType valueOf(int what) {
+            return MessageType.values()[what];
+        }
     }
 
     public static class Message implements Serializable {
         public final MessageType type;
         public final String content;
+        public final String createTime;
         private String[] choices;
 
         private Message(MessageType type, String content) {
             this.type = type;
             this.content = content;
+            this.createTime = format.format(new Date());
         }
 
         public String[] getChoices() {
@@ -86,6 +97,8 @@ public class ConsumerSession implements Serializable {
             return "Message{" +
                     "type=" + type +
                     ", content='" + content + '\'' +
+                    ", createTime='" + createTime + '\'' +
+                    (choices == null ? "" : (", choices=" + Arrays.toString(choices))) +
                     '}';
         }
     }

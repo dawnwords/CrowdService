@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.data.ConsumerSession;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
 import edu.fudan.se.crowdservice.fragment.BaseFragment;
@@ -24,10 +25,7 @@ import edu.fudan.se.crowdservice.fragment.NavigationFragment.NavigationDrawerCal
 import edu.fudan.se.crowdservice.fragment.WorkerFragment;
 import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.DelegateMessage;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.RefuseMessage;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.RequestMessage;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.*;
 import edu.fudan.se.crowdservice.wrapper.DelegateWrapper;
 import edu.fudan.se.crowdservice.wrapper.RefuseWrapper;
 import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
@@ -41,23 +39,21 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             TemplateManager tm = (TemplateManager) iBinder;
-            setTemplateManager(tm);
+            navigationFragment.setTemplateManager(tm);
             navigationFragment.setTemplateSelectCallBack(new NavigationFragment.TemplateSelectCallbacks() {
                 @Override
                 public void onTemplateSelected(Template template) {
-                    //TODO finish this method
+                    ConsumerFragment fragment = (ConsumerFragment) getSupportFragmentManager().findFragmentByTag("Consumer");
+                    if (fragment != null) {
+                        fragment.addTemplate(template);
+                    }
                 }
             });
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            setTemplateManager(null);
-        }
-
-        private void setTemplateManager(TemplateManager tm) {
-            ((ConsumerFragment) getSupportFragmentManager().findFragmentByTag("Consumer")).setTemplateManager(tm);
-            navigationFragment.setTemplateManager(tm);
+            navigationFragment.setTemplateManager(null);
         }
 
     };
@@ -75,9 +71,13 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 case DelegateMessage.WHAT:
                     delegateMessage(message);
                     break;
+                case ConsumerSessionMessage.WHAT:
+                    consumerSessionMessage(message);
+                    break;
             }
         }
     };
+
     private ServiceConnection jadeConnection = new ServiceConnection() {
 
         @Override
@@ -118,6 +118,30 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     private void refuseMessage(UIMessage message) {
         RefuseWrapper refuse = (RefuseWrapper) message.getValue();
         toast("Your offer for task" + refuse.taskId + " is refused:" + refuse.reason);
+    }
+
+    private void consumerSessionMessage(UIMessage message) {
+        switch (ConsumerSession.MessageType.valueOf(message.what())) {
+            case CONSUMER_INPUT:
+                //TODO addMessage
+                break;
+            case SERVICE_START:
+                break;
+            case SERVICE_STOP:
+                break;
+            case SERVICE_EXCEPTION:
+                break;
+            case REQUEST_INPUT:
+                break;
+            case REQUEST_CONFIRM:
+                break;
+            case REQUEST_CHOOSE:
+                break;
+            case SHOW_MESSAGE:
+                break;
+            case TEMPLATE_STOP:
+                break;
+        }
     }
 
     @Override

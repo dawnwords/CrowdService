@@ -59,8 +59,13 @@ public class AgentManager extends Binder implements AgentInterface {
     }
 
     @Override
-    public void executeTemplate(Template template) {
-        agent.executeTemplate(template);
+    public void setResultInput(int sessionId, String resultInput) {
+        agent.setResultInput(sessionId, resultInput);
+    }
+
+    @Override
+    public int executeTemplate(Template template) {
+        return agent.executeTemplate(template);
     }
 
     public static interface OnAgentReadyInterface {

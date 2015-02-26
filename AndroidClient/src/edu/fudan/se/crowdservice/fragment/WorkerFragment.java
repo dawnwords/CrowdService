@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.method.DigitsKeyListener;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
@@ -19,6 +21,12 @@ public class WorkerFragment extends BaseFragment<RequestWrapper> {
 
     public WorkerFragment() {
         super(R.string.no_task, R.layout.list_item_task);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
