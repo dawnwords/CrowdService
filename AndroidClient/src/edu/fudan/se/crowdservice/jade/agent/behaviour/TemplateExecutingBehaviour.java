@@ -3,6 +3,8 @@ package edu.fudan.se.crowdservice.jade.agent.behaviour;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.ResultHolder;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.data.ConsumerSession;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.ConsumerSessionMessage;
 import jade.core.behaviours.OneShotBehaviour;
 
 /**
@@ -16,45 +18,49 @@ public class TemplateExecutingBehaviour extends OneShotBehaviour {
     private Template.ServiceExecutionListener listener = new Template.ServiceExecutionListener() {
         @Override
         public void onServiceStart(Class serviceClass) {
-            //TODO post message for handler
+            sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(serviceClass));
         }
 
         @Override
         public void onServiceStop(Class serviceClass) {
-            //TODO post message for handler
+            sendConsumerSessionMessage(ConsumerSession.buildServiceStopMessage(serviceClass));
         }
 
         @Override
         public void onServiceException(Class serviceClass, String reason) {
-            //TODO post message for handler
+            sendConsumerSessionMessage(ConsumerSession.buildServiceExceptionMessage(serviceClass, reason));
         }
 
         @Override
         public void onTemplateStop() {
-            //TODO post message for handler
+            sendConsumerSessionMessage(ConsumerSession.buildTemplateStopMessage());
         }
 
         @Override
-        public String onRequestUserInput(String message) {
-            //TODO post message for handler
+        public String onRequestUserInput(String hint) {
+            sendConsumerSessionMessage(ConsumerSession.buildRequestInputMessage(hint));
             return result.get();
         }
 
         @Override
-        public boolean onRequestUserConfirm(String s) {
-            //TODO post message for handler
+        public boolean onRequestUserConfirm(String hint) {
+            sendConsumerSessionMessage(ConsumerSession.buildRequestConfirmMessage(hint));
             return result.get().equals(Boolean.TRUE.toString());
         }
 
         @Override
-        public int onRequestUserChoose(String s, String[] strings) {
-            //TODO post message for handler
+        public int onRequestUserChoose(String hint, String[] choices) {
+            sendConsumerSessionMessage(ConsumerSession.buildRequestChooseMessage(hint, choices));
             return Integer.parseInt(result.get());
         }
 
         @Override
-        public void onShowMessage(String s) {
-            //TODO post message for handler
+        public void onShowMessage(String content) {
+            sendConsumerSessionMessage(ConsumerSession.buildShowMessageMessage(content));
+        }
+
+        private void sendConsumerSessionMessage(ConsumerSession.Message message) {
+            handler.sendMessage(new ConsumerSessionMessage(message).asMessage());
         }
     };
 

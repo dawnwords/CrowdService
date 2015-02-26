@@ -8,7 +8,7 @@ import edu.fudan.se.crowdservice.data.ConsumerSession;
 public class ConsumerSessionMessage extends UIMessage<ConsumerSession.Message> {
     public static final int WHAT = 945;
 
-    protected ConsumerSessionMessage(ConsumerSession.Message value) {
+    public ConsumerSessionMessage(ConsumerSession.Message value) {
         super(WHAT, value);
     }
 }
