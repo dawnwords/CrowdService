@@ -26,6 +26,12 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
         super(R.string.no_service_in_execution, R.layout.list_item_consumer_session);
     }
 
+    @Override
+    public void onActivityCreated (Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     private void addViewByLastMessage() {
         final ConsumerSession.Message lastMessage = getLastMessage();
         if (lastMessage == null) {
