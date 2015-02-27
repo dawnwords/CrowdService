@@ -58,6 +58,10 @@ public class ConsumerSession implements Serializable {
         return new Message(sessionID, MessageType.SHOW_MESSAGE, content);
     }
 
+    public Message getLastMessage() {
+        return messages.size() > 0 ? messages.get(messages.size() - 1) : null;
+    }
+
     @Override
     public String toString() {
         return "ConsumerSession{" +

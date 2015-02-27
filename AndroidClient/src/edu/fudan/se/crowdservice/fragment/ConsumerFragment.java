@@ -42,7 +42,8 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
 
         templateName.setText(session.templateName);
         templateCreateTime.setText(session.createTime);
-        lastMessage.setText(session.messages.get(session.messages.size() - 1).content);
+        ConsumerSession.Message msg = session.getLastMessage();
+        lastMessage.setText(msg == null ? "Template Started." : msg.content);
     }
 
     public void addTemplate(Template template) {
