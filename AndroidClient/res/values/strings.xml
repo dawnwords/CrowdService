@@ -27,4 +27,6 @@
     <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string name="back">Back</string>
     <string name="no_service_in_execution">No Service in Execution</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

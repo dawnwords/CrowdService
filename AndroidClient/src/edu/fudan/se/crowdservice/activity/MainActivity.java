@@ -18,11 +18,8 @@ import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
-import edu.fudan.se.crowdservice.fragment.BaseFragment;
-import edu.fudan.se.crowdservice.fragment.ConsumerFragment;
-import edu.fudan.se.crowdservice.fragment.NavigationFragment;
+import edu.fudan.se.crowdservice.fragment.*;
 import edu.fudan.se.crowdservice.fragment.NavigationFragment.NavigationDrawerCallbacks;
-import edu.fudan.se.crowdservice.fragment.WorkerFragment;
 import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.*;
@@ -43,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             navigationFragment.setTemplateSelectCallBack(new NavigationFragment.TemplateSelectCallbacks() {
                 @Override
                 public void onTemplateSelected(Template template) {
-                    ConsumerFragment fragment = (ConsumerFragment) getSupportFragmentManager().findFragmentByTag("Consumer");
+                    ConsumerFragment fragment = (ConsumerFragment) getFragmentByTag("Consumer");
                     if (fragment != null) {
                         fragment.addTemplate(template);
                     }
@@ -93,9 +90,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
 
         private void setAgent(AgentManager agent) {
-            FragmentManager manager = getSupportFragmentManager();
             for (String fragmentTag : FRAGMENT_TAG) {
-                ((BaseFragment) manager.findFragmentByTag(fragmentTag)).setAgent(agent);
+                ((BaseFragment) getFragmentByTag(fragmentTag)).setAgent(agent);
             }
         }
     };
@@ -122,7 +118,15 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private void consumerSessionMessage(UIMessage message) {
         ConsumerSession.Message csm = (ConsumerSession.Message) message.getValue();
-        ((ConsumerFragment) getSupportFragmentManager().findFragmentByTag("Consumer")).addConsumerSessionMessage(csm);
+        ((ConsumerFragment) getFragmentByTag("Consumer")).addConsumerSessionMessage(csm);
+        ConsumerSessionFragment consumerSession = (ConsumerSessionFragment) getFragmentByTag("ConsumerSession");
+        if (lastFragment == consumerSession) {
+            consumerSession.updateConsumerSessionMessage();
+        }
+    }
+
+    private Fragment getFragmentByTag(String tag) {
+        return getSupportFragmentManager().findFragmentByTag(tag);
     }
 
     @Override
@@ -161,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     public void onNavigationDrawerItemSelected(String title) {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        Fragment currentFragment = manager.findFragmentByTag(title);
+        Fragment currentFragment = getFragmentByTag(title);
         if (currentFragment == null) {
             currentFragment = createFragment(title);
             transaction.add(R.id.content_frame, currentFragment, title);

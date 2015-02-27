@@ -1,9 +1,10 @@
 package edu.fudan.se.crowdservice.fragment;
 
+import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
-import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 
@@ -11,13 +12,18 @@ import edu.fudan.se.crowdservice.data.ConsumerSession;
  * Created by Dawnwords on 2015/2/26.
  */
 public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Message> {
+
+    private View userInputView;
+    private View userChooseView;
+    private View userConfirmView;
+
     public ConsumerSessionFragment() {
         super(R.string.no_service_in_execution, R.layout.list_item_consumer_session);
         addViewByLastMessage();
     }
 
     private void addViewByLastMessage() {
-        ConsumerSession.Message lastMessage = data.get(data.size() - 1);
+        final ConsumerSession.Message lastMessage = data.get(data.size() - 1);
         switch (lastMessage.type) {
             case CONSUMER_INPUT:
             case SERVICE_START:
@@ -27,17 +33,66 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
             case TEMPLATE_STOP:
                 break;
             case REQUEST_INPUT:
-                //TODO addBottomView and setResultInput
-                String result = "";
-                agent.setResultInput(lastMessage.sessionID, result);
+                userInputView.findViewById(R.id.user_input_submit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Editable text = ((EditText) userInputView.findViewById(R.id.user_input)).getText();
+                        agent.setResultInput(lastMessage.sessionID, text == null ? "" : text.toString());
+                    }
+                });
+                switchInputView(userInputView);
                 break;
             case REQUEST_CONFIRM:
-                //TODO addBottomView and setResultInput
+                userConfirmView.findViewById(R.id.user_confirm_yes).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        agent.setResultInput(lastMessage.sessionID, String.valueOf(true));
+                    }
+                });
+                userConfirmView.findViewById(R.id.user_confirm_no).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        agent.setResultInput(lastMessage.sessionID, String.valueOf(false));
+                    }
+                });
+                switchInputView(userConfirmView);
                 break;
             case REQUEST_CHOOSE:
-                //TODO addBottomView and setResultInput
+                int res = android.R.layout.simple_expandable_list_item_1;
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), res, lastMessage.getChoices());
+                final Spinner spinnerChoice = (Spinner) userChooseView.findViewById(R.id.user_choose);
+                spinnerChoice.setAdapter(adapter);
+                userChooseView.findViewById(R.id.user_choose_submit).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int choice = spinnerChoice.getSelectedItemPosition();
+                        agent.setResultInput(lastMessage.sessionID, String.valueOf(choice));
+                    }
+                });
                 break;
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        getListView().addFooterView(initFooterView(savedInstanceState));
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private View initFooterView(Bundle savedInstanceState) {
+        View footer = getLayoutInflater(savedInstanceState).inflate(R.layout.list_footer_user_input, null);
+        userInputView = footer.findViewById(R.id.user_input_view);
+        userChooseView = footer.findViewById(R.id.user_choose_view);
+        userConfirmView = footer.findViewById(R.id.user_confirm_view);
+
+        switchInputView(null);
+        return footer;
+    }
+
+    private void switchInputView(View inputView) {
+        userInputView.setVisibility(inputView == userInputView ? View.VISIBLE : View.GONE);
+        userChooseView.setVisibility(inputView == userChooseView ? View.VISIBLE : View.GONE);
+        userConfirmView.setVisibility(inputView == userConfirmView ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -60,5 +115,10 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
 
         TextView time = (TextView) convertView.findViewById(R.id.message_time);
         time.setText(message.createTime);
+    }
+
+    public void updateConsumerSessionMessage() {
+        setData(data);
+        addViewByLastMessage();
     }
 }

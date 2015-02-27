@@ -23,11 +23,10 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
 
     @Override
     protected void onItemSelected(ConsumerSession session) {
-        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(CONSUMER_SESSION_TAG);
         ConsumerSessionFragment fragment = (ConsumerSessionFragment) getFragmentManager().findFragmentByTag(CONSUMER_SESSION_TAG);
         fragment.setData(session.messages);
+        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(CONSUMER_SESSION_TAG);
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
