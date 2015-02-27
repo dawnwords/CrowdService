@@ -1,7 +1,12 @@
 package edu.fudan.se.crowdservice.fragment;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
@@ -19,11 +24,13 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
 
     public ConsumerSessionFragment() {
         super(R.string.no_service_in_execution, R.layout.list_item_consumer_session);
-        addViewByLastMessage();
     }
 
     private void addViewByLastMessage() {
-        final ConsumerSession.Message lastMessage = data.get(data.size() - 1);
+        final ConsumerSession.Message lastMessage = getLastMessage();
+        if (lastMessage == null) {
+            return;
+        }
         switch (lastMessage.type) {
             case CONSUMER_INPUT:
             case SERVICE_START:
@@ -74,8 +81,33 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (isVisible()) {
+            inflater.inflate(R.menu.consumer_session, menu);
+            ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_back) {
+            ((NavigationFragment.NavigationDrawerCallbacks) getActivity()).onNavigationDrawerItemSelected("Consumer");
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private ConsumerSession.Message getLastMessage() {
+        return data.size() > 0 ? data.get(data.size() - 1) : null;
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         getListView().addFooterView(initFooterView(savedInstanceState));
+        addViewByLastMessage();
         super.onViewCreated(view, savedInstanceState);
     }
 

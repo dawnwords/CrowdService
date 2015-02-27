@@ -11,7 +11,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.core.Template;
@@ -139,15 +141,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private void initUI() {
         setContentView(R.layout.activity_main);
-        initFragments();
-    }
 
-    private void initFragments() {
         navigationFragment = (NavigationFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         navigationFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-        for (String fragmentTitle : FRAGMENT_TAG) {
-            onNavigationDrawerItemSelected(fragmentTitle);
-        }
     }
 
     @Override
@@ -155,6 +151,22 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         unbindService(felixConnection);
         unbindService(jadeConnection);
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!isCurrentFragment("ConsumerSession")) {
+            getMenuInflater().inflate(R.menu.main, menu);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private boolean isCurrentFragment(String tag) {
+        return lastFragment != null && tag != null && tag.equals(lastFragment.getTag());
     }
 
     private void toast(String msg) {

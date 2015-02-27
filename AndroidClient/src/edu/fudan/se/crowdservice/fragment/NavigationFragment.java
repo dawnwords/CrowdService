@@ -52,8 +52,14 @@ public class NavigationFragment extends Fragment {
             }
         });
         mDrawerListView.setAdapter(adapter);
-        selectItem(0);
         return mDrawerListView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mCallbacks.onNavigationDrawerItemSelected("Consumer");
+        selectItem(0);
     }
 
     private void toast(String msg) {
@@ -76,13 +82,13 @@ public class NavigationFragment extends Fragment {
         mCallbacks = null;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (isDrawerOpen()) {
-            inflater.inflate(R.menu.main, menu);
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        if (isDrawerOpen()) {
+//            inflater.inflate(R.menu.main, menu);
+//        }
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

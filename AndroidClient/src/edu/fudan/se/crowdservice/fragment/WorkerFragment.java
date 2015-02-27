@@ -24,12 +24,6 @@ public class WorkerFragment extends BaseFragment<RequestWrapper> {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     protected void onItemSelected(final RequestWrapper task) {
         final EditText input = new EditText(getActivity());
         input.setKeyListener(new DigitsKeyListener());
