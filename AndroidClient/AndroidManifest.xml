@@ -36,11 +36,18 @@
         <service android:name=".felix.FelixService"/>
 
         <activity android:name=".activity.MainActivity"
+                  android:screenOrientation="portrait"
                   android:windowSoftInputMode="adjustResize"
+                  android:launchMode="singleTask"
+                  android:allowTaskReparenting="true"
                   android:label="@string/app_name"/>
+
         <activity android:name=".core.AdapterActivity"
+                  android:screenOrientation="portrait"
                   android:windowSoftInputMode="adjustResize"/>
+
         <activity android:name=".activity.LoginActivity"
+                  android:screenOrientation="portrait"
                   android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
