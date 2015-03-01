@@ -4,10 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
 import edu.fudan.se.crowdservice.R;
@@ -27,7 +24,17 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
     }
 
     @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.list_consumer_session, container, false);
+        userInputView = view.findViewById(R.id.user_input_view);
+        userChooseView = view.findViewById(R.id.user_choose_view);
+        userConfirmView = view.findViewById(R.id.user_confirm_view);
+        switchInputView(null);
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
     }
@@ -109,25 +116,15 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void setEmptyText(CharSequence text) {
+        TextView emptyView = (TextView) getListView().getEmptyView();
+        emptyView.setVisibility(View.GONE);
+        emptyView.setText(text);
+    }
+
     private ConsumerSession.Message getLastMessage() {
         return data.size() > 0 ? data.get(data.size() - 1) : null;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        getListView().addFooterView(initFooterView(savedInstanceState));
-        addViewByLastMessage();
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    private View initFooterView(Bundle savedInstanceState) {
-        View footer = getLayoutInflater(savedInstanceState).inflate(R.layout.list_footer_user_input, null);
-        userInputView = footer.findViewById(R.id.user_input_view);
-        userChooseView = footer.findViewById(R.id.user_choose_view);
-        userConfirmView = footer.findViewById(R.id.user_confirm_view);
-
-        switchInputView(null);
-        return footer;
     }
 
     private void switchInputView(View inputView) {
