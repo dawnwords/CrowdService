@@ -40,19 +40,25 @@ public class TemplateExecutingBehaviour extends OneShotBehaviour {
         @Override
         public String onRequestUserInput(String hint) {
             sendConsumerSessionMessage(ConsumerSession.buildRequestInputMessage(sessionID, hint));
-            return result.get();
+            String input = result.get();
+            sendConsumerSessionMessage(ConsumerSession.buildConsumerInputMessage(sessionID, input));
+            return input;
         }
 
         @Override
         public boolean onRequestUserConfirm(String hint) {
             sendConsumerSessionMessage(ConsumerSession.buildRequestConfirmMessage(sessionID, hint));
-            return result.get().equals(Boolean.TRUE.toString());
+            boolean confirm = result.get().equals(Boolean.TRUE.toString());
+            sendConsumerSessionMessage(ConsumerSession.buildConsumerInputMessage(sessionID, confirm ? "Yes" : "No"));
+            return confirm;
         }
 
         @Override
         public int onRequestUserChoose(String hint, String[] choices) {
             sendConsumerSessionMessage(ConsumerSession.buildRequestChooseMessage(sessionID, hint, choices));
-            return Integer.parseInt(result.get());
+            int choice = Integer.parseInt(result.get());
+            sendConsumerSessionMessage(ConsumerSession.buildConsumerInputMessage(sessionID, choices[choice]));
+            return choice;
         }
 
         @Override

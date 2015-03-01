@@ -58,6 +58,10 @@ public class ConsumerSession implements Serializable {
         return new Message(sessionID, MessageType.SHOW_MESSAGE, content);
     }
 
+    public static Message buildConsumerInputMessage(int sessionID, String input) {
+        return new Message(sessionID, MessageType.CONSUMER_INPUT, input);
+    }
+
     public Message getLastMessage() {
         return messages.size() > 0 ? messages.get(messages.size() - 1) : null;
     }
@@ -70,6 +74,7 @@ public class ConsumerSession implements Serializable {
                 ", messages=" + messages +
                 '}';
     }
+
 
     public static enum MessageType {
         CONSUMER_INPUT, SERVICE_START, SERVICE_STOP, SERVICE_EXCEPTION, TEMPLATE_STOP,

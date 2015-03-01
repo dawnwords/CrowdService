@@ -41,10 +41,7 @@
     <list default="true" id="01640590-39b9-4eee-ae46-34f71e021079" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ArithmeticTemplate/src/edu/fudan/se/crowdservice/template/ArithmeticTemplate.java" afterPath="$PROJECT_DIR$/ArithmeticTemplate/src/edu/fudan/se/crowdservice/template/ArithmeticTemplate.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/data/ConsumerSession.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/data/ConsumerSession.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/agent/behaviour/TemplateExecutingBehaviour.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/agent/behaviour/TemplateExecutingBehaviour.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="E:\CrowdService\AndroidClient\res\layout\list_footer_user_input.xml" afterPath="$PROJECT_DIR$/AndroidClient/res/layout/list_consumer_session.xml" />
     </list>
     <ignored path="CrowdService.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -774,12 +771,12 @@
       <workItem from="1424747198312" duration="72198000" />
       <workItem from="1425179141802" duration="4184000" />
       <workItem from="1425214343919" duration="765000" />
-      <workItem from="1425215788607" duration="5784000" />
+      <workItem from="1425215788607" duration="5855000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="410732000" />
+    <option name="totallyTimeSpent" value="410803000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
