@@ -23,10 +23,10 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
 
     @Override
     protected void onItemSelected(ConsumerSession session) {
-        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(CONSUMER_SESSION_TAG);
-        getFragmentManager().executePendingTransactions();
         ConsumerSessionFragment fragment = (ConsumerSessionFragment) getFragmentManager().findFragmentByTag(CONSUMER_SESSION_TAG);
         fragment.setData(session.messages);
+        fragment.updateConsumerSessionMessage();
+        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(CONSUMER_SESSION_TAG);
     }
 
     @Override
