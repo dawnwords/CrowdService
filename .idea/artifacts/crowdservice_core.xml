@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="crowdservice_core">
+    <output-path>$PROJECT_DIR$/libs</output-path>
+    <root id="archive" name="crowdservice_core.jar">
+      <element id="module-output" name="CrowdServiceCore" />
+    </root>
+  </artifact>
+</component>

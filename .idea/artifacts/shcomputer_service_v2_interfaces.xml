@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="shcomputer_service_v2_interfaces">
+    <output-path>$PROJECT_DIR$/interfaces</output-path>
+    <root id="archive" name="shcomputer_service_v2_interfaces.jar">
+      <element id="module-output" name="SiteInspectionService" />
+      <element id="module-output" name="UIService" />
+      <element id="module-output" name="ItemSelectionService" />
+      <element id="module-output" name="PriceAssessmentService" />
+    </root>
+  </artifact>
+</component>

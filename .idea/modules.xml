@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AddServiceImpl/AddServiceImpl.iml" filepath="$PROJECT_DIR$/AddServiceImpl/AddServiceImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidClient/AndroidClient.iml" filepath="$PROJECT_DIR$/AndroidClient/AndroidClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ArithmeticTemplate/ArithmeticTemplate.iml" filepath="$PROJECT_DIR$/ArithmeticTemplate/ArithmeticTemplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BuySHComputerTemplate/BuySHComputerTemplate.iml" filepath="$PROJECT_DIR$/BuySHComputerTemplate/BuySHComputerTemplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BuySHComputerTemplateV2/BuySHComputerTemplateV2.iml" filepath="$PROJECT_DIR$/BuySHComputerTemplateV2/BuySHComputerTemplateV2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CrowdServiceCore/CrowdServiceCore.iml" filepath="$PROJECT_DIR$/CrowdServiceCore/CrowdServiceCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataTransfer/DataTransfer.iml" filepath="$PROJECT_DIR$/DataTransfer/DataTransfer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DivideServiceImpl/DivideServiceImpl.iml" filepath="$PROJECT_DIR$/DivideServiceImpl/DivideServiceImpl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GetLocationFromURLService/GetLocationFromURLService.iml" filepath="$PROJECT_DIR$/GetLocationFromURLService/GetLocationFromURLService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ItemSelectionService/ItemSelectionService.iml" filepath="$PROJECT_DIR$/ItemSelectionService/ItemSelectionService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JudgeWorthOfComputerService/JudgeWorthOfComputerService.iml" filepath="$PROJECT_DIR$/JudgeWorthOfComputerService/JudgeWorthOfComputerService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PriceAssessmentService/PriceAssessmentService.iml" filepath="$PROJECT_DIR$/PriceAssessmentService/PriceAssessmentService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SelectURLService/SelectURLService.iml" filepath="$PROJECT_DIR$/SelectURLService/SelectURLService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ShowPictureService/ShowPictureService.iml" filepath="$PROJECT_DIR$/ShowPictureService/ShowPictureService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SiteInspectionService/SiteInspectionService.iml" filepath="$PROJECT_DIR$/SiteInspectionService/SiteInspectionService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TakePictureOfURLService/TakePictureOfURLService.iml" filepath="$PROJECT_DIR$/TakePictureOfURLService/TakePictureOfURLService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UIService/UIService.iml" filepath="$PROJECT_DIR$/UIService/UIService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appcompat_v7/appcompat_v7.iml" filepath="$PROJECT_DIR$/appcompat_v7/appcompat_v7.iml" />
+    </modules>
+  </component>
+</project>

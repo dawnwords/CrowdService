@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="arithmetic_service_interfaces">
+    <output-path>$PROJECT_DIR$/interfaces</output-path>
+    <root id="archive" name="arithmetic_service_interfaces.jar">
+      <element id="module-output" name="AddServiceImpl" />
+      <element id="module-output" name="DivideServiceImpl" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="shcomputer_service_interfaces">
+    <output-path>$PROJECT_DIR$/interfaces</output-path>
+    <root id="archive" name="shcomputer_service_interfaces.jar">
+      <element id="module-output" name="GetLocationFromURLService" />
+      <element id="module-output" name="JudgeWorthOfComputerService" />
+      <element id="module-output" name="SelectURLService" />
+      <element id="module-output" name="ShowPictureService" />
+      <element id="module-output" name="TakePictureOfURLService" />
+    </root>
+  </artifact>
+</component>
