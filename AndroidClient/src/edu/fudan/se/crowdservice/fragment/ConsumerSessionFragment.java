@@ -44,12 +44,15 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
             case SERVICE_EXCEPTION:
             case SHOW_MESSAGE:
             case TEMPLATE_STOP:
+                switchInputView(null);
                 break;
             case REQUEST_INPUT:
+                final EditText userInput = ((EditText) userInputView.findViewById(R.id.user_input));
+                userInput.setText("");
                 userInputView.findViewById(R.id.user_input_submit).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Editable text = ((EditText) userInputView.findViewById(R.id.user_input)).getText();
+                        Editable text = userInput.getText();
                         agent.setResultInput(lastMessage.sessionID, text == null ? "" : text.toString());
                     }
                 });
@@ -154,8 +157,6 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
         TextView time = (TextView) convertView.findViewById(R.id.message_time);
         time.setText(message.createTime);
     }
-
-
 
     public void updateConsumerSessionMessage() {
         setData(data);
