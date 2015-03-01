@@ -56,6 +56,7 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
             case REQUEST_INPUT:
                 final EditText userInput = ((EditText) userInputView.findViewById(R.id.user_input));
                 userInput.setText("");
+                userInput.requestFocus();
                 userInputView.findViewById(R.id.user_input_submit).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -142,6 +143,7 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
         TextView content = (TextView) convertView.findViewById(R.id.message_content);
         content.setText(message.content);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         if (message.type == ConsumerSession.MessageType.CONSUMER_INPUT) {
             content.setBackgroundResource(R.drawable.bubble_consumer);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
