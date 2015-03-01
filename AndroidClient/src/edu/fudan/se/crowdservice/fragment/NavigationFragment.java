@@ -59,6 +59,7 @@ public class NavigationFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mCallbacks.onNavigationDrawerItemSelected("Consumer");
+        mCallbacks.onNavigationDrawerItemSelected("ConsumerSession");
         selectItem(0);
     }
 
@@ -81,14 +82,6 @@ public class NavigationFragment extends Fragment {
         super.onDetach();
         mCallbacks = null;
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        if (isDrawerOpen()) {
-//            inflater.inflate(R.menu.main, menu);
-//        }
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -39,9 +39,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="01640590-39b9-4eee-ae46-34f71e021079" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PriceAssessmentService/src/service/shcomputer/cs/priceassessment/impl/PriceAssessmentServiceImpl.java" afterPath="$PROJECT_DIR$/PriceAssessmentService/src/service/shcomputer/cs/priceassessment/impl/PriceAssessmentServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SiteInspectionService/src/service/shcomputer/cs/siteinspection/impl/SiteInspectionServiceImpl.java" afterPath="$PROJECT_DIR$/SiteInspectionService/src/service/shcomputer/cs/siteinspection/impl/SiteInspectionServiceImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/appcompat_v7/appcompat_v7.iml" afterPath="$PROJECT_DIR$/appcompat_v7/appcompat_v7.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java" afterPath="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="CrowdService.iws" />
@@ -80,7 +81,91 @@
     <favorites_list name="CrowdService" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="ConsumerFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="840">
+              <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GPSLocator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/GPSLocator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="840">
+              <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+              <folding>
+                <element signature="e#1119#1120#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="NavigationFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="2490">
+              <caret line="61" column="66" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
+              <folding>
+                <element signature="method#onCreateView#0;class#NavigationFragment#0" expanded="false" />
+                <element signature="method#onDetach#0;class#NavigationFragment#0" expanded="false" />
+                <element signature="method#onOptionsItemSelected#0;class#NavigationFragment#0" expanded="false" />
+                <element signature="method#onConfigurationChanged#0;class#NavigationFragment#0" expanded="false" />
+                <element signature="method#setUp#0;class#NavigationFragment#0" expanded="false" />
+                <element signature="method#initDrawerLayout#0;class#NavigationFragment#0" expanded="false" />
+                <element signature="method#setActionBarTitle#0;class#NavigationFragment#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="JADEService.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/JADEService.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1770">
+              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="BaseFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/BaseFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="555" max-vertical-offset="1185">
+              <caret line="75" column="25" selection-start-line="75" selection-start-column="25" selection-end-line="75" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConsumerSessionFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="2190">
+              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+              <folding>
+                <element signature="e#1559#1921#0" expanded="true" />
+                <element signature="e#1920#1921#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.11904762" vertical-offset="0" max-vertical-offset="2565">
+              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
@@ -131,15 +216,15 @@
         <option value="$PROJECT_DIR$/AndroidClient/res/layout/spinner_item_user_choice.xml" />
         <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/data/ConsumerSession.java" />
         <option value="$PROJECT_DIR$/AndroidClient/res/layout/activity_main.xml" />
-        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java" />
-        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java" />
         <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/WorkerFragment.java" />
-        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java" />
         <option value="$PROJECT_DIR$/AndroidClient/res/menu/main.xml" />
-        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java" />
         <option value="$PROJECT_DIR$/AndroidClient/res/menu/consumer_session.xml" />
         <option value="$PROJECT_DIR$/SiteInspectionService/src/service/shcomputer/cs/siteinspection/impl/SiteInspectionServiceImpl.java" />
         <option value="$PROJECT_DIR$/PriceAssessmentService/src/service/shcomputer/cs/priceassessment/impl/PriceAssessmentServiceImpl.java" />
+        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java" />
+        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java" />
+        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java" />
+        <option value="$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -222,6 +307,34 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="CrowdServiceCore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CrowdService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CrowdServiceCore" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="core" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CrowdService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="AndroidClient" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -243,8 +356,26 @@
               <option name="myItemId" value="crowdservice" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="view" />
+              <option name="myItemId" value="CrowdService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AndroidClient" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crowdservice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="fragment" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -263,6 +394,10 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="crowdservice" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="activity" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -291,7 +426,7 @@
     <property name="restartRequiresConfirmation" value="true" />
     <property name="dynamic.classpath" value="false" />
     <property name="SearchEverywhereHistoryKey" value="&quot;Consumer&quot;&#9;null&#9;null&#10;sessionId&#9;PSI&#9;JAVA://edu.fudan.se.crowdservice.jade.agent.DaemonAgent#sessionID&#10;Date&#9;PSI&#9;JAVA://java.util.Date&#10;saveb&#9;PSI&#9;JAVA://edu.fudan.se.crowdservice.core.CrowdServiceStub#saveByteArray&#10;byte&#9;PSI&#9;JAVA://edu.fudan.se.crowdservice.core.dui.ImageInputView#loadByteArray&#10;save&#9;PSI&#9;JAVA://edu.fudan.se.crowdservice.util.XMLUtil#saveByteArray&#10;CHECKIN&#9;PSI&#9;JAVA://edu.fudan.se.crowdservice.jade.agent.ConversationType#CHECKIN_AGENT&#10;10.131.253&#9;null&#9;null" />
-    <property name="DEBUGGABLE_DEVICE" value="genymotion-google_nexus_5___4_4_2___api_19___1080x1920-192.168.56.101:5555" />
+    <property name="DEBUGGABLE_DEVICE" value="samsung-sch_i959-4d001711c1785051" />
     <property name="DEBUGGABLE_PROCESS" value="edu.fudan.se.crowdservice" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="OverrideImplement.combined" value="true" />
@@ -661,12 +796,12 @@
       <workItem from="1424747198312" duration="72198000" />
       <workItem from="1425179141802" duration="4184000" />
       <workItem from="1425214343919" duration="765000" />
-      <workItem from="1425215788607" duration="569000" />
+      <workItem from="1425215788607" duration="2154000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="405517000" />
+    <option name="totallyTimeSpent" value="407102000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -690,7 +825,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="828" y="-1088" width="1936" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -704,16 +839,17 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24838188" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3960396" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3955224" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32673267" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32550335" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2564725" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32550335" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3251599" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29855537" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29744136" sideWeight="0.46747354" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19669509" sideWeight="0.7904564" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.29744136" sideWeight="0.46747354" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19669509" sideWeight="0.7904564" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.6" sideWeight="0.5325265" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -721,7 +857,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2564725" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905295" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40264025" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -752,14 +887,9 @@
           <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="33" />
+      <option name="time" value="40" />
     </breakpoint-manager>
     <watches-manager>
-      <configuration name="Remote">
-        <watch expression="bundleContext.getServiceReference(Template.class).getProperty(Constants.BUNDLE_SYMBOLICNAME)" language="JAVA" custom="" />
-        <watch expression="resource.getSymbolicName()" language="JAVA" custom="" />
-        <watch expression="bundleContext.getServiceReference(Template.class).getProperty(Constants.BUNDLE_SYMBOLICNAME).equals(resource.getSymbolicName())" language="JAVA" custom="" />
-      </configuration>
       <configuration name="Emulator">
         <watch expression="getFragmentManager().getFragments()" language="JAVA" custom="" />
       </configuration>
@@ -773,45 +903,24 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2235">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#744#745#0" expanded="false" />
-            <element signature="e#836#837#0" expanded="false" />
-            <element signature="e#2116#2355#0" expanded="false" />
-            <element signature="e#2354#2355#0" expanded="false" />
-            <element signature="e#2444#2684#0" expanded="false" />
-            <element signature="e#2683#2684#0" expanded="false" />
-            <element signature="e#2930#2938#0" expanded="false" />
-            <element signature="e#3228#3547#0" expanded="false" />
-            <element signature="e#3546#3547#0" expanded="false" />
-            <element signature="e#4446#4447#0" expanded="false" />
-            <element signature="e#4519#4520#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2025" max-vertical-offset="2655">
           <caret line="168" column="55" selection-start-line="168" selection-start-column="55" selection-end-line="168" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#1908#2303#0" expanded="false" />
-            <element signature="e#2302#2303#0" expanded="false" />
-            <element signature="e#2406#2407#0" expanded="false" />
-            <element signature="e#2473#2474#0" expanded="false" />
-            <element signature="e#2522#3196#0" expanded="false" />
-            <element signature="e#3195#3196#0" expanded="false" />
-            <element signature="e#3608#3609#0" expanded="false" />
-            <element signature="e#3646#3647#0" expanded="false" />
-            <element signature="e#5302#5303#0" expanded="false" />
-            <element signature="e#5375#5376#0" expanded="false" />
-            <element signature="e#6850#6851#0" expanded="false" />
-            <element signature="e#6917#6918#0" expanded="false" />
+            <element signature="e#1927#2322#0" expanded="false" />
+            <element signature="e#2321#2322#0" expanded="false" />
+            <element signature="e#2425#2426#0" expanded="false" />
+            <element signature="e#2492#2493#0" expanded="false" />
+            <element signature="e#2541#3215#0" expanded="false" />
+            <element signature="e#3214#3215#0" expanded="false" />
+            <element signature="e#3627#3628#0" expanded="false" />
+            <element signature="e#3665#3666#0" expanded="false" />
+            <element signature="e#5321#5322#0" expanded="false" />
+            <element signature="e#5394#5395#0" expanded="false" />
+            <element signature="e#6869#6870#0" expanded="false" />
+            <element signature="e#6936#6937#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -904,14 +1013,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/res/drawable-hdpi/buble_system.9.png">
-      <provider editor-type-id="images">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="ninepatcheditor">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidClient/res/drawable-hdpi/bubble_consumer.9.png">
       <provider editor-type-id="images">
         <state />
@@ -956,20 +1057,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CrowdServiceCore/src/edu/fudan/se/crowdservice/core/Template.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="225" max-vertical-offset="2370">
-          <caret line="46" column="47" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/agent/behaviour/TemplateExecutingBehaviour.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.56747407" vertical-offset="318" max-vertical-offset="1185">
-          <caret line="59" column="89" selection-start-line="59" selection-start-column="89" selection-end-line="59" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/agent/DaemonAgent.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7443182" vertical-offset="500" max-vertical-offset="1380">
@@ -994,22 +1081,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/res/layout/list_footer_user_input.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.16383494" vertical-offset="0" max-vertical-offset="885">
-          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-          <folding>
-            <element signature="e#885#901#0" expanded="false" />
-            <element signature="e#1263#1276#0" expanded="false" />
-            <element signature="e#1454#1466#0" expanded="false" />
-            <element signature="e#2253#2269#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/appcompat_v7/libs/android-support-v4.jar!/android/support/v4/app/FragmentActivity.class">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.72" vertical-offset="8282" max-vertical-offset="9720">
@@ -1021,13 +1092,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.48939642" vertical-offset="495" max-vertical-offset="1200">
           <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/BaseFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="394" max-vertical-offset="1185">
-          <caret line="85" column="51" selection-start-line="85" selection-start-column="51" selection-end-line="85" selection-end-column="51" />
         </state>
       </provider>
     </entry>
@@ -1047,13 +1111,6 @@
       </provider>
       <provider editor-type-id="android-designer">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/data/ConsumerSession.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27431905" vertical-offset="459" max-vertical-offset="1425">
-          <caret line="59" column="0" selection-start-line="59" selection-start-column="0" selection-end-line="59" selection-end-column="0" />
-        </state>
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/appcompat_v7/libs/android-support-v4.jar!/android/support/v4/app/FragmentManagerImpl.class">
@@ -1092,18 +1149,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="116" max-vertical-offset="840">
-          <caret line="30" column="0" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#580#581#0" expanded="false" />
-            <element signature="e#652#653#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/WorkerFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
@@ -1116,72 +1161,6 @@
             <element signature="e#2033#2034#0" expanded="false" />
             <element signature="e#2335#2336#0" expanded="false" />
             <element signature="e#2365#2366#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/res/layout/list_item_consumer_session.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="300">
-          <caret line="12" column="48" selection-start-line="12" selection-start-column="48" selection-end-line="12" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="2595">
-          <caret line="84" column="13" selection-start-line="84" selection-start-column="13" selection-end-line="84" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="method#onCreateView#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="e#1789#2007#0" expanded="false" />
-            <element signature="e#2006#2007#0" expanded="false" />
-            <element signature="e#2361#2362#0" expanded="false" />
-            <element signature="e#2437#2438#0" expanded="false" />
-            <element signature="method#onDetach#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="method#onOptionsItemSelected#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="method#onConfigurationChanged#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="method#setUp#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="method#initDrawerLayout#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="e#4077#4214#0" expanded="false" />
-            <element signature="e#4213#4214#0" expanded="false" />
-            <element signature="method#setActionBarTitle#0;class#NavigationFragment#0" expanded="false" />
-            <element signature="e#6141#6142#0" expanded="false" />
-            <element signature="e#6221#6222#0" expanded="false" />
-            <element signature="e#7128#7129#0" expanded="false" />
-            <element signature="e#7179#7180#0" expanded="false" />
-            <element signature="e#7574#7575#0" expanded="false" />
-            <element signature="e#7616#7617#0" expanded="false" />
-            <element signature="e#7681#7682#0" expanded="false" />
-            <element signature="e#7726#7727#0" expanded="false" />
-            <element signature="e#7791#7792#0" expanded="false" />
-            <element signature="e#7830#7831#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3069307" vertical-offset="1656" max-vertical-offset="2565">
-          <caret line="168" column="55" selection-start-line="168" selection-start-column="55" selection-end-line="168" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#1908#2303#0" expanded="false" />
-            <element signature="e#2302#2303#0" expanded="false" />
-            <element signature="e#2406#2407#0" expanded="false" />
-            <element signature="e#2473#2474#0" expanded="false" />
-            <element signature="e#2522#3196#0" expanded="false" />
-            <element signature="e#3195#3196#0" expanded="false" />
-            <element signature="e#3608#3609#0" expanded="false" />
-            <element signature="e#3646#3647#0" expanded="false" />
-            <element signature="e#5302#5303#0" expanded="false" />
-            <element signature="e#5375#5376#0" expanded="false" />
-            <element signature="e#6850#6851#0" expanded="false" />
-            <element signature="e#6917#6918#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1199,27 +1178,6 @@
         <state vertical-scroll-proportion="0.101809956" vertical-offset="0" max-vertical-offset="884">
           <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="2295">
-          <caret line="49" column="29" selection-start-line="49" selection-start-column="29" selection-end-line="49" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#744#745#0" expanded="false" />
-            <element signature="e#836#837#0" expanded="false" />
-            <element signature="e#2116#2355#0" expanded="false" />
-            <element signature="e#2354#2355#0" expanded="false" />
-            <element signature="e#2444#2684#0" expanded="false" />
-            <element signature="e#2683#2684#0" expanded="false" />
-            <element signature="e#2930#2938#0" expanded="false" />
-            <element signature="e#3228#3547#0" expanded="false" />
-            <element signature="e#3546#3547#0" expanded="false" />
-            <element signature="e#4446#4447#0" expanded="false" />
-            <element signature="e#4519#4520#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1265,14 +1223,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/JADEService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="585" max-vertical-offset="1770">
-          <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/felix/FelixService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="1425">
@@ -1285,6 +1235,129 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2310231" vertical-offset="105" max-vertical-offset="1860">
           <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CrowdServiceCore/src/edu/fudan/se/crowdservice/core/Template.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36633664" vertical-offset="597" max-vertical-offset="2520">
+          <caret line="74" column="36" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/data/ConsumerSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="267" max-vertical-offset="1620">
+          <caret line="43" column="58" selection-start-line="43" selection-start-column="58" selection-end-line="43" selection-end-column="58" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/agent/behaviour/TemplateExecutingBehaviour.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1185">
+          <caret line="41" column="62" selection-start-line="41" selection-start-column="62" selection-end-line="41" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/res/layout/list_item_consumer_session.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.3392857" vertical-offset="0" max-vertical-offset="300">
+          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/res/drawable-hdpi/buble_system.9.png">
+      <provider editor-type-id="images">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="ninepatcheditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/res/layout/list_footer_user_input.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15005861" vertical-offset="7" max-vertical-offset="885">
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/GPSLocator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="840">
+          <caret line="35" column="0" selection-start-line="35" selection-start-column="0" selection-end-line="35" selection-end-column="0" />
+          <folding>
+            <element signature="e#1119#1120#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="840">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/BaseFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="647" max-vertical-offset="1185">
+          <caret line="75" column="25" selection-start-line="75" selection-start-column="25" selection-end-line="75" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/jade/JADEService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="1770">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/NavigationFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="135" max-vertical-offset="2490">
+          <caret line="61" column="66" selection-start-line="61" selection-start-column="66" selection-end-line="61" selection-end-column="66" />
+          <folding>
+            <element signature="method#onCreateView#0;class#NavigationFragment#0" expanded="false" />
+            <element signature="method#onDetach#0;class#NavigationFragment#0" expanded="false" />
+            <element signature="method#onOptionsItemSelected#0;class#NavigationFragment#0" expanded="false" />
+            <element signature="method#onConfigurationChanged#0;class#NavigationFragment#0" expanded="false" />
+            <element signature="method#setUp#0;class#NavigationFragment#0" expanded="false" />
+            <element signature="method#initDrawerLayout#0;class#NavigationFragment#0" expanded="false" />
+            <element signature="method#setActionBarTitle#0;class#NavigationFragment#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/fragment/ConsumerSessionFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="2190">
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
+          <folding>
+            <element signature="e#1559#1921#0" expanded="true" />
+            <element signature="e#1920#1921#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidClient/src/edu/fudan/se/crowdservice/activity/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11904762" vertical-offset="0" max-vertical-offset="2565">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
           <folding />
         </state>
       </provider>

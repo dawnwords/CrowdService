@@ -155,6 +155,8 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
         time.setText(message.createTime);
     }
 
+
+
     public void updateConsumerSessionMessage() {
         setData(data);
         addViewByLastMessage();

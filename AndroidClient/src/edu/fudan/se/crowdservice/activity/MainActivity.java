@@ -31,7 +31,7 @@ import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
 
-    private static final String[] FRAGMENT_TAG = {"Consumer", "Worker"};
+    private static final String[] FRAGMENT_TAG = {"ConsumerSession", "Consumer", "Worker"};
     private NavigationFragment navigationFragment;
     private Fragment lastFragment;
     private ServiceConnection felixConnection = new ServiceConnection() {
