@@ -27,8 +27,8 @@ public class ArithmeticTemplate extends Template {
         double result;
         int add1 = Integer.parseInt(requestUserInput("Input Add 1"));
         int add2 = Integer.parseInt(requestUserInput("Input Add 2"));
-        int divisor = Integer.parseInt(requestUserInput("Input Divisor"));
         result = addService.add(add1, add2);
+        int divisor = Integer.parseInt(requestUserInput("Input Divisor"));
         result = divideService.div(result, divisor);
         showMessage("result is " + result);
     }
