@@ -60,6 +60,7 @@ public class NavigationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mCallbacks.onNavigationDrawerItemSelected("Consumer");
         mCallbacks.onNavigationDrawerItemSelected("ConsumerSession");
+        mCallbacks.onNavigationDrawerItemSelected("TaskSubmit");
         selectItem(0);
     }
 

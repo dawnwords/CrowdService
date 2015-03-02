@@ -135,10 +135,6 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
     }
 
     @Override
-    protected void onItemSelected(ConsumerSession.Message item) {
-    }
-
-    @Override
     protected void setItemView(ConsumerSession.Message message, View convertView) {
         TextView content = (TextView) convertView.findViewById(R.id.message_content);
         content.setText(message.content);

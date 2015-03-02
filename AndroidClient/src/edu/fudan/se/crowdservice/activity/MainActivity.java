@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private void requestMessage(UIMessage message) {
         RequestWrapper request = (RequestWrapper) message.getValue();
-        ((WorkerFragment) getSupportFragmentManager().findFragmentByTag("Worker")).addRequest(request);
+        ((WorkerFragment) getSupportFragmentManager().findFragmentByTag("Worker")).addMessageWrapper(request);
         toast("You receive a request:" + request.taskId);
     }
 
