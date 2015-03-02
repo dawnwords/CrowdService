@@ -99,7 +99,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
             @Override
             public void onClick(View view) {
                 ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
-                ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setData(delegateWrapper.keyValueHolders);
+                ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegateWrapper);
             }
         });
     }
