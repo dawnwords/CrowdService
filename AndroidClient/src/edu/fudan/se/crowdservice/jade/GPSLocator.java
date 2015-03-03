@@ -2,45 +2,39 @@ package edu.fudan.se.crowdservice.jade;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.LocationManagerProxy;
+import com.amap.api.location.LocationProviderProxy;
 import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 
 /**
  * Created by Jiahuan on 2015/1/25.
  */
-public class GPSLocator implements LocationListener {
+public class GPSLocator implements AMapLocationListener {
     private AgentInterface agent;
-    private LocationManager lm;
+    private LocationManagerProxy mAMapLocManager;
 
     public void enableGPS(Context context, final AgentInterface agent) {
         this.agent = agent;
-        lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-        Looper.prepare();
-        if (checkAndStartGPS(LocationManager.GPS_PROVIDER) || checkAndStartGPS(LocationManager.NETWORK_PROVIDER)) ;
-        Looper.loop();
-    }
-
-    private boolean checkAndStartGPS(String provider) {
-        if (lm.isProviderEnabled(provider)) {
-            lm.requestLocationUpdates(provider, 0, 0, this);
-            return true;
+        if (mAMapLocManager == null) {
+            mAMapLocManager = LocationManagerProxy.getInstance(context);
         }
-        return false;
+        mAMapLocManager.requestLocationUpdates(LocationProviderProxy.AMapNetwork, 1000, 10, this);
     }
 
     public void disableGPS() {
-        lm.removeUpdates(this);
+        if (mAMapLocManager != null) {
+            mAMapLocManager.removeUpdates(this);
+            mAMapLocManager.destory();
+        }
+        mAMapLocManager = null;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        if (agent != null && location != null) {
-            agent.setLocation(location);
-        }
     }
 
     @Override
@@ -53,5 +47,12 @@ public class GPSLocator implements LocationListener {
 
     @Override
     public void onProviderDisabled(String s) {
+    }
+
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (agent != null && aMapLocation != null) {
+            agent.setLocation(aMapLocation);
+        }
     }
 }

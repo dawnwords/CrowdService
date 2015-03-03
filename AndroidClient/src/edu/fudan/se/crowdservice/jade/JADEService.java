@@ -3,6 +3,7 @@ package edu.fudan.se.crowdservice.jade;
 import android.app.Service;
 import android.content.*;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import edu.fudan.se.crowdservice.core.SavedProperty;
 import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
@@ -100,6 +101,7 @@ public class JADEService extends Service {
                 new RuntimeCallback<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Looper.prepare();
                         info("Successfully start of the " + agentClassName);
                         try {
                             AgentInterface agent = MicroRuntime.getAgent(agentName).getO2AInterface(AgentInterface.class);
@@ -111,6 +113,7 @@ public class JADEService extends Service {
                         } catch (ControllerException e) {
                             onFailure(e);
                         }
+                        Looper.loop();
                     }
 
                     @Override

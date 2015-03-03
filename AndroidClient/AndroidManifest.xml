@@ -15,13 +15,22 @@
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <!-- Locating Permission -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
     <application android:hardwareAccelerated="false"
                  android:theme="@style/CustomActionBarTheme"
                  android:icon="@drawable/ic_launcher"
                  android:label="@string/app_name">
+        <meta-data
+                android:name="com.amap.api.v2.apikey"
+                android:value="918a29c9b410022958bb4c013403467e"/>
+
         <service android:name="jade.android.MicroRuntimeService"/>
         <service android:name=".jade.JADEService"/>
         <service android:name=".felix.FelixService"/>
