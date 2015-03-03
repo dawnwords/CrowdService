@@ -12,6 +12,7 @@ import edu.fudan.se.crowdservice.activity.MainActivity;
 import edu.fudan.se.crowdservice.wrapper.*;
 
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created by Jiahuan on 2015/1/21.
@@ -82,7 +83,14 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         view.findViewById(R.id.task_remove).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                data.remove(data.indexOf(request));
+                Iterator<Wrapper> iterator = data.iterator();
+                while (iterator.hasNext()) {
+                    Wrapper wrapper = iterator.next();
+                    if (wrapper.taskId == request.taskId) {
+                        iterator.remove();
+                        return;
+                    }
+                }
             }
         });
     }
