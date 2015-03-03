@@ -10,8 +10,8 @@ public enum ConversationType {
     HEARTBEAT(ConversationType.CHECKIN_AGENT),
     RESPONSE, OFFER, DELEGATE, REFUSE, REQUEST, COMPLETE;
 
-    private static final String TASK_AGENT = "task-agent";
-    private static final String CHECKIN_AGENT = "checkin-agent";
+    public static final String TASK_AGENT = "task-agent";
+    public static final String CHECKIN_AGENT = "checkin-agent";
 
     private String targetAgent;
 

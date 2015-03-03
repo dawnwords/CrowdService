@@ -3,6 +3,7 @@ package edu.fudan.se.crowdservice.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -35,7 +36,6 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
 
     private Button initSubmitButton() {
         Button submit = new Button(getActivity());
-        submit.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         submit.setText(getText(R.string.submit));
         submit.setOnClickListener(new View.OnClickListener() {
             @Override

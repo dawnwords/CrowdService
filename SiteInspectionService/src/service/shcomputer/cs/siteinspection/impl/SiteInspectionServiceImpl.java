@@ -11,8 +11,7 @@ import java.util.ArrayList;
  * Created by Jiahuan on 2015/1/25.
  */
 public class SiteInspectionServiceImpl extends ConcreteService implements SiteInspectionService {
-    public static final String IP = "10.131.253.172";
-    //    public static final String IP = "192.168.0.103";
+    public static final String IP = "10.131.253.211";
     public static final int PORT = 8887;
     public static final String URL = String.format("http://%s:%d/siteinspect?wsdl", IP, PORT);
     public static final String NS = "http://siteinspection.crowdservice.se.fudan.edu/";
