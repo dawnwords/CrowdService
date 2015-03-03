@@ -13,14 +13,14 @@ import edu.fudan.se.crowdservice.data.ConsumerSession;
 /**
  * Created by Dawnwords on 2015/2/26.
  */
-public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Message> {
+public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Message> {
 
     private View userInputView;
     private View userChooseView;
     private View userConfirmView;
 
     public ConsumerSessionFragment() {
-        super(R.string.no_service_in_execution, R.layout.list_item_consumer_session);
+        super(R.string.no_service_in_execution, R.layout.list_item_consumer_session, "Consumer");
     }
 
     @Override
@@ -31,12 +31,6 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
         userConfirmView = view.findViewById(R.id.user_confirm_view);
         switchInputView(null);
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     private void addViewByLastMessage() {
@@ -95,26 +89,6 @@ public class ConsumerSessionFragment extends BaseFragment<ConsumerSession.Messag
                 });
                 break;
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (isVisible()) {
-            inflater.inflate(R.menu.consumer_session, menu);
-            ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_back) {
-            ((NavigationFragment.NavigationDrawerCallbacks) getActivity()).onNavigationDrawerItemSelected("Consumer");
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

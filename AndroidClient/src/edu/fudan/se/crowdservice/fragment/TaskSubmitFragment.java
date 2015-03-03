@@ -18,19 +18,13 @@ import java.util.ArrayList;
 /**
  * Created by Dawnwords on 2015/3/2.
  */
-public class TaskSubmitFragment extends BaseFragment<KeyValueHolder> {
+public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
     private DelegateWrapper delegateWrapper;
     private ArrayList<KeyValueView> keyValueViews;
 
     public TaskSubmitFragment() {
-        super(R.string.no_task, R.layout.list_item_key_value);
+        super(R.string.no_task, R.layout.list_item_key_value, "Worker");
         keyValueViews = new ArrayList<KeyValueView>();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override

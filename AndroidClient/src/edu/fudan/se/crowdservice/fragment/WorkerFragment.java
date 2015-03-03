@@ -35,9 +35,20 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         } else if (wrapper instanceof RequestWrapper) {
             renderRequestWrapper((RequestWrapper) wrapper, view);
         } else if (wrapper instanceof RefuseWrapper) {
-            setVisibility(view, STATE_VISIBILITY);
-            ((TextView) view.findViewById(R.id.task_state)).setText(R.string.task_rejected);
+            renderRefuseWrapper((RefuseWrapper) wrapper, view);
+        } else if (wrapper instanceof CompleteWrapper) {
+            renderCompleteWrapper(view);
         }
+    }
+
+    private void renderCompleteWrapper(View view) {
+        setVisibility(view, STATE_VISIBILITY);
+        ((TextView) view.findViewById(R.id.task_state)).setText(R.string.task_complete);
+    }
+
+    private void renderRefuseWrapper(RefuseWrapper wrapper, View view) {
+        setVisibility(view, STATE_VISIBILITY);
+        ((TextView) view.findViewById(R.id.task_state)).setText("You Are Rejected for " + wrapper.reason);
     }
 
     private void renderRequestWrapper(final RequestWrapper request, final View view) {

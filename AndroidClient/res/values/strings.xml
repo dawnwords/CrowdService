@@ -29,10 +29,10 @@
     <string name="no_service_in_execution">No Service in Execution</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="task_rejected">You are not selected!</string>
     <string name="offer">Offer Price</string>
     <string name="ignore">Ignore It</string>
     <string name="do_it">Do It</string>
     <string name="task_waiting">Waiting for Response</string>
     <string name="task_out_of_date">Task Out of Date</string>
+    <string name="task_complete">Task Completed</string>
 </resources>

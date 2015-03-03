@@ -25,8 +25,6 @@ import edu.fudan.se.crowdservice.fragment.NavigationFragment.NavigationDrawerCal
 import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.*;
-import edu.fudan.se.crowdservice.wrapper.DelegateWrapper;
-import edu.fudan.se.crowdservice.wrapper.RefuseWrapper;
 import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
@@ -62,13 +60,9 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             UIMessage message = new UIMessage(msg);
             switch (message.what()) {
                 case RefuseMessage.WHAT:
-                    refuseMessage(message);
-                    break;
                 case RequestMessage.WHAT:
-                    requestMessage(message);
-                    break;
                 case DelegateMessage.WHAT:
-                    delegateMessage(message);
+                    taskMessage(message);
                     break;
                 case ConsumerSessionMessage.WHAT:
                     consumerSessionMessage(message);
@@ -98,24 +92,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
     };
 
-    private void delegateMessage(UIMessage message) {
-        DelegateWrapper delegate = (DelegateWrapper) message.getValue();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(TaskSubmitActivity.UI_MODEL, delegate);
-        Intent intent = new Intent(this, TaskSubmitActivity.class);
-        intent.putExtra(TaskSubmitActivity.EXTRA_BUNDLE, bundle);
-        startActivity(intent);
-    }
-
-    private void requestMessage(UIMessage message) {
+    private void taskMessage(UIMessage message) {
         RequestWrapper request = (RequestWrapper) message.getValue();
         ((WorkerFragment) getSupportFragmentManager().findFragmentByTag("Worker")).addMessageWrapper(request);
         toast("You receive a request:" + request.taskId);
-    }
-
-    private void refuseMessage(UIMessage message) {
-        RefuseWrapper refuse = (RefuseWrapper) message.getValue();
-        toast("Your offer for task" + refuse.taskId + " is refused:" + refuse.reason);
     }
 
     private void consumerSessionMessage(UIMessage message) {
@@ -155,7 +135,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!isCurrentFragment("ConsumerSession")) {
+        if (!isCurrentFragment("ConsumerSession") && !isCurrentFragment("TaskSubmit")) {
             getMenuInflater().inflate(R.menu.main, menu);
             ActionBar actionBar = getSupportActionBar();
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
