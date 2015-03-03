@@ -26,6 +26,7 @@ import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.*;
 import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
+import edu.fudan.se.crowdservice.wrapper.Wrapper;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
 
@@ -93,9 +94,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     };
 
     private void taskMessage(UIMessage message) {
-        RequestWrapper request = (RequestWrapper) message.getValue();
-        ((WorkerFragment) getSupportFragmentManager().findFragmentByTag("Worker")).addMessageWrapper(request);
-        toast("You receive a request:" + request.taskId);
+        Wrapper messageWrapper = (Wrapper) message.getValue();
+        ((WorkerFragment) getSupportFragmentManager().findFragmentByTag("Worker")).addMessageWrapper(messageWrapper);
     }
 
     private void consumerSessionMessage(UIMessage message) {
