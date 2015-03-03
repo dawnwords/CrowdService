@@ -99,7 +99,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         setVisibility(view, DELEGATE_VISIBILITY);
         //TODO + ddl in delegateWrapper
         final Date ddl = new Date();
-        ddl.setTime(ddl.getTime() + 200 * 1000);
+        ddl.setTime(ddl.getTime() + 100 * 1000);
         final TextView timeRemain = (TextView) view.findViewById(R.id.task_time_remain);
         handler.post(new Runnable() {
             @Override
@@ -134,7 +134,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         v.findViewById(R.id.task_do).setVisibility(visibility[7] ? View.VISIBLE : View.GONE);
     }
 
-    public void addMessageWrapper(Wrapper value) {
+    public synchronized void addMessageWrapper(Wrapper value) {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).taskId == value.taskId) {
                 data.set(i, value);

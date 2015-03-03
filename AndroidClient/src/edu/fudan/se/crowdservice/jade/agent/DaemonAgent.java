@@ -79,6 +79,7 @@ public class DaemonAgent extends Agent implements AgentInterface {
         addBehaviour(new ReceiveDelegateBehaviour(handler, context));
         addBehaviour(new ReceiveRefuseBehaviour(handler));
         addBehaviour(new ReceiveRequestBehaviour(handler));
+        addBehaviour(new ReceiveCompleteBehaviour(handler));
     }
 
     @Override

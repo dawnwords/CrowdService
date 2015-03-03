@@ -25,7 +25,6 @@ import edu.fudan.se.crowdservice.fragment.NavigationFragment.NavigationDrawerCal
 import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.*;
-import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
 import edu.fudan.se.crowdservice.wrapper.Wrapper;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
@@ -63,6 +62,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 case RefuseMessage.WHAT:
                 case RequestMessage.WHAT:
                 case DelegateMessage.WHAT:
+                case CompleteMessage.WHAT:
                     taskMessage(message);
                     break;
                 case ConsumerSessionMessage.WHAT:
