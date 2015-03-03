@@ -1,4 +1,4 @@
-package edu.fudan.se.crowdservice.jade.agent;
+package edu.fudan.se.crowdservice.wrapper;
 
 import jade.core.AID;
 
@@ -8,7 +8,7 @@ import jade.core.AID;
 public enum ConversationType {
     CAPACITY(ConversationType.CHECKIN_AGENT),
     HEARTBEAT(ConversationType.CHECKIN_AGENT),
-    RESPONSE, OFFER, DELEGATE, REFUSE, REQUEST;
+    RESPONSE, OFFER, DELEGATE, REFUSE, REQUEST, COMPLETE;
 
     private static final String TASK_AGENT = "task-agent";
     private static final String CHECKIN_AGENT = "checkin-agent";

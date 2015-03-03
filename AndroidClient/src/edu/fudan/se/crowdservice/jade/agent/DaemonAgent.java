@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.jade.agent.behaviour.*;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.wrapper.OfferWrapper;
 import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 import jade.core.Agent;

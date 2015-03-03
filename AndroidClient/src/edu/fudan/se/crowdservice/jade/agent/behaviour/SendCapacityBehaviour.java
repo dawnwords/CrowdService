@@ -1,6 +1,6 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
-import edu.fudan.se.crowdservice.jade.agent.ConversationType;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 
 /**
  * Created by Jiahuan on 2015/1/21.

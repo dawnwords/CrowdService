@@ -1,7 +1,7 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.jade.agent.ConversationType;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.RequestMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.wrapper.RequestWrapper;

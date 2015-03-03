@@ -3,7 +3,7 @@ package edu.fudan.se.crowdservice.jade.agent.behaviour;
 import android.content.Context;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.IOUtil;
-import edu.fudan.se.crowdservice.jade.agent.ConversationType;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.DelegateMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.kv.ImageDisplay;

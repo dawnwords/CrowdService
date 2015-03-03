@@ -1,6 +1,6 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
-import edu.fudan.se.crowdservice.jade.agent.ConversationType;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;

@@ -1,8 +1,8 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.jade.agent.ConversationType;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
