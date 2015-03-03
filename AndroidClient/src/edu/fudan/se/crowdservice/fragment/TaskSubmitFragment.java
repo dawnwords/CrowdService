@@ -51,7 +51,7 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
         String viewClassName = "edu.fudan.se.crowdservice.core.dui." + holder.getClass().getSimpleName() + "View";
         try {
             Class clazz = Class.forName(viewClassName);
-            KeyValueView view = (KeyValueView) clazz.getConstructor(Context.class, KeyValueHolder.class).newInstance(this, holder);
+            KeyValueView view = (KeyValueView) clazz.getConstructor(Context.class, KeyValueHolder.class).newInstance(getActivity(), holder);
             ((LinearLayout) convertView).addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             keyValueViews.add(view);
         } catch (Exception e) {
