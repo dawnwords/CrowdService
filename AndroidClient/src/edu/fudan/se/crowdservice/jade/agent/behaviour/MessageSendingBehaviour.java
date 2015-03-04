@@ -30,7 +30,6 @@ public abstract class MessageSendingBehaviour<T extends Serializable> extends On
         aclMsg.setConversationId(conversationType.name());
         aclMsg.addReceiver(targetAgent);
         try {
-            info("Sending Message to %s:%s", targetAgent, content);
             aclMsg.setContentObject(content);
             myAgent.send(aclMsg);
         } catch (IOException e) {

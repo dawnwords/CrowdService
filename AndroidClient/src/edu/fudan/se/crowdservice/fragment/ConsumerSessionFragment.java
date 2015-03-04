@@ -128,7 +128,7 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
     }
 
     public void updateConsumerSessionMessage() {
-        setData(data);
+        refreshList();
         addViewByLastMessage();
     }
 }

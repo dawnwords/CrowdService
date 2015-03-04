@@ -51,7 +51,7 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
         for (ConsumerSession session : data) {
             if (session.sessionID == message.sessionID) {
                 session.messages.add(message);
-                setData(data);
+                refreshList();
                 break;
             }
         }
