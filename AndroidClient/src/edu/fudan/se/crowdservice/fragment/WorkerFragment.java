@@ -37,7 +37,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
         state.setVisibility(view);
 
-        String methodName = "render" + state.name().charAt(0) + state.name().substring(1).toLowerCase() + "Wrapper";
+        String methodName = "render" + wrapper.getClass().getSimpleName();
         try {
             getClass().getDeclaredMethod(methodName, Wrapper.class, View.class).invoke(this, wrapper, view);
         } catch (Exception e) {
@@ -62,30 +62,31 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     private void renderRequestWrapper(Wrapper wrapper, final View view) {
         final RequestWrapper request = (RequestWrapper) wrapper;
         ((TextView) view.findViewById(R.id.task_description)).setText(request.description);
-        ((CountDownView) view.findViewById(R.id.task_time_remain))
-                .setTimeUpListener(new OfferOutDatedListener(request.taskId)).setTimeRemain(request.deadline).start();
-        view.findViewById(R.id.task_offer).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
-                String title = getResources().getString(R.string.offer_price);
-                new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
-                        .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+        ((CountDownView) view.findViewById(R.id.task_offer))
+                .setTimeUpListener(new OfferOutDatedListener(request.taskId))
+                .setTimeRemain(request.deadline)
+                .setClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        try {
-                            int offer = Integer.parseInt(input.getText().toString());
-                            agent.sendOffer(new OfferWrapper(request.taskId, offer));
-                            dialog.dismiss();
-                            addMessageWrapper(new WaitingWrapper(request.taskId));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            showMessage("Please Input correct price for this task!");
-                        }
+                    public void onClick(View v) {
+                        final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
+                        String title = getResources().getString(R.string.offer_price);
+                        new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
+                                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                try {
+                                    int offer = Integer.parseInt(input.getText().toString());
+                                    agent.sendOffer(new OfferWrapper(request.taskId, offer));
+                                    dialog.dismiss();
+                                    addMessageWrapper(new WaitingWrapper(request.taskId));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    showMessage("Please Input correct price for this task!");
+                                }
+                            }
+                        }).create().show();
                     }
-                }).create().show();
-            }
-        });
+                }).start();
         view.findViewById(R.id.task_remove).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,16 +104,17 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
     private void renderDelegateWrapper(Wrapper wrapper, final View view) {
         final DelegateWrapper delegate = (DelegateWrapper) wrapper;
-        ((CountDownView) view.findViewById(R.id.task_time_remain))
-                .setTimeUpListener(new OfferOutDatedListener(delegate.taskId)).setTimeRemain(delegate.deadline).start();
+        ((CountDownView) view.findViewById(R.id.task_do))
+                .setTimeUpListener(new OfferOutDatedListener(delegate.taskId))
+                .setTimeRemain(delegate.deadline)
+                .setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
+                        ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
+                    }
+                }).start();
         ((TextView) view.findViewById(R.id.task_reward)).setText("" + delegate.cost);
-        view.findViewById(R.id.task_do).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
-                ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
-            }
-        });
         view.setTag(State.DELEGATE);
     }
 
@@ -128,9 +130,9 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private enum State {
-        REQUEST(new boolean[]{true, false, false, true, true, false, false}),
-        WAITING(new boolean[]{true, true, false, false, false, true, false}),
-        DELEGATE(new boolean[]{true, true, false, false, false, false, true}),
+        REQUEST(new boolean[]{true, false, false, false, false, true}),
+        WAITING(new boolean[]{false, true, true, false, false, false}),
+        DELEGATE(new boolean[]{false, true, false, true, false, false}),
         REFUSE, COMPLETE;
         private boolean[] visibility;
 
@@ -139,17 +141,16 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         }
 
         State() {
-            this(new boolean[]{false, false, true, false, true, false, false});
+            this(new boolean[]{false, false, false, false, true, true});
         }
 
         public void setVisibility(View v) {
-            v.findViewById(R.id.task_time_remain).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_offer).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
             v.findViewById(R.id.task_reward).setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_state).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_offer).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_remove).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_waiting).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_do).setVisibility(visibility[6] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_waiting).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_do).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_state).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_remove).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
         }
     }
 

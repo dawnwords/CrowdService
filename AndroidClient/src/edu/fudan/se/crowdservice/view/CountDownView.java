@@ -4,12 +4,12 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.widget.TextView;
+import android.widget.Button;
 
 /**
  * Created by Dawnwords on 2015/3/4.
  */
-public class CountDownView extends TextView {
+public class CountDownView extends Button {
 
     private static final int COUNT_DOWN = 1329;
     private static final int STOP = 1330;
@@ -21,7 +21,7 @@ public class CountDownView extends TextView {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case COUNT_DOWN:
-                    setText(timeRemain + "s");
+                    setText(getText() + "(" + timeRemain + "s)");
                     if (timeRemain == 0) {
                         stop();
                         if (listener != null) {
@@ -51,6 +51,11 @@ public class CountDownView extends TextView {
     public CountDownView setTimeRemain(int timeRemain) {
         this.timeRemain = timeRemain;
         stop();
+        return this;
+    }
+
+    public CountDownView setClickListener(OnClickListener l) {
+        super.setOnClickListener(l);
         return this;
     }
 
