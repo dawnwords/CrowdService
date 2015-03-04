@@ -29,9 +29,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     protected void setItemView(Wrapper wrapper, View view) {
         State state = (State) view.getTag();
         if (state == null) {
-            String tagName = wrapper.getClass().getSimpleName();
-            tagName = tagName.substring(0, tagName.length() - "Wrapper".length());
-            state = State.valueOf(tagName.toUpperCase());
+            state = State.REQUEST;
             view.setTag(state);
         } else if (wrapper.getClass().getName().toUpperCase().contains(state.name())) {
             return;
@@ -48,6 +46,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private void renderWaitingWrapper(Wrapper wrapper, View view) {
+        view.setTag(State.WAITING);
     }
 
     private void renderCompleteWrapper(Wrapper wrapper, View view) {
@@ -78,7 +77,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                             int offer = Integer.parseInt(input.getText().toString());
                             agent.sendOffer(new OfferWrapper(request.taskId, offer));
                             dialog.dismiss();
-                            view.setTag(State.WAITING);
+                            addMessageWrapper(new WaitingWrapper(request.taskId));
                         } catch (Exception e) {
                             e.printStackTrace();
                             showMessage("Please Input correct price for this task!");
@@ -114,6 +113,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                 ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
             }
         });
+        view.setTag(State.DELEGATE);
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
@@ -163,6 +163,14 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         @Override
         public void onTimeUp() {
             addMessageWrapper(new RefuseWrapper(taskId, RefuseWrapper.Reason.OFFER_OUT_OF_DATE));
+        }
+    }
+
+    private class WaitingWrapper extends Wrapper {
+        private static final long serialVersionUID = 207989568150920761L;
+
+        public WaitingWrapper(long taskId) {
+            super(taskId);
         }
     }
 
