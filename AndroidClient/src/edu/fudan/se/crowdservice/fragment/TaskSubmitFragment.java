@@ -3,7 +3,7 @@ package edu.fudan.se.crowdservice.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AbsListView;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -52,7 +52,9 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
         try {
             Class clazz = Class.forName(viewClassName);
             KeyValueView view = (KeyValueView) clazz.getConstructor(Context.class, KeyValueHolder.class).newInstance(getActivity(), holder);
-            ((LinearLayout) convertView).addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+            LinearLayout group = (LinearLayout) convertView;
+            group.removeAllViews();
+            group.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             keyValueViews.add(view);
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,6 +63,7 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
 
     public void setDelegateWrapper(DelegateWrapper delegateWrapper) {
         this.delegateWrapper = delegateWrapper;
+        this.keyValueViews.clear();
         setData(delegateWrapper.keyValueHolders);
     }
 
