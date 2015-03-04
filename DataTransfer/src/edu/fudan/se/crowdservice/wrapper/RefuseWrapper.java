@@ -12,6 +12,14 @@ public class RefuseWrapper extends Wrapper {
         this.reason = reason.reason;
     }
 
+    @Override
+    public String toString() {
+        return "RefuseWrapper{" +
+                "taskId=" + taskId + "," +
+                "reason='" + reason + '\'' +
+                '}';
+    }
+
     public static enum Reason {
         OFFER_NOT_SELECTED("Offer Not Selected"), OFFER_OUT_OF_DATE("Offer Out of Date");
 

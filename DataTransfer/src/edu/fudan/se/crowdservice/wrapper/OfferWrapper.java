@@ -12,4 +12,12 @@ public class OfferWrapper extends Wrapper {
         super(taskId);
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "OfferWrapper{" +
+                "taskId=" + taskId + "," +
+                "price=" + price +
+                '}';
+    }
 }

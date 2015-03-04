@@ -9,4 +9,11 @@ public class CompleteWrapper extends Wrapper {
     public CompleteWrapper(long taskId) {
         super(taskId);
     }
+
+    @Override
+    public String toString() {
+        return "CompleteWrapper{" +
+                "taskId=" + taskId + "," +
+                "}";
+    }
 }

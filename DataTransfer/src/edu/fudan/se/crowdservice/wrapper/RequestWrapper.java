@@ -12,4 +12,12 @@ public class RequestWrapper extends Wrapper {
         super(taskId);
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "RequestWrapper{" +
+                "taskId=" + taskId + "," +
+                "description='" + description + '\'' +
+                '}';
+    }
 }
