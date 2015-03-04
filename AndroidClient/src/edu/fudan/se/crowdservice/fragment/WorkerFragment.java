@@ -9,9 +9,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.activity.MainActivity;
+import edu.fudan.se.crowdservice.view.CountDownView;
 import edu.fudan.se.crowdservice.wrapper.*;
 
-import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -52,18 +52,19 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
     private void renderCompleteWrapper(Wrapper wrapper, View view) {
         ((TextView) view.findViewById(R.id.task_state)).setText(R.string.task_complete);
+        view.setTag(State.COMPLETE);
     }
 
     private void renderRefuseWrapper(Wrapper wrapper, View view) {
         ((TextView) view.findViewById(R.id.task_state)).setText("You Are Rejected for " + ((RefuseWrapper) wrapper).reason);
+        view.setTag(State.REFUSE);
     }
 
     private void renderRequestWrapper(Wrapper wrapper, final View view) {
         final RequestWrapper request = (RequestWrapper) wrapper;
         ((TextView) view.findViewById(R.id.task_description)).setText(request.description);
-        //TODO + ddl + reward in request wrapper
-        ((TextView) view.findViewById(R.id.task_ddl)).setText("12:20");
-        ((TextView) view.findViewById(R.id.task_reward)).setText("20");
+        ((CountDownView) view.findViewById(R.id.task_time_remain))
+                .setTimeUpListener(new OfferOutDatedListener(request.taskId)).setTimeRemain(request.deadline).start();
         view.findViewById(R.id.task_offer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,22 +104,9 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
     private void renderDelegateWrapper(Wrapper wrapper, final View view) {
         final DelegateWrapper delegate = (DelegateWrapper) wrapper;
-        //TODO + ddl in delegateWrapper
-        final Date ddl = new Date();
-        ddl.setTime(ddl.getTime() + 100 * 1000);
-        final TextView timeRemain = (TextView) view.findViewById(R.id.task_time_remain);
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long time = (ddl.getTime() - new Date().getTime()) / 1000;
-                if (time > 0) {
-                    timeRemain.setText(time + "s");
-                    handler.postDelayed(this, 1000);
-                } else {
-                    addMessageWrapper(new RefuseWrapper(delegate.taskId, RefuseWrapper.Reason.OFFER_OUT_OF_DATE));
-                }
-            }
-        });
+        ((CountDownView) view.findViewById(R.id.task_time_remain))
+                .setTimeUpListener(new OfferOutDatedListener(delegate.taskId)).setTimeRemain(delegate.deadline).start();
+        ((TextView) view.findViewById(R.id.task_reward)).setText("" + delegate.cost);
         view.findViewById(R.id.task_do).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,9 +128,9 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private enum State {
-        REQUEST(new boolean[]{true, false, true, false, true, true, false, false}),
-        WAITING(new boolean[]{true, false, true, false, false, false, true, false}),
-        DELEGATE(new boolean[]{false, true, true, false, false, false, false, true}),
+        REQUEST(new boolean[]{true, false, false, true, true, false, false}),
+        WAITING(new boolean[]{true, true, false, false, false, true, false}),
+        DELEGATE(new boolean[]{true, true, false, false, false, false, true}),
         REFUSE, COMPLETE;
         private boolean[] visibility;
 
@@ -151,18 +139,30 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         }
 
         State() {
-            this(new boolean[]{false, false, false, true, false, true, false, false});
+            this(new boolean[]{false, false, true, false, true, false, false});
         }
 
         public void setVisibility(View v) {
-            v.findViewById(R.id.task_ddl).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_time_remain).setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_reward).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_state).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_offer).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_remove).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_waiting).setVisibility(visibility[6] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_do).setVisibility(visibility[7] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_time_remain).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_reward).setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_state).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_offer).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_remove).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_waiting).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_do).setVisibility(visibility[6] ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private class OfferOutDatedListener implements CountDownView.TimeUpListener {
+        private long taskId;
+
+        public OfferOutDatedListener(long taskId) {
+            this.taskId = taskId;
+        }
+
+        @Override
+        public void onTimeUp() {
+            addMessageWrapper(new RefuseWrapper(taskId, RefuseWrapper.Reason.OFFER_OUT_OF_DATE));
         }
     }
 
