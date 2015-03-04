@@ -12,17 +12,23 @@ public class DelegateWrapper extends Wrapper {
     private static final long serialVersionUID = 5024381597298577179L;
 
     public final ArrayList<KeyValueHolder> keyValueHolders;
+    public final int deadline;
+    public final int cost;
 
-    public DelegateWrapper(long taskId, ArrayList<KeyValueHolder> keyValueHolders) {
+    public DelegateWrapper(long taskId, ArrayList<KeyValueHolder> keyValueHolders, int deadline, int cost) {
         super(taskId);
         this.keyValueHolders = keyValueHolders;
+        this.deadline = deadline;
+        this.cost = cost;
     }
 
     @Override
     public String toString() {
         return "DelegateWrapper{" +
-                "taskId=" + taskId + "," +
-                "keyValueHolders=" + Arrays.toString(keyValueHolders.toArray()) +
+                "taskId=" + taskId +
+                ", deadline=" + deadline +
+                ", cost=" + cost +
+                ", keyValueHolders=" + Arrays.toString(keyValueHolders.toArray()) +
                 '}';
     }
 }
