@@ -15,13 +15,13 @@
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <!-- Locating Permission -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
 
     <application android:hardwareAccelerated="false"
                  android:theme="@style/CustomActionBarTheme"
@@ -36,6 +36,7 @@
         <service android:name=".felix.FelixService"/>
 
         <activity android:name=".activity.MainActivity"
+                  android:windowSoftInputMode="adjustPan"
                   android:label="@string/app_name"/>
         <activity android:name=".core.AdapterActivity"/>
         <activity android:name=".activity.LoginActivity">
