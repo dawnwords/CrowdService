@@ -19,10 +19,6 @@ import java.util.Iterator;
  */
 public class WorkerFragment extends BaseFragment<Wrapper> {
     public static final String TASK_SUBMIT_TAG = "TaskSubmit";
-    private static boolean[] REQUEST_VISIBILITY = {true, false, true, false, true, true, false, false};
-    private static boolean[] WAIT_VISIBILITY = {true, false, true, false, false, false, true, false};
-    private static boolean[] DELEGATE_VISIBILITY = {false, true, true, false, false, false, false, true};
-    private static boolean[] STATE_VISIBILITY = {false, false, false, true, false, true, false, false};
     private Handler handler = new Handler();
 
     public WorkerFragment() {
@@ -31,29 +27,39 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
     @Override
     protected void setItemView(Wrapper wrapper, View view) {
-        if (wrapper instanceof DelegateWrapper) {
-            renderDelegateWrapper((DelegateWrapper) wrapper, view);
-        } else if (wrapper instanceof RequestWrapper) {
-            renderRequestWrapper((RequestWrapper) wrapper, view);
-        } else if (wrapper instanceof RefuseWrapper) {
-            renderRefuseWrapper((RefuseWrapper) wrapper, view);
-        } else if (wrapper instanceof CompleteWrapper) {
-            renderCompleteWrapper(view);
+        State state = (State) view.getTag();
+        if (state == null) {
+            String tagName = wrapper.getClass().getSimpleName();
+            tagName = tagName.substring(0, tagName.length() - "Wrapper".length());
+            state = State.valueOf(tagName.toUpperCase());
+            view.setTag(state);
+        } else if (wrapper.getClass().getName().toUpperCase().contains(state.name())) {
+            return;
+        }
+
+        state.setVisibility(view);
+
+        String methodName = "render" + state.name().charAt(0) + state.name().substring(1).toLowerCase() + "Wrapper";
+        try {
+            getClass().getDeclaredMethod(methodName, Wrapper.class, View.class).invoke(this, wrapper, view);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void renderCompleteWrapper(View view) {
-        setVisibility(view, STATE_VISIBILITY);
+    private void renderWaitingWrapper(Wrapper wrapper, View view) {
+    }
+
+    private void renderCompleteWrapper(Wrapper wrapper, View view) {
         ((TextView) view.findViewById(R.id.task_state)).setText(R.string.task_complete);
     }
 
-    private void renderRefuseWrapper(RefuseWrapper wrapper, View view) {
-        setVisibility(view, STATE_VISIBILITY);
-        ((TextView) view.findViewById(R.id.task_state)).setText("You Are Rejected for " + wrapper.reason);
+    private void renderRefuseWrapper(Wrapper wrapper, View view) {
+        ((TextView) view.findViewById(R.id.task_state)).setText("You Are Rejected for " + ((RefuseWrapper) wrapper).reason);
     }
 
-    private void renderRequestWrapper(final RequestWrapper request, final View view) {
-        setVisibility(view, REQUEST_VISIBILITY);
+    private void renderRequestWrapper(Wrapper wrapper, final View view) {
+        final RequestWrapper request = (RequestWrapper) wrapper;
         ((TextView) view.findViewById(R.id.task_description)).setText(request.description);
         //TODO + ddl + reward in request wrapper
         ((TextView) view.findViewById(R.id.task_ddl)).setText("12:20");
@@ -71,7 +77,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                             int offer = Integer.parseInt(input.getText().toString());
                             agent.sendOffer(new OfferWrapper(request.taskId, offer));
                             dialog.dismiss();
-                            setVisibility(view, WAIT_VISIBILITY);
+                            view.setTag(State.WAITING);
                         } catch (Exception e) {
                             e.printStackTrace();
                             showMessage("Please Input correct price for this task!");
@@ -85,18 +91,18 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
             public void onClick(View view) {
                 Iterator<Wrapper> iterator = data.iterator();
                 while (iterator.hasNext()) {
-                    Wrapper wrapper = iterator.next();
-                    if (wrapper.taskId == request.taskId) {
+                    if (iterator.next().taskId == request.taskId) {
                         iterator.remove();
-                        return;
+                        break;
                     }
                 }
+                setData(data);
             }
         });
     }
 
-    private void renderDelegateWrapper(final DelegateWrapper delegateWrapper, final View view) {
-        setVisibility(view, DELEGATE_VISIBILITY);
+    private void renderDelegateWrapper(Wrapper wrapper, final View view) {
+        final DelegateWrapper delegate = (DelegateWrapper) wrapper;
         //TODO + ddl in delegateWrapper
         final Date ddl = new Date();
         ddl.setTime(ddl.getTime() + 100 * 1000);
@@ -109,8 +115,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                     timeRemain.setText(time + "s");
                     handler.postDelayed(this, 1000);
                 } else {
-                    setVisibility(view, STATE_VISIBILITY);
-                    ((TextView) view.findViewById(R.id.task_state)).setText(R.string.task_out_of_date);
+                    addMessageWrapper(new RefuseWrapper(delegate.taskId, RefuseWrapper.Reason.OFFER_OUT_OF_DATE));
                 }
             }
         });
@@ -118,20 +123,9 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
             @Override
             public void onClick(View view) {
                 ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
-                ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegateWrapper);
+                ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
             }
         });
-    }
-
-    private void setVisibility(View v, boolean[] visibility) {
-        v.findViewById(R.id.task_ddl).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_time_remain).setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_reward).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_state).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_offer).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_remove).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_waiting).setVisibility(visibility[6] ? View.VISIBLE : View.GONE);
-        v.findViewById(R.id.task_do).setVisibility(visibility[7] ? View.VISIBLE : View.GONE);
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
@@ -144,4 +138,32 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         }
         addData(value);
     }
+
+    private enum State {
+        REQUEST(new boolean[]{true, false, true, false, true, true, false, false}),
+        WAITING(new boolean[]{true, false, true, false, false, false, true, false}),
+        DELEGATE(new boolean[]{false, true, true, false, false, false, false, true}),
+        REFUSE, COMPLETE;
+        private boolean[] visibility;
+
+        State(boolean[] visibility) {
+            this.visibility = visibility;
+        }
+
+        State() {
+            this(new boolean[]{false, false, false, true, false, true, false, false});
+        }
+
+        public void setVisibility(View v) {
+            v.findViewById(R.id.task_ddl).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_time_remain).setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_reward).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_state).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_offer).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_remove).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_waiting).setVisibility(visibility[6] ? View.VISIBLE : View.GONE);
+            v.findViewById(R.id.task_do).setVisibility(visibility[7] ? View.VISIBLE : View.GONE);
+        }
+    }
+
 }

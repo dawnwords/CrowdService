@@ -33,6 +33,5 @@
     <string name="ignore">Ignore It</string>
     <string name="do_it">Do It</string>
     <string name="task_waiting">Waiting for Response</string>
-    <string name="task_out_of_date">Task Out of Date</string>
     <string name="task_complete">Task Completed</string>
 </resources>
