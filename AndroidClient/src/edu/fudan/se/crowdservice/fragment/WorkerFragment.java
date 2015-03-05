@@ -65,6 +65,23 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         holder.remove.setOnClickListener(new RemoveItemListener(wrapper));
     }
 
+    private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
+        State.DELEGATE.setVisibility(holder);
+        final DelegateWrapper delegate = (DelegateWrapper) wrapper;
+        holder.description.setText(saved.description);
+        holder.doo.setTimeUpListener(new OutDatedListener(delegate.taskId))
+                .setTimeRemain(saved.ddl)
+                .setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.doo.stop();
+                        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
+                        ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
+                    }
+                }).start();
+        holder.reward.setText("Reward:" + delegate.cost);
+    }
+
     private void renderRequestWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
         State.REQUEST.setVisibility(holder);
         final RequestWrapper request = (RequestWrapper) wrapper;
@@ -75,42 +92,31 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                 .setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
-                        String title = getResources().getString(R.string.offer_price);
-                        new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
-                                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int i) {
-                                try {
-                                    int offer = Integer.parseInt(input.getText().toString());
-                                    addMessageWrapper(new WaitingWrapper(request.taskId, offer));
-                                    agent.sendOffer(new OfferWrapper(request.taskId, offer));
-                                    dialog.dismiss();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                    showMessage("Please Input correct price for this task!");
-                                }
-                            }
-                        }).create().show();
+                        holder.offer.stop();
+                        showOfferPriceDialog(request.taskId);
                     }
                 }).start();
         holder.remove.setOnClickListener(new RemoveItemListener(request));
     }
 
-    private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
-        State.DELEGATE.setVisibility(holder);
-        final DelegateWrapper delegate = (DelegateWrapper) wrapper;
-        holder.description.setText(saved.description);
-        holder.doo.setTimeUpListener(new OutDatedListener(delegate.taskId))
-                .setTimeRemain(saved.ddl)
-                .setClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
-                        ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
-                    }
-                }).start();
-        holder.reward.setText("Reward:" + delegate.cost);
+    private void showOfferPriceDialog(final long taskId) {
+        final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
+        String title = getResources().getString(R.string.offer_price);
+        new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
+                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                try {
+                    int offer = Integer.parseInt(input.getText().toString());
+                    addMessageWrapper(new WaitingWrapper(taskId, offer));
+                    agent.sendOffer(new OfferWrapper(taskId, offer));
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showMessage("Please Input correct price for this task!");
+                }
+            }
+        }).create().show();
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
