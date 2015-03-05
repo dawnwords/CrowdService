@@ -1,19 +1,18 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
 import edu.fudan.se.crowdservice.wrapper.ConversationType;
+import edu.fudan.se.crowdservice.wrapper.Wrapper;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.lang.acl.UnreadableException;
 
-import java.io.Serializable;
-
 /**
  * Created by Jiahuan on 2015/1/22.
  */
-public abstract class MessageReceivingBehaviour<T extends Serializable> extends CyclicBehaviour {
+public abstract class MessageReceivingBehaviour<T extends Wrapper> extends CyclicBehaviour {
 
     private ConversationType conversationType;
     private Handler handler;
@@ -31,8 +30,7 @@ public abstract class MessageReceivingBehaviour<T extends Serializable> extends 
         ACLMessage aclMsg = myAgent.receive(mt);
         if (aclMsg != null) {
             try {
-                UIMessage message = prepareMessage((T) aclMsg.getContentObject());
-                handler.sendMessage(message.asMessage());
+                handler.sendMessage(new TaskMessage(prepareMessage((T) aclMsg.getContentObject())).asMessage());
             } catch (UnreadableException e) {
                 e.printStackTrace();
             }
@@ -41,6 +39,8 @@ public abstract class MessageReceivingBehaviour<T extends Serializable> extends 
         }
     }
 
-    protected abstract UIMessage prepareMessage(T content);
+    protected T prepareMessage(T content) {
+        return content;
+    }
 
 }

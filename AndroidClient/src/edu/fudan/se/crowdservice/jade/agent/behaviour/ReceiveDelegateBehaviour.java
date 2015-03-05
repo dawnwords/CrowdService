@@ -3,8 +3,6 @@ package edu.fudan.se.crowdservice.jade.agent.behaviour;
 import android.content.Context;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.IOUtil;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.kv.ImageDisplay;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.wrapper.ConversationType;
@@ -22,7 +20,7 @@ public class ReceiveDelegateBehaviour extends MessageReceivingBehaviour<Delegate
     }
 
     @Override
-    protected UIMessage prepareMessage(DelegateWrapper content) {
+    protected DelegateWrapper prepareMessage(DelegateWrapper content) {
         for (int i = 0; i < content.keyValueHolders.size(); i++) {
             KeyValueHolder holder = content.keyValueHolders.get(i);
             if (holder instanceof ImageDisplay) {
@@ -32,6 +30,6 @@ public class ReceiveDelegateBehaviour extends MessageReceivingBehaviour<Delegate
                 content.keyValueHolders.set(i, new ImageDisplay(key, imagePath));
             }
         }
-        return new TaskMessage(content);
+        return content;
     }
 }
