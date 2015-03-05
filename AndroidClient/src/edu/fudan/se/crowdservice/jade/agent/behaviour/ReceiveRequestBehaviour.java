@@ -1,9 +1,9 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.wrapper.ConversationType;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.RequestMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.wrapper.RequestWrapper;
 
 /**
@@ -16,6 +16,6 @@ public class ReceiveRequestBehaviour extends MessageReceivingBehaviour<RequestWr
 
     @Override
     protected UIMessage prepareMessage(RequestWrapper content) {
-        return new RequestMessage(content);
+        return new TaskMessage(content);
     }
 }

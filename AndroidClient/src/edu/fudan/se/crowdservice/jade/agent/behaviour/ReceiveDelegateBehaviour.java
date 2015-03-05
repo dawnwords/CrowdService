@@ -3,11 +3,11 @@ package edu.fudan.se.crowdservice.jade.agent.behaviour;
 import android.content.Context;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.IOUtil;
-import edu.fudan.se.crowdservice.wrapper.ConversationType;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.DelegateMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.kv.ImageDisplay;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
+import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.wrapper.DelegateWrapper;
 
 /**
@@ -32,6 +32,6 @@ public class ReceiveDelegateBehaviour extends MessageReceivingBehaviour<Delegate
                 content.keyValueHolders.set(i, new ImageDisplay(key, imagePath));
             }
         }
-        return new DelegateMessage(content);
+        return new TaskMessage(content);
     }
 }

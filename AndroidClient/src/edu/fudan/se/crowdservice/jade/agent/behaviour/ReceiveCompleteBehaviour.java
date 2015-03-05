@@ -1,7 +1,7 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.CompleteMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.wrapper.CompleteWrapper;
 import edu.fudan.se.crowdservice.wrapper.ConversationType;
@@ -16,6 +16,6 @@ public class ReceiveCompleteBehaviour extends MessageReceivingBehaviour<Complete
 
     @Override
     protected UIMessage prepareMessage(CompleteWrapper content) {
-        return new CompleteMessage(content);
+        return new TaskMessage(content);
     }
 }

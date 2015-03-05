@@ -1,7 +1,7 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.RefuseMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.wrapper.RefuseWrapper;
@@ -16,6 +16,6 @@ public class ReceiveRefuseBehaviour extends MessageReceivingBehaviour<RefuseWrap
 
     @Override
     protected UIMessage prepareMessage(RefuseWrapper content) {
-        return new RefuseMessage(content);
+        return new TaskMessage(content);
     }
 }
