@@ -18,10 +18,10 @@ public class CountDownButton extends Button {
     private static final int STOP = 1330;
 
     private int timeRemain;
+    private boolean hasStarted;
     private String text;
     private TimeUpListener listener;
     private Handler handler;
-
 
     public CountDownButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,7 +29,6 @@ public class CountDownButton extends Button {
         this.handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                Log.i(getClass().getSimpleName(), "time remain = " + timeRemain);
                 switch (msg.what) {
                     case COUNT_DOWN:
                         setText(text + "(" + timeRemain + "s)");
@@ -56,22 +55,21 @@ public class CountDownButton extends Button {
         return this;
     }
 
-    public CountDownButton setTimeRemain(int timeRemain) {
-        this.timeRemain = timeRemain;
-        return this;
-    }
-
     public CountDownButton setClickListener(OnClickListener l) {
         super.setOnClickListener(l);
         return this;
     }
 
     public void start() {
-        handler.sendEmptyMessage(COUNT_DOWN);
+        if (!hasStarted) {
+            handler.sendEmptyMessage(COUNT_DOWN);
+            hasStarted = true;
+        }
     }
 
     public void stop() {
         handler.sendEmptyMessage(STOP);
+        hasStarted = false;
     }
 
     public CountDownButton setTimeRemain(long ddl) {
