@@ -31,6 +31,7 @@ public class CountDownButton extends Button {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case COUNT_DOWN:
+                        i("Count Down");
                         setText(text + "(" + timeRemain + "s)");
                         if (timeRemain <= 0) {
                             stop();
@@ -43,11 +44,16 @@ public class CountDownButton extends Button {
                         timeRemain--;
                         break;
                     case STOP:
-                        handler.removeMessages(COUNT_DOWN);
+                        i("Stop");
+                        handler.removeCallbacksAndMessages(null);
                         break;
                 }
             }
         };
+    }
+
+    private void i(String msg) {
+        Log.i(getClass().getSimpleName(), "Message(" + text + "):" + msg);
     }
 
     public CountDownButton setTimeUpListener(TimeUpListener listener) {
@@ -61,7 +67,7 @@ public class CountDownButton extends Button {
     }
 
     public void start() {
-        if (!hasStarted) {
+        if (!hasStarted && timeRemain > 0) {
             handler.sendEmptyMessage(COUNT_DOWN);
             hasStarted = true;
         }

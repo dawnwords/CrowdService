@@ -3,6 +3,7 @@ package edu.fudan.se.crowdservice.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v4.util.LongSparseArray;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -44,6 +45,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private void renderWaitingWrapper(Wrapper wrapper, ViewHolder holder, Saved saved) {
+        i("renderWaitingWrapper");
         State.WAITING.setVisibility(holder);
         WaitingWrapper waiting = (WaitingWrapper) wrapper;
         holder.description.setText(saved.description);
@@ -51,10 +53,12 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private void renderCompleteWrapper(Wrapper wrapper, ViewHolder holder, Saved saved) {
+        i("renderCompleteWrapper");
         renderStateWrapper(wrapper, holder, State.COMPLETE, getString(R.string.task_complete), saved);
     }
 
     private void renderRefuseWrapper(Wrapper wrapper, ViewHolder holder, Saved saved) {
+        i("renderRefuseWrapper");
         renderStateWrapper(wrapper, holder, State.REFUSE, "You Are Rejected for " + ((RefuseWrapper) wrapper).reason, saved);
     }
 
@@ -66,6 +70,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
+        i("renderDelegateWrapper");
         State.DELEGATE.setVisibility(holder);
         final DelegateWrapper delegate = (DelegateWrapper) wrapper;
         holder.description.setText(saved.description);
@@ -83,6 +88,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     private void renderRequestWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
+        i("renderRequestWrapper");
         State.REQUEST.setVisibility(holder);
         final RequestWrapper request = (RequestWrapper) wrapper;
         saved.description(request.description);
@@ -97,6 +103,10 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                     }
                 }).start();
         holder.remove.setOnClickListener(new RemoveItemListener(request));
+    }
+
+    private void i(String msg) {
+        Log.i(getClass().getSimpleName(), msg);
     }
 
     private void showOfferPriceDialog(final long taskId) {
@@ -120,11 +130,11 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
+        i("Message:" + value.toString());
         savedDDL(value);
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).taskId == value.taskId) {
                 data.set(i, value);
-                taskSavedMap.get(value.taskId).ddl(0);
                 refreshList();
                 return;
             }
@@ -226,6 +236,14 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         public WaitingWrapper(long taskId, int cost) {
             super(taskId);
             this.cost = cost;
+        }
+
+        @Override
+        public String toString() {
+            return "WaitingWrapper{" +
+                    "taskId=" + taskId +
+                    ",cost=" + cost +
+                    '}';
         }
     }
 
