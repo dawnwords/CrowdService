@@ -21,35 +21,40 @@ public class CountDownButton extends Button {
     private boolean hasStarted;
     private String text;
     private TimeUpListener listener;
-    private Handler handler;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case COUNT_DOWN:
+                    i("Count Down");
+                    setText(text + "(" + timeRemain + "s)");
+                    if (timeRemain <= 0) {
+                        stop();
+                        if (listener != null) {
+                            listener.onTimeUp();
+                        }
+                    } else {
+                        handler.sendEmptyMessageDelayed(COUNT_DOWN, 1000);
+                    }
+                    timeRemain--;
+                    break;
+                case STOP:
+                    i("Stop");
+                    handler.removeCallbacksAndMessages(null);
+                    break;
+            }
+        }
+    };
+
+    public CountDownButton(Context context, String text) {
+        super(context);
+        this.text = text;
+        setText(text);
+    }
 
     public CountDownButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.text = getText().toString();
-        this.handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case COUNT_DOWN:
-                        i("Count Down");
-                        setText(text + "(" + timeRemain + "s)");
-                        if (timeRemain <= 0) {
-                            stop();
-                            if (listener != null) {
-                                listener.onTimeUp();
-                            }
-                        } else {
-                            handler.sendEmptyMessageDelayed(COUNT_DOWN, 1000);
-                        }
-                        timeRemain--;
-                        break;
-                    case STOP:
-                        i("Stop");
-                        handler.removeCallbacksAndMessages(null);
-                        break;
-                }
-            }
-        };
     }
 
     private void i(String msg) {

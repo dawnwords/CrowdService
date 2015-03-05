@@ -69,7 +69,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         holder.remove.setOnClickListener(new RemoveItemListener(wrapper));
     }
 
-    private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
+    private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, final Saved saved) {
         i("renderDelegateWrapper");
         State.DELEGATE.setVisibility(holder);
         final DelegateWrapper delegate = (DelegateWrapper) wrapper;
@@ -81,7 +81,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                     public void onClick(View view) {
                         holder.doo.stop();
                         ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
-                        ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
+                        ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate, saved.ddl);
                     }
                 }).start();
         holder.reward.setText("Reward:" + delegate.cost);

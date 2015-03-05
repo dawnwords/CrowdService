@@ -3,14 +3,14 @@ package edu.fudan.se.crowdservice.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
+import edu.fudan.se.crowdservice.activity.MainActivity;
 import edu.fudan.se.crowdservice.core.dui.KeyValueView;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
+import edu.fudan.se.crowdservice.view.CountDownButton;
 import edu.fudan.se.crowdservice.wrapper.DelegateWrapper;
 import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 
@@ -22,6 +22,7 @@ import java.util.ArrayList;
 public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
     private DelegateWrapper delegateWrapper;
     private ArrayList<KeyValueView> keyValueViews;
+    private CountDownButton submit;
 
     public TaskSubmitFragment() {
         super(R.string.no_task, R.layout.list_item_key_value, "Worker");
@@ -30,20 +31,26 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        getListView().addFooterView(initSubmitButton());
+        initSubmitButton();
+        getListView().addFooterView(submit);
         super.onViewCreated(view, savedInstanceState);
     }
 
-    private Button initSubmitButton() {
-        Button submit = new Button(getActivity());
-        submit.setText(getText(R.string.submit));
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                submit();
-            }
-        });
-        return submit;
+    private void initSubmitButton() {
+        submit = new CountDownButton(getActivity(), getText(R.string.submit).toString())
+                .setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        submit();
+                    }
+                }).setTimeUpListener(new CountDownButton.TimeUpListener() {
+                    @Override
+                    public void onTimeUp() {
+                        submit.setText(R.string.time_up);
+                        submit.setClickable(false);
+                    }
+                });
+        submit.setClickable(true);
     }
 
     @Override
@@ -61,10 +68,11 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
         }
     }
 
-    public void setDelegateWrapper(DelegateWrapper delegateWrapper) {
+    public void setDelegateWrapper(DelegateWrapper delegateWrapper, long ddl) {
         this.delegateWrapper = delegateWrapper;
         this.keyValueViews.clear();
         setData(delegateWrapper.keyValueHolders);
+        submit.setTimeRemain(ddl).start();
     }
 
     public void submit() {
@@ -79,6 +87,8 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
                 }
             }
         }
+        submit.stop();
         agent.sendResponse(new ResponseWrapper(delegateWrapper.taskId, result));
+        ((MainActivity) getActivity()).onNavigationDrawerItemSelected("Worker");
     }
 }
