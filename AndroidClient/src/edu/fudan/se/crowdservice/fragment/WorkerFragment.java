@@ -30,17 +30,14 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
     @Override
     protected void setItemView(Wrapper wrapper, View view) {
-        Saved saved = taskSavedMap.get(wrapper.taskId);
-        if (saved == null) {
-            taskSavedMap.put(wrapper.taskId, new Saved().taskId(wrapper.taskId));
-        }
         ViewHolder holder = (ViewHolder) view.getTag();
         if (holder == null) {
             holder = new ViewHolder(view);
         }
         String methodName = "render" + wrapper.getClass().getSimpleName();
         try {
-            getClass().getDeclaredMethod(methodName, Wrapper.class, ViewHolder.class, Saved.class).invoke(this, wrapper, holder, saved);
+            getClass().getDeclaredMethod(methodName, Wrapper.class, ViewHolder.class, Saved.class)
+                    .invoke(this, wrapper, holder, taskSavedMap.get(wrapper.taskId));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,12 +70,6 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         final RequestWrapper request = (RequestWrapper) wrapper;
         saved.description(request.description);
         holder.description.setText(request.description);
-
-        if (saved.ddl == 0) {
-            saved.ddl(request.deadline + new Date().getTime());
-        } else {
-            holder.offer.stop();
-        }
         holder.offer.setTimeUpListener(new OutDatedListener(request.taskId))
                 .setTimeRemain(saved.ddl)
                 .setClickListener(new View.OnClickListener() {
@@ -110,11 +101,6 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         State.DELEGATE.setVisibility(holder);
         final DelegateWrapper delegate = (DelegateWrapper) wrapper;
         holder.description.setText(saved.description);
-        if (saved.ddl == 0) {
-            saved.ddl(delegate.deadline + new Date().getTime());
-        } else {
-            holder.doo.stop();
-        }
         holder.doo.setTimeUpListener(new OutDatedListener(delegate.taskId))
                 .setTimeRemain(saved.ddl)
                 .setClickListener(new View.OnClickListener() {
@@ -128,6 +114,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
+        savedDDL(value);
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).taskId == value.taskId) {
                 data.set(i, value);
@@ -137,6 +124,16 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
             }
         }
         addData(value);
+    }
+
+    private void savedDDL(Wrapper value) {
+        Saved saved = taskSavedMap.get(value.taskId);
+        if (saved == null) {
+            saved = new Saved().taskId(value.taskId);
+        }
+        int ddl = value instanceof DelegateWrapper ? ((DelegateWrapper) value).deadline :
+                value instanceof RequestWrapper ? ((RequestWrapper) value).deadline : 0;
+        taskSavedMap.put(value.taskId, saved.ddl(ddl * 1000 + new Date().getTime()));
     }
 
     private enum State {
@@ -178,7 +175,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
             waiting = v.findViewById(R.id.task_waiting);
             state = (TextView) v.findViewById(R.id.task_state);
             remove = (Button) v.findViewById(R.id.task_remove);
-            v.setTag(v);
+            v.setTag(this);
         }
     }
 
@@ -242,7 +239,7 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                     break;
                 }
             }
-            refreshList();
+            setData(data);
         }
     }
 }
