@@ -2,9 +2,10 @@ package edu.fudan.se.crowdservice.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.Handler;
+import android.support.v4.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
@@ -12,6 +13,7 @@ import edu.fudan.se.crowdservice.activity.MainActivity;
 import edu.fudan.se.crowdservice.view.CountDownButton;
 import edu.fudan.se.crowdservice.wrapper.*;
 
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -19,45 +21,66 @@ import java.util.Iterator;
  */
 public class WorkerFragment extends BaseFragment<Wrapper> {
     public static final String TASK_SUBMIT_TAG = "TaskSubmit";
-    private Handler handler = new Handler();
+    private final LongSparseArray<Saved> taskSavedMap;
 
     public WorkerFragment() {
         super(R.string.no_task, R.layout.list_item_task);
+        taskSavedMap = new LongSparseArray<Saved>();
     }
 
     @Override
     protected void setItemView(Wrapper wrapper, View view) {
+        Saved saved = taskSavedMap.get(wrapper.taskId);
+        if (saved == null) {
+            taskSavedMap.put(wrapper.taskId, new Saved().taskId(wrapper.taskId));
+        }
+        ViewHolder holder = (ViewHolder) view.getTag();
+        if (holder == null) {
+            holder = new ViewHolder(view);
+        }
         String methodName = "render" + wrapper.getClass().getSimpleName();
         try {
-            getClass().getDeclaredMethod(methodName, Wrapper.class, View.class).invoke(this, wrapper, view);
+            getClass().getDeclaredMethod(methodName, Wrapper.class, ViewHolder.class, Saved.class).invoke(this, wrapper, holder, saved);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void renderWaitingWrapper(Wrapper wrapper, View view) {
-        State.WAITING.setVisibility(view);
+    private void renderWaitingWrapper(Wrapper wrapper, ViewHolder holder, Saved saved) {
+        State.WAITING.setVisibility(holder);
         WaitingWrapper waiting = (WaitingWrapper) wrapper;
-        ((TextView) view.findViewById(R.id.task_reward)).setText("Reward:" + waiting.cost);
+        holder.description.setText(saved.description);
+        holder.reward.setText("Reward:" + waiting.cost);
     }
 
-    private void renderCompleteWrapper(Wrapper wrapper, View view) {
-        State.COMPLETE.setVisibility(view);
-        ((TextView) view.findViewById(R.id.task_state)).setText(R.string.task_complete);
+    private void renderCompleteWrapper(Wrapper wrapper, ViewHolder holder, Saved saved) {
+        renderStateWrapper(wrapper, holder, State.COMPLETE, getString(R.string.task_complete), saved);
     }
 
-    private void renderRefuseWrapper(Wrapper wrapper, View view) {
-        State.REFUSE.setVisibility(view);
-        ((TextView) view.findViewById(R.id.task_state)).setText("You Are Rejected for " + ((RefuseWrapper) wrapper).reason);
+    private void renderRefuseWrapper(Wrapper wrapper, ViewHolder holder, Saved saved) {
+        renderStateWrapper(wrapper, holder, State.REFUSE, "You Are Rejected for " + ((RefuseWrapper) wrapper).reason, saved);
     }
 
-    private void renderRequestWrapper(Wrapper wrapper, final View view) {
-        State.REQUEST.setVisibility(view);
+    private void renderStateWrapper(Wrapper wrapper, ViewHolder holder, State state, String message, Saved saved) {
+        state.setVisibility(holder);
+        holder.description.setText(saved.description);
+        holder.state.setText(message);
+        holder.remove.setOnClickListener(new RemoveItemListener(wrapper));
+    }
+
+    private void renderRequestWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
+        State.REQUEST.setVisibility(holder);
         final RequestWrapper request = (RequestWrapper) wrapper;
-        ((TextView) view.findViewById(R.id.task_description)).setText(request.description);
-        ((CountDownButton) view.findViewById(R.id.task_offer))
-                .setTimeUpListener(new OfferOutDatedListener(request.taskId))
-                .setTimeRemain(request.deadline)
+        saved.description(request.description);
+        holder.description.setText(request.description);
+
+        if (saved.ddl == 0) {
+            saved.ddl(request.deadline + new Date().getTime());
+        } else {
+            holder.offer.stop();
+        }
+        holder.offer.setTimeUpListener(new OutDatedListener(request.taskId))
+                .setTimeRemain(saved.ddl)
                 .setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -80,27 +103,20 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                         }).create().show();
                     }
                 }).start();
-        view.findViewById(R.id.task_remove).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Iterator<Wrapper> iterator = data.iterator();
-                while (iterator.hasNext()) {
-                    if (iterator.next().taskId == request.taskId) {
-                        iterator.remove();
-                        break;
-                    }
-                }
-                refreshList();
-            }
-        });
+        holder.remove.setOnClickListener(new RemoveItemListener(request));
     }
 
-    private void renderDelegateWrapper(Wrapper wrapper, final View view) {
-        State.DELEGATE.setVisibility(view);
+    private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, Saved saved) {
+        State.DELEGATE.setVisibility(holder);
         final DelegateWrapper delegate = (DelegateWrapper) wrapper;
-        ((CountDownButton) view.findViewById(R.id.task_do))
-                .setTimeUpListener(new OfferOutDatedListener(delegate.taskId))
-                .setTimeRemain(delegate.deadline)
+        holder.description.setText(saved.description);
+        if (saved.ddl == 0) {
+            saved.ddl(delegate.deadline + new Date().getTime());
+        } else {
+            holder.doo.stop();
+        }
+        holder.doo.setTimeUpListener(new OutDatedListener(delegate.taskId))
+                .setTimeRemain(saved.ddl)
                 .setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -108,13 +124,14 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                         ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate);
                     }
                 }).start();
-        ((TextView) view.findViewById(R.id.task_reward)).setText("Reward:" + delegate.cost);
+        holder.reward.setText("Reward:" + delegate.cost);
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
         for (int i = 0; i < data.size(); i++) {
             if (data.get(i).taskId == value.taskId) {
                 data.set(i, value);
+                taskSavedMap.get(value.taskId).ddl(0);
                 refreshList();
                 return;
             }
@@ -137,20 +154,59 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
             this(new boolean[]{false, false, false, false, true, true});
         }
 
-        public void setVisibility(View v) {
-            v.findViewById(R.id.task_offer).setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_reward).setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_waiting).setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_do).setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_state).setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
-            v.findViewById(R.id.task_remove).setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
+        public void setVisibility(ViewHolder v) {
+            v.offer.setVisibility(visibility[0] ? View.VISIBLE : View.GONE);
+            v.reward.setVisibility(visibility[1] ? View.VISIBLE : View.GONE);
+            v.waiting.setVisibility(visibility[2] ? View.VISIBLE : View.GONE);
+            v.doo.setVisibility(visibility[3] ? View.VISIBLE : View.GONE);
+            v.state.setVisibility(visibility[4] ? View.VISIBLE : View.GONE);
+            v.remove.setVisibility(visibility[5] ? View.VISIBLE : View.GONE);
         }
     }
 
-    private class OfferOutDatedListener implements CountDownButton.TimeUpListener {
+    private class ViewHolder {
+        CountDownButton offer, doo;
+        TextView reward, state, description;
+        Button remove;
+        View waiting;
+
+        ViewHolder(View v) {
+            description = (TextView) v.findViewById(R.id.task_description);
+            offer = (CountDownButton) v.findViewById(R.id.task_offer);
+            doo = (CountDownButton) v.findViewById(R.id.task_do);
+            reward = (TextView) v.findViewById(R.id.task_reward);
+            waiting = v.findViewById(R.id.task_waiting);
+            state = (TextView) v.findViewById(R.id.task_state);
+            remove = (Button) v.findViewById(R.id.task_remove);
+            v.setTag(v);
+        }
+    }
+
+    private class Saved {
+        long taskId;
+        String description;
+        long ddl;
+
+        Saved taskId(long taskId) {
+            this.taskId = taskId;
+            return this;
+        }
+
+        Saved description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        Saved ddl(long ddl) {
+            this.ddl = ddl;
+            return this;
+        }
+    }
+
+    private class OutDatedListener implements CountDownButton.TimeUpListener {
         private long taskId;
 
-        public OfferOutDatedListener(long taskId) {
+        public OutDatedListener(long taskId) {
             this.taskId = taskId;
         }
 
@@ -170,4 +226,23 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         }
     }
 
+    private class RemoveItemListener implements View.OnClickListener {
+        private Wrapper wrapper;
+
+        public RemoveItemListener(Wrapper wrapper) {
+            this.wrapper = wrapper;
+        }
+
+        @Override
+        public void onClick(View view) {
+            Iterator<Wrapper> iterator = data.iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next().taskId == wrapper.taskId) {
+                    iterator.remove();
+                    break;
+                }
+            }
+            refreshList();
+        }
+    }
 }

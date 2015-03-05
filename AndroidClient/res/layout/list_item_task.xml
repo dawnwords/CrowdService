@@ -12,13 +12,15 @@
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal">
-        <edu.fudan.se.crowdservice.view.CountDownView
+        <edu.fudan.se.crowdservice.view.CountDownButton
                 style="@style/HalfScreen"
                 android:id="@+id/task_offer"
                 android:text="@string/offer"/>
 
-        <TextView android:id="@+id/task_reward"
-                  style="@style/HalfScreen"/>
+        <TextView style="@style/HalfScreen"
+                  android:id="@+id/task_reward"
+                  android:layout_gravity="center_vertical"
+                />
 
         <RelativeLayout android:id="@+id/task_waiting"
                         style="@style/HalfScreen">
@@ -28,6 +30,7 @@
                           android:layout_centerInParent="true">
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
+                          android:layout_gravity="center"
                           android:gravity="center"
                           android:text="@string/task_waiting"/>
 
@@ -37,13 +40,14 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <edu.fudan.se.crowdservice.view.CountDownView
+        <edu.fudan.se.crowdservice.view.CountDownButton
                 style="@style/HalfScreen"
                 android:id="@+id/task_do"
                 android:text="@string/do_it"/>
 
-        <TextView android:id="@+id/task_state"
-                  style="@style/HalfScreen"/>
+        <TextView style="@style/HalfScreen"
+                  android:id="@+id/task_state"
+                  android:layout_gravity="center_vertical"/>
 
         <Button style="@style/HalfScreen"
                 android:id="@+id/task_remove"
