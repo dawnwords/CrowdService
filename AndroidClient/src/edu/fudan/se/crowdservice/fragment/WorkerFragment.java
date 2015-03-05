@@ -98,8 +98,24 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                 .setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        holder.offer.stop();
-                        showOfferPriceDialog(request.taskId);
+                        final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
+                        String title = getResources().getString(R.string.offer_price);
+                        new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
+                                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                try {
+                                    int offer = Integer.parseInt(input.getText().toString());
+                                    addMessageWrapper(new WaitingWrapper(request.taskId, offer));
+                                    agent.sendOffer(new OfferWrapper(request.taskId, offer));
+                                    dialog.dismiss();
+                                    holder.offer.stop();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    showMessage("Please Input correct price for this task!");
+                                }
+                            }
+                        }).create().show();
                     }
                 }).start();
         holder.remove.setOnClickListener(new RemoveItemListener(request));
@@ -107,26 +123,6 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
 
     private void i(String msg) {
         Log.i(getClass().getSimpleName(), msg);
-    }
-
-    private void showOfferPriceDialog(final long taskId) {
-        final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
-        String title = getResources().getString(R.string.offer_price);
-        new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
-                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int i) {
-                try {
-                    int offer = Integer.parseInt(input.getText().toString());
-                    addMessageWrapper(new WaitingWrapper(taskId, offer));
-                    agent.sendOffer(new OfferWrapper(taskId, offer));
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    showMessage("Please Input correct price for this task!");
-                }
-            }
-        }).create().show();
     }
 
     public synchronized void addMessageWrapper(Wrapper value) {
