@@ -39,6 +39,10 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
         this.context = context;
     }
 
+    public String templateName() {
+        return getTemplateClass().getSimpleName();
+    }
+
     public synchronized T createTemplateInstance(ServiceExecutionListener listener) {
         T template = null;
         try {
