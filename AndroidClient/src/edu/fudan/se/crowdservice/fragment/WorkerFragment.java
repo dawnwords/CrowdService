@@ -68,6 +68,8 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         holder.description.setText(saved.description);
         holder.state.setText(message);
         holder.remove.setOnClickListener(new RemoveItemListener(wrapper));
+        holder.offer.stop();
+        holder.doo.stop();
     }
 
     private void renderDelegateWrapper(Wrapper wrapper, final ViewHolder holder, final Saved saved) {
@@ -80,7 +82,6 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                 .setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        holder.doo.stop();
                         ((MainActivity) getActivity()).onNavigationDrawerItemSelected(TASK_SUBMIT_TAG);
                         ((TaskSubmitFragment) getFragmentManager().findFragmentByTag(TASK_SUBMIT_TAG)).setDelegateWrapper(delegate, saved.ddl);
                     }
@@ -130,9 +131,9 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
         i("Message:" + value.toString());
         savedDDL(value);
         ListIterator<Wrapper> iterator = data.listIterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Wrapper wrapper = iterator.next();
-            if(wrapper.taskId == value.taskId){
+            if (wrapper.taskId == value.taskId) {
                 iterator.set(value);
                 setData(data);
                 return;

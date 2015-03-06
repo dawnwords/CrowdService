@@ -16,6 +16,7 @@ import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.view.CountDownButton;
 import edu.fudan.se.crowdservice.wrapper.DelegateWrapper;
+import edu.fudan.se.crowdservice.wrapper.RefuseWrapper;
 import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 
 import java.util.ArrayList;
@@ -80,9 +81,16 @@ public class TaskSubmitFragment extends Fragment {
         }).setTimeUpListener(new CountDownButton.TimeUpListener() {
             @Override
             public void onTimeUp() {
-                submit.setText(R.string.time_up);
+                submit.setClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switchWorkerFragment();
+                    }
+                }).setText(R.string.time_up);
+                RefuseWrapper refuseWrapper = new RefuseWrapper(delegateWrapper.taskId, RefuseWrapper.Reason.OFFER_OUT_OF_DATE);
+                ((WorkerFragment) getActivity().getSupportFragmentManager().findFragmentByTag("Worker")).addMessageWrapper(refuseWrapper);
             }
-        }).setClickable(true);
+        });
         parameter = (LinearLayout) v.findViewById(R.id.task_parameter);
         return v;
     }
