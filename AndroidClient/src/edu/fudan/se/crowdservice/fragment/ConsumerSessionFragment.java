@@ -1,10 +1,10 @@
 package edu.fudan.se.crowdservice.fragment;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
 import android.widget.RelativeLayout.LayoutParams;
 import edu.fudan.se.crowdservice.R;
@@ -18,6 +18,8 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
     private View userInputView;
     private View userChooseView;
     private View userConfirmView;
+
+    private ConsumerSession session;
 
     public ConsumerSessionFragment() {
         super(R.string.no_service_in_execution, R.layout.list_item_consumer_session, "Consumer");
@@ -34,7 +36,7 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
     }
 
     private void addViewByLastMessage() {
-        final ConsumerSession.Message lastMessage = getLastMessage();
+        final ConsumerSession.Message lastMessage = session.getLastMessage();
         if (lastMessage == null) {
             return;
         }
@@ -55,7 +57,7 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
                     @Override
                     public void onClick(View v) {
                         Editable text = userInput.getText();
-                        agent.setResultInput(lastMessage.sessionID, text == null ? "" : text.toString());
+                        agent.setResultInput(session.sessionID, text == null ? "" : text.toString());
                     }
                 });
                 switchInputView(userInputView);
@@ -64,13 +66,13 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
                 userConfirmView.findViewById(R.id.user_confirm_yes).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        agent.setResultInput(lastMessage.sessionID, String.valueOf(true));
+                        agent.setResultInput(session.sessionID, String.valueOf(true));
                     }
                 });
                 userConfirmView.findViewById(R.id.user_confirm_no).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        agent.setResultInput(lastMessage.sessionID, String.valueOf(false));
+                        agent.setResultInput(session.sessionID, String.valueOf(false));
                     }
                 });
                 switchInputView(userConfirmView);
@@ -84,9 +86,10 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
                     @Override
                     public void onClick(View v) {
                         int choice = spinnerChoice.getSelectedItemPosition();
-                        agent.setResultInput(lastMessage.sessionID, String.valueOf(choice));
+                        agent.setResultInput(session.sessionID, String.valueOf(choice));
                     }
                 });
+                switchInputView(userChooseView);
                 break;
         }
     }
@@ -96,10 +99,6 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
         TextView emptyView = (TextView) getListView().getEmptyView();
         emptyView.setVisibility(View.GONE);
         emptyView.setText(text);
-    }
-
-    private ConsumerSession.Message getLastMessage() {
-        return data.size() > 0 ? data.get(data.size() - 1) : null;
     }
 
     private void switchInputView(View inputView) {
@@ -125,6 +124,12 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
 
         TextView time = (TextView) convertView.findViewById(R.id.message_time);
         time.setText(message.createTime);
+    }
+
+    public void setSession(ConsumerSession session) {
+        this.session = session;
+        setData(session.getMessageList());
+        addViewByLastMessage();
     }
 
     public void updateConsumerSessionMessage() {

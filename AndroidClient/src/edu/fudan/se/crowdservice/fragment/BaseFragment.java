@@ -2,6 +2,7 @@ package edu.fudan.se.crowdservice.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Jiahuan on 2015/1/24.
@@ -75,12 +77,18 @@ public abstract class BaseFragment<T> extends ListFragment {
 
     protected final void setData(ArrayList<T> data) {
         this.data = data;
+        i("setData:" + Arrays.toString(this.data.toArray()));
         adapter.notifyDataSetChanged();
     }
 
     protected final void addData(T data) {
         this.data.add(data);
+        i("addData:" + Arrays.toString(this.data.toArray()));
         adapter.notifyDataSetChanged();
+    }
+
+    private void i(String msg) {
+        Log.i(getClass().getSimpleName(), msg);
     }
 
     protected void onItemSelected(T item) {

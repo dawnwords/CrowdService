@@ -13,21 +13,14 @@ public class ConsumerSession implements Serializable {
     private static final SimpleDateFormat format = new SimpleDateFormat("HH:mm");
     public final int sessionID;
     public final String templateName;
-    public final String createTime;
-    public final ArrayList<Message> messages;
+    private Date lastMessageTime;
+    private ArrayList<Message> messages;
 
     public ConsumerSession(int sessionID, String templateName) {
         this.sessionID = sessionID;
         this.templateName = templateName;
-        this.createTime = format.format(new Date());
+        this.lastMessageTime = new Date();
         this.messages = new ArrayList<Message>();
-    }
-
-    public ConsumerSession(ConsumerSession session) {
-        this.sessionID = session.sessionID;
-        this.templateName = session.templateName;
-        this.createTime = session.createTime;
-        this.messages = session.messages;
     }
 
     public static Message buildServiceStartMessage(int sessionID, Class service) {
@@ -69,19 +62,31 @@ public class ConsumerSession implements Serializable {
         return new Message(sessionID, MessageType.CONSUMER_INPUT, input);
     }
 
-    public Message getLastMessage() {
-        return messages.size() > 0 ? messages.get(messages.size() - 1) : null;
-    }
-
     @Override
     public String toString() {
         return "ConsumerSession{" +
                 "sessionID=" + sessionID +
                 ", templateName='" + templateName + '\'' +
-                ", messages=" + messages +
+                ", messages=" + Arrays.toString(messages.toArray()) +
                 '}';
     }
 
+    public ArrayList<Message> getMessageList() {
+        return messages;
+    }
+
+    public String time() {
+        return format.format(lastMessageTime);
+    }
+
+    public void addMessage(Message message) {
+        messages.add(message);
+        lastMessageTime = new Date();
+    }
+
+    public Message getLastMessage() {
+        return messages.size() > 0 ? messages.get(messages.size() - 1) : null;
+    }
 
     public static enum MessageType {
         CONSUMER_INPUT, SERVICE_START, SERVICE_STOP, SERVICE_EXCEPTION, TEMPLATE_STOP,
@@ -116,7 +121,7 @@ public class ConsumerSession implements Serializable {
                     "sessionID=" + sessionID +
                     ", type=" + type +
                     ", content='" + content + '\'' +
-                    ", createTime='" + createTime + '\'' +
+                    ", lastMessageTime='" + createTime + '\'' +
                     (choices == null ? "" : (", choices=" + Arrays.toString(choices))) +
                     '}';
         }

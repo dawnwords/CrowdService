@@ -1,7 +1,5 @@
 package edu.fudan.se.crowdservice.fragment;
 
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
@@ -26,8 +24,7 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
     @Override
     protected void onItemSelected(ConsumerSession session) {
         ConsumerSessionFragment fragment = (ConsumerSessionFragment) getFragmentManager().findFragmentByTag(CONSUMER_SESSION_TAG);
-        fragment.setData(session.messages);
-        fragment.updateConsumerSessionMessage();
+        fragment.setSession(session);
         ((MainActivity) getActivity()).onNavigationDrawerItemSelected(CONSUMER_SESSION_TAG);
     }
 
@@ -38,7 +35,7 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
         TextView lastMessage = (TextView) convertView.findViewById(R.id.last_message);
 
         templateName.setText(session.templateName);
-        templateCreateTime.setText(session.createTime);
+        templateCreateTime.setText(session.time());
         ConsumerSession.Message msg = session.getLastMessage();
         lastMessage.setText(msg == null ? "Template Started." : msg.content);
     }
@@ -49,16 +46,21 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
         addData(new ConsumerSession(sessionId, templateName));
     }
 
-    public void addConsumerSessionMessage(ConsumerSession.Message message) {
+    public synchronized void addConsumerSessionMessage(ConsumerSession.Message message) {
         ListIterator<ConsumerSession> iterator = data.listIterator();
-        while (iterator.hasNext()){
+        ConsumerSession target = null;
+        while (iterator.hasNext()) {
             ConsumerSession session = iterator.next();
-            if(session.sessionID == message.sessionID){
-                session.messages.add(message);
-                iterator.set(new ConsumerSession(session));
-                setData(data);
+            if (session.sessionID == message.sessionID) {
+                session.addMessage(message);
+                target = session;
+                iterator.remove();
                 break;
             }
+        }
+        if (target != null) {
+            data.add(0, target);
+            setData(data);
         }
     }
 }
