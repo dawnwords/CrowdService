@@ -9,6 +9,8 @@ import edu.fudan.se.crowdservice.activity.MainActivity;
 import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 
+import java.util.ListIterator;
+
 
 /**
  * Created by Jiahuan on 2015/1/21.
@@ -48,10 +50,13 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
     }
 
     public void addConsumerSessionMessage(ConsumerSession.Message message) {
-        for (ConsumerSession session : data) {
-            if (session.sessionID == message.sessionID) {
+        ListIterator<ConsumerSession> iterator = data.listIterator();
+        while (iterator.hasNext()){
+            ConsumerSession session = iterator.next();
+            if(session.sessionID == message.sessionID){
                 session.messages.add(message);
-                refreshList();
+                iterator.set(new ConsumerSession(session));
+                setData(data);
                 break;
             }
         }

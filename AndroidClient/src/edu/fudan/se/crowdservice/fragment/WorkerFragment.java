@@ -16,6 +16,7 @@ import edu.fudan.se.crowdservice.wrapper.*;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.ListIterator;
 
 /**
  * Created by Jiahuan on 2015/1/21.
@@ -128,10 +129,12 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
     public synchronized void addMessageWrapper(Wrapper value) {
         i("Message:" + value.toString());
         savedDDL(value);
-        for (int i = 0; i < data.size(); i++) {
-            if (data.get(i).taskId == value.taskId) {
-                data.set(i, value);
-                refreshList();
+        ListIterator<Wrapper> iterator = data.listIterator();
+        while (iterator.hasNext()){
+            Wrapper wrapper = iterator.next();
+            if(wrapper.taskId == value.taskId){
+                iterator.set(value);
+                setData(data);
                 return;
             }
         }

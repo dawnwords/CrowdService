@@ -23,6 +23,13 @@ public class ConsumerSession implements Serializable {
         this.messages = new ArrayList<Message>();
     }
 
+    public ConsumerSession(ConsumerSession session) {
+        this.sessionID = session.sessionID;
+        this.templateName = session.templateName;
+        this.createTime = session.createTime;
+        this.messages = session.messages;
+    }
+
     public static Message buildServiceStartMessage(int sessionID, Class service) {
         return new Message(sessionID, MessageType.SERVICE_START, service.getSimpleName() + " Started.");
     }

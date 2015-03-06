@@ -83,12 +83,6 @@ public abstract class BaseFragment<T> extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
-    protected final void refreshList() {
-        ArrayList<T> data = (ArrayList<T>) this.data.clone();
-        this.data.clear();
-        setData(data);
-    }
-
     protected void onItemSelected(T item) {
     }
 
