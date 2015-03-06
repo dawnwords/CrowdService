@@ -2,13 +2,17 @@ package edu.fudan.se.crowdservice.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.*;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.activity.MainActivity;
 import edu.fudan.se.crowdservice.core.dui.KeyValueView;
+import edu.fudan.se.crowdservice.jade.agent.AgentInterface;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.view.CountDownButton;
 import edu.fudan.se.crowdservice.wrapper.DelegateWrapper;
@@ -19,60 +23,91 @@ import java.util.ArrayList;
 /**
  * Created by Dawnwords on 2015/3/2.
  */
-public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
+public class TaskSubmitFragment extends Fragment {
     private DelegateWrapper delegateWrapper;
     private ArrayList<KeyValueView> keyValueViews;
     private CountDownButton submit;
+    private AgentInterface agent;
+    private LinearLayout parameter;
 
     public TaskSubmitFragment() {
-        super(R.string.no_task, R.layout.list_item_key_value, "Worker");
         keyValueViews = new ArrayList<KeyValueView>();
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        initSubmitButton();
-        getListView().addFooterView(submit);
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    private void initSubmitButton() {
-        submit = new CountDownButton(getActivity(), getText(R.string.submit).toString())
-                .setClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        submit();
-                    }
-                }).setTimeUpListener(new CountDownButton.TimeUpListener() {
-                    @Override
-                    public void onTimeUp() {
-                        submit.setText(R.string.time_up);
-                        submit.setClickable(false);
-                    }
-                });
-        submit.setClickable(true);
+    public void setAgent(AgentInterface agent) {
+        this.agent = agent;
     }
 
     @Override
-    protected void setItemView(KeyValueHolder holder, View convertView) {
-        String viewClassName = "edu.fudan.se.crowdservice.core.dui." + holder.getClass().getSimpleName() + "View";
-        try {
-            Class clazz = Class.forName(viewClassName);
-            KeyValueView view = (KeyValueView) clazz.getConstructor(Context.class, KeyValueHolder.class).newInstance(getActivity(), holder);
-            LinearLayout group = (LinearLayout) convertView;
-            group.removeAllViews();
-            group.addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-            keyValueViews.add(view);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if (isVisible()) {
+            inflater.inflate(R.menu.consumer_session, menu);
+            ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_back) {
+            switchWorkerFragment();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void switchWorkerFragment() {
+        ((MainActivity) getActivity()).onNavigationDrawerItemSelected("Worker");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_task_submit, container, false);
+        submit = (CountDownButton) v.findViewById(R.id.task_submit);
+        submit.setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submit();
+            }
+        }).setTimeUpListener(new CountDownButton.TimeUpListener() {
+            @Override
+            public void onTimeUp() {
+                submit.setText(R.string.time_up);
+            }
+        }).setClickable(true);
+        parameter = (LinearLayout) v.findViewById(R.id.task_parameter);
+        return v;
     }
 
     public void setDelegateWrapper(DelegateWrapper delegateWrapper, long ddl) {
         this.delegateWrapper = delegateWrapper;
         this.keyValueViews.clear();
-        setData(delegateWrapper.keyValueHolders);
+        this.parameter.removeAllViews();
+        addKeyValueViews(delegateWrapper.keyValueHolders);
         submit.setTimeRemain(ddl).start();
+    }
+
+    private void addKeyValueViews(ArrayList<KeyValueHolder> keyValueHolders) {
+        LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        for (KeyValueHolder holder : keyValueHolders) {
+            String viewClassName = "edu.fudan.se.crowdservice.core.dui." + holder.getClass().getSimpleName() + "View";
+            try {
+                Class clazz = Class.forName(viewClassName);
+                KeyValueView view = (KeyValueView) clazz.getConstructor(Context.class, KeyValueHolder.class).newInstance(getActivity(), holder);
+                parameter.addView(view, params);
+                keyValueViews.add(view);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void submit() {
@@ -89,6 +124,6 @@ public class TaskSubmitFragment extends ChildFragment<KeyValueHolder> {
         }
         submit.stop();
         agent.sendResponse(new ResponseWrapper(delegateWrapper.taskId, result));
-        ((MainActivity) getActivity()).onNavigationDrawerItemSelected("Worker");
+        switchWorkerFragment();
     }
 }

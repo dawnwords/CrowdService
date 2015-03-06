@@ -16,7 +16,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
-import edu.fudan.se.crowdservice.core.Template;
 import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 import edu.fudan.se.crowdservice.felix.FelixService;
@@ -25,12 +24,13 @@ import edu.fudan.se.crowdservice.fragment.*;
 import edu.fudan.se.crowdservice.fragment.NavigationFragment.NavigationDrawerCallbacks;
 import edu.fudan.se.crowdservice.jade.AgentManager;
 import edu.fudan.se.crowdservice.jade.JADEService;
-import edu.fudan.se.crowdservice.jade.agent.uimessage.*;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.ConsumerSessionMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.TaskMessage;
+import edu.fudan.se.crowdservice.jade.agent.uimessage.UIMessage;
 import edu.fudan.se.crowdservice.wrapper.Wrapper;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerCallbacks {
 
-    private static final String[] FRAGMENT_TAG = {"TaskSubmit", "ConsumerSession", "Consumer", "Worker"};
     private NavigationFragment navigationFragment;
     private Fragment lastFragment;
     private ServiceConnection felixConnection = new ServiceConnection() {
@@ -85,9 +85,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         }
 
         private void setAgent(AgentManager agent) {
-            for (String fragmentTag : FRAGMENT_TAG) {
-                ((BaseFragment) getFragmentByTag(fragmentTag)).setAgent(agent);
-            }
+            ((BaseFragment) getFragmentByTag("ConsumerSession")).setAgent(agent);
+            ((BaseFragment) getFragmentByTag("Consumer")).setAgent(agent);
+            ((BaseFragment) getFragmentByTag("Worker")).setAgent(agent);
+            ((TaskSubmitFragment) getFragmentByTag("TaskSubmit")).setAgent(agent);
         }
     };
 

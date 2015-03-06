@@ -45,12 +45,21 @@ public abstract class BaseFragment<T> extends ListFragment {
             setItemView(getItem(i), view);
             return view;
         }
+
+        @Override
+        public boolean isEnabled(int position) {
+            return isItemEnabled();
+        }
     };
 
     public BaseFragment(int emptyStringResId, int itemLayoutId) {
         super();
         this.emptyStringResId = emptyStringResId;
         this.itemLayoutId = itemLayoutId;
+    }
+
+    protected boolean isItemEnabled() {
+        return true;
     }
 
     public void setAgent(AgentInterface agent) {

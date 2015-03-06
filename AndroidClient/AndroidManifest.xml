@@ -36,15 +36,16 @@
         <service android:name=".felix.FelixService"/>
 
         <activity android:name=".activity.MainActivity"
-                  android:windowSoftInputMode="adjustPan"
+                  android:windowSoftInputMode="adjustResize"
                   android:label="@string/app_name"/>
-        <activity android:name=".core.AdapterActivity"/>
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".core.AdapterActivity"
+                  android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".activity.LoginActivity"
+                  android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TaskSubmitActivity"/>
     </application>
 </manifest>
