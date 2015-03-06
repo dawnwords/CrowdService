@@ -3,7 +3,7 @@ package edu.fudan.se.crowdservice.felix;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Binder;
-import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import jade.util.Logger;
 import org.osgi.framework.*;
 import org.osgi.service.obr.*;
@@ -56,9 +56,9 @@ public class TemplateManager extends Binder {
     }
 
     public void resolveTemplate(Resource resource, final Context context, final OnTemplateResolvedListener listener) {
-        new AsyncTask<Resource, Void, Template>() {
+        new AsyncTask<Resource, Void, TemplateFactory>() {
             @Override
-            protected Template doInBackground(Resource... resources) {
+            protected TemplateFactory doInBackground(Resource... resources) {
                 Resource resource = resources[0];
                 resolver = admin.resolver();
                 resolver.add(resource);
@@ -70,11 +70,11 @@ public class TemplateManager extends Binder {
 
                     String filter = String.format("(%s=%s)", Constants.BUNDLE_SYMBOLICNAME, resource.getSymbolicName());
                     try {
-                        Iterator<ServiceReference<Template>> iterator = bundleContext.getServiceReferences(Template.class, filter).iterator();
+                        Iterator<ServiceReference<TemplateFactory>> iterator = bundleContext.getServiceReferences(TemplateFactory.class, filter).iterator();
                         if (iterator.hasNext()) {
-                            Template template = bundleContext.getService(iterator.next());
-                            template.setContext(context);
-                            return template;
+                            TemplateFactory templateFactory = bundleContext.getService(iterator.next());
+                            templateFactory.setContext(context);
+                            return templateFactory;
                         }
                     } catch (InvalidSyntaxException e) {
                         e.printStackTrace();
@@ -84,11 +84,11 @@ public class TemplateManager extends Binder {
             }
 
             @Override
-            protected void onPostExecute(Template template) {
-                if (template == null) {
+            protected void onPostExecute(TemplateFactory templateFactory) {
+                if (templateFactory == null) {
                     listener.onFailure(resolver.getUnsatisfiedRequirements());
                 } else {
-                    listener.onTemplateResolved(template);
+                    listener.onTemplateResolved(templateFactory);
                 }
             }
         }.execute(resource);
@@ -127,7 +127,7 @@ public class TemplateManager extends Binder {
     }
 
     public static interface OnTemplateResolvedListener {
-        void onTemplateResolved(Template template);
+        void onTemplateResolved(TemplateFactory templateFactory);
 
         void onFailure(Requirement[] unsatisfiedRequirements);
     }

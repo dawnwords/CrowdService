@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.jade.agent.behaviour.*;
 import edu.fudan.se.crowdservice.wrapper.ConversationType;
 import edu.fudan.se.crowdservice.wrapper.OfferWrapper;
@@ -103,9 +104,9 @@ public class DaemonAgent extends Agent implements AgentInterface {
     }
 
     @Override
-    public int executeTemplate(Template template) {
+    public int executeTemplate(TemplateFactory templateFactory) {
         int id = sessionID.incrementAndGet();
-        TemplateExecutingBehaviour behaviour = new TemplateExecutingBehaviour(id, template, handler);
+        TemplateExecutingBehaviour behaviour = new TemplateExecutingBehaviour(id, templateFactory, handler);
         templateSession.put(id, behaviour);
         addBehaviour(tbf.wrap(behaviour));
         return id;

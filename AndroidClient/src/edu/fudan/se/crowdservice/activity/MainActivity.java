@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 import edu.fudan.se.crowdservice.felix.FelixService;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
@@ -39,10 +40,10 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             navigationFragment.setTemplateManager(tm);
             navigationFragment.setTemplateSelectCallBack(new NavigationFragment.TemplateSelectCallbacks() {
                 @Override
-                public void onTemplateSelected(Template template) {
+                public void onTemplateSelected(TemplateFactory templateFactory) {
                     ConsumerFragment fragment = (ConsumerFragment) getFragmentByTag("Consumer");
                     if (fragment != null) {
-                        fragment.addTemplate(template);
+                        fragment.addTemplate(templateFactory);
                     }
                 }
             });

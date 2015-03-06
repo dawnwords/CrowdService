@@ -23,11 +23,6 @@ public class BuySHComputerTemplateV2 extends Template {
     private PriceAssessmentService priceAssessmentService;
 
     @Override
-    protected String getTemplateName() {
-        return getClass().getSimpleName();
-    }
-
-    @Override
     protected void resolveService(ServiceResolver serviceResolver) {
         itemSelectionService = serviceResolver.resolveService(ItemSelectionService.class, 0.2, 0.2);
         siteInspectionService = serviceResolver.resolveService(SiteInspectionService.class, 0.3, 0.3);

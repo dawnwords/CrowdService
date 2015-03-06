@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.wrapper.OfferWrapper;
 import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 
@@ -25,5 +26,5 @@ public interface AgentInterface {
 
     void setResultInput(int sessionId, String resultInput);
 
-    int executeTemplate(Template template);
+    int executeTemplate(TemplateFactory templateFactory);
 }

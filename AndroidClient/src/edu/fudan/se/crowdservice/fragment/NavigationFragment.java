@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.felix.TemplateManager;
 import edu.fudan.se.crowdservice.view.ConsumerDrawerView;
 import org.osgi.service.obr.Requirement;
@@ -177,9 +178,9 @@ public class NavigationFragment extends Fragment {
     public void setTemplateSelectCallBack(final TemplateSelectCallbacks callBack) {
         consumerView.setTemplateResolveListener(new TemplateManager.OnTemplateResolvedListener() {
             @Override
-            public void onTemplateResolved(Template template) {
-                toast(template.getClass().getName());
-                callBack.onTemplateSelected(template);
+            public void onTemplateResolved(TemplateFactory templateFactory) {
+                toast(templateFactory.getClass().getName());
+                callBack.onTemplateSelected(templateFactory);
                 selectItem(1); // Set Consumer Tag As Checked
             }
 
@@ -203,7 +204,7 @@ public class NavigationFragment extends Fragment {
     }
 
     public static interface TemplateSelectCallbacks {
-        void onTemplateSelected(Template template);
+        void onTemplateSelected(TemplateFactory template);
     }
 
     private class DrawerAdapter extends BaseAdapter {

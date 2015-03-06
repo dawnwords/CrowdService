@@ -22,11 +22,6 @@ public class BuySHComputerTemplate extends Template {
     private JudgeWorthOfComputerService judgeWorthOfComputerService;//CS
 
     @Override
-    protected String getTemplateName() {
-        return getClass().getSimpleName();
-    }
-
-    @Override
     protected void resolveService(ServiceResolver serviceResolver) {
         selectURLService = serviceResolver.resolveService(SelectURLService.class, 0.2, 0);
         getLocationFromURLService = serviceResolver.resolveService(GetLocationFromURLService.class, 0, 0.1);

@@ -5,6 +5,7 @@ import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.activity.MainActivity;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 
 import java.util.ListIterator;
@@ -40,9 +41,9 @@ public class ConsumerFragment extends BaseFragment<ConsumerSession> {
         lastMessage.setText(msg == null ? "Template Started." : msg.content);
     }
 
-    public void addTemplate(Template template) {
-        String templateName = template.getClass().getSimpleName();
-        int sessionId = agent.executeTemplate(template);
+    public void addTemplate(TemplateFactory templateFactory) {
+        String templateName = templateFactory.getClass().getSimpleName();
+        int sessionId = agent.executeTemplate(templateFactory);
         addData(new ConsumerSession(sessionId, templateName));
     }
 

@@ -2,7 +2,9 @@ package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
 import edu.fudan.se.crowdservice.core.ResultHolder;
+import edu.fudan.se.crowdservice.core.ServiceExecutionListener;
 import edu.fudan.se.crowdservice.core.Template;
+import edu.fudan.se.crowdservice.core.TemplateFactory;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.ConsumerSessionMessage;
 import jade.core.behaviours.OneShotBehaviour;
@@ -13,10 +15,30 @@ import jade.core.behaviours.OneShotBehaviour;
 public class TemplateExecutingBehaviour extends OneShotBehaviour {
 
     private Template template;
-    private int sessionID;
-    private Handler handler;
     private ResultHolder<String> result = new ResultHolder<String>();
-    private Template.ServiceExecutionListener listener = new Template.ServiceExecutionListener() {
+
+    public TemplateExecutingBehaviour(int sessionID, TemplateFactory templateFactory, Handler handler) {
+        this.template = templateFactory.createTemplateInstance(new Listener(sessionID, handler));
+    }
+
+    @Override
+    public void action() {
+        template.executeTemplate();
+    }
+
+    public void setResultInput(String resultInput) {
+        result.set(resultInput);
+    }
+
+    private class Listener implements ServiceExecutionListener {
+        private int sessionID;
+        private Handler handler;
+
+        public Listener(int sessionID, Handler handler) {
+            this.sessionID = sessionID;
+            this.handler = handler;
+        }
+
         @Override
         public void onServiceStart(Class serviceClass) {
             sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(sessionID, serviceClass));
@@ -69,20 +91,5 @@ public class TemplateExecutingBehaviour extends OneShotBehaviour {
         private void sendConsumerSessionMessage(ConsumerSession.Message message) {
             handler.sendMessage(new ConsumerSessionMessage(message).asMessage());
         }
-    };
-
-    public TemplateExecutingBehaviour(int sessionID, Template template, Handler handler) {
-        this.sessionID = sessionID;
-        this.template = template;
-        this.handler = handler;
-    }
-
-    @Override
-    public void action() {
-        template.executeTemplate(listener);
-    }
-
-    public void setResultInput(String resultInput) {
-        result.set(resultInput);
     }
 }
