@@ -1,10 +1,7 @@
 package edu.fudan.se.crowdservice.jade.agent.behaviour;
 
 import android.os.Handler;
-import edu.fudan.se.crowdservice.core.ResultHolder;
-import edu.fudan.se.crowdservice.core.ServiceExecutionListener;
-import edu.fudan.se.crowdservice.core.Template;
-import edu.fudan.se.crowdservice.core.TemplateFactory;
+import edu.fudan.se.crowdservice.core.*;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 import edu.fudan.se.crowdservice.jade.agent.uimessage.ConsumerSessionMessage;
 import jade.core.behaviours.OneShotBehaviour;
@@ -40,18 +37,18 @@ public class TemplateExecutingBehaviour extends OneShotBehaviour {
         }
 
         @Override
-        public void onServiceStart(Class serviceClass) {
-            sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(sessionID, serviceClass));
+        public void onServiceStart(ConcreteService service, Object[] objects) {
+            sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(sessionID, service.getClass()));
         }
 
         @Override
-        public void onServiceStop(Class serviceClass) {
-            sendConsumerSessionMessage(ConsumerSession.buildServiceStopMessage(sessionID, serviceClass));
+        public void onServiceStop(ConcreteService service) {
+            sendConsumerSessionMessage(ConsumerSession.buildServiceStopMessage(sessionID, service.getClass()));
         }
 
         @Override
-        public void onServiceException(Class serviceClass, String reason) {
-            sendConsumerSessionMessage(ConsumerSession.buildServiceExceptionMessage(sessionID, serviceClass, reason));
+        public void onServiceException(ConcreteService service, String reason) {
+            sendConsumerSessionMessage(ConsumerSession.buildServiceExceptionMessage(sessionID, service.getClass(), reason));
         }
 
         @Override
