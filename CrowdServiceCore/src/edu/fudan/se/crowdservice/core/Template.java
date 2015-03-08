@@ -5,7 +5,8 @@ import jade.util.Logger;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -15,13 +16,18 @@ public abstract class Template {
 
     private ServiceExecutionListener listener;
     private TemplateFactory.ServiceResolver resolver;
-    private HashMap<String, TimeCost> serviceTimeCostMap;
+    private TemplateFactory.InstanceCount instanceCount;
+    private Map<String, Integer> resultNums;
+    private List<String> serviceSequence;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
-    private TimeCost totalTimeCost;
+
+    void setInstanceCount(TemplateFactory.InstanceCount instanceCount) {
+        this.instanceCount = instanceCount;
+    }
 
     void setServiceExecutionListener(ServiceExecutionListener listener) {
-        this.listener = listener;
+        this.listener = new mServiceExecutionListener(listener);
     }
 
     void setServiceResolver(TemplateFactory.ServiceResolver resolver) {
@@ -29,26 +35,46 @@ public abstract class Template {
     }
 
     public void executeTemplate() {
-        this.totalTimeCost = requestTotalTimeCost();
-        log("Total Time=" + totalTimeCost.time + ",Cost=" + totalTimeCost.cost);
-        planTotalTimeCost(getClass().getSimpleName(), totalTimeCost);
         log("Resolve Service...");
-        resolveService(new ServiceResolver());
+        ServiceResolver resolver = new ServiceResolver();
+        resolveService(resolver);
+        requestTotalTimeCost();
         log("Execute Template");
         execute();
         log("Stop Template");
         listener.onTemplateStop();
     }
 
-    private TimeCost requestTotalTimeCost() {
-        String timeString = requestUserInput("Please input expected execution time for this template:(s)");
-        String costString = requestUserInput("Please input expected cost for this template:($)");
-        return new TimeCost(Integer.parseInt(timeString), Integer.parseInt(costString));
+    private void requestTotalTimeCost() {
+        double reliability;
+        do {
+            int time = intInput("Please input expected execution time for this template:(s)");
+            int cost = intInput("Please input expected cost for this template:(￠)");
+            showMessage("Given Execution Time:%d(s), Cost:%d￠, Assessing Reliability...", time, cost);
+            reliability = assessReliability(time, cost);
+        } while (requestUserConfirm(String.format("Reliability: %.2f%%. Reinput time and cost?", reliability)));
     }
 
-    private void planTotalTimeCost(String templateName, TimeCost total) {
+    private int intInput(String msg) {
+        do {
+            try {
+                return Integer.parseInt(requestUserInput(msg));
+            } catch (Exception e) {
+                showMessage("An integer is required");
+            }
+        } while (true);
+    }
+
+    private double assessReliability(int time, int cost) {
         //TODO invoke tfws1
-        serviceTimeCostMap = new HashMap<String, TimeCost>();
+        return 0;
+    }
+
+    private void planTimeCost(ConcreteService service) {
+        // TODO invoke tfws2
+        service.setTime(30);
+        service.setCost(30);
+        service.setResultNum(resultNums.get(service.getClass().getName()));
     }
 
     protected abstract void resolveService(ServiceResolver serviceResolver);
@@ -59,16 +85,16 @@ public abstract class Template {
         logger.log(Level.INFO, msg);
     }
 
-    protected String requestUserInput(final String message) {
-        return listener.onRequestUserInput(message);
+    protected String requestUserInput(String format, Object... args) {
+        return listener.onRequestUserInput(String.format(format, args));
     }
 
-    protected boolean requestUserConfirm(final String message) {
-        return listener.onRequestUserConfirm(message);
+    protected boolean requestUserConfirm(String format, Object... args) {
+        return listener.onRequestUserConfirm(String.format(format, args));
     }
 
-    protected int requestUserChoose(final String message, final String[] item) {
-        return listener.onRequestUserChoose(message, item);
+    protected int requestUserChoose(String format, final String[] item, Object... args) {
+        return listener.onRequestUserChoose(String.format(format, args), item);
     }
 
     protected void showMessage(String format, Object... args) {
@@ -76,19 +102,14 @@ public abstract class Template {
     }
 
     protected class ServiceResolver {
-        public <S> S resolveService(Class<S> serviceClass, double timePercent, double costPercent) {
-            S service = (S) resolver.resolveService(serviceClass);
-            initConcreteService((ConcreteService) service, timePercent, costPercent);
-            return new ServiceHandler<S>().newProxyInstance(service);
-        }
-
-        private void initConcreteService(ConcreteService service, double timePercent, double costPercent) {
-            //TODO After tfws1 Added
-//            TimeCost timeCost = serviceTimeCostMap.get(serviceClass.getName());
-//            concreteService.setTime(timeCost.time);
-//            concreteService.setCost(timeCost.cost);
-            service.setTime((int) (totalTimeCost.time * timePercent));
-            service.setCost((int) (totalTimeCost.cost * costPercent));
+        public <S> S resolveService(Class<S> serviceClass) {
+            ConcreteService service = (ConcreteService) resolver.resolveService(serviceClass);
+            if (service.isCrowd()) {
+                int resultNum = intInput(service.getServiceInterfacesName()
+                        + " binds a CrowdService.\nPlease input expected Result Number for this Service:");
+                resultNums.put(service.getClass().getName(), resultNum);
+            }
+            return new ServiceHandler<S>().newProxyInstance((S) service);
         }
     }
 
@@ -104,13 +125,13 @@ public abstract class Template {
         @Override
         public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Object result = null;
-            Class targetClass = target.getClass();
-            listener.onServiceStart(targetClass);
+            ConcreteService service = (ConcreteService) target;
+            listener.onServiceStart(service, args);
             try {
                 result = method.invoke(target, args);
-                listener.onServiceStop(targetClass);
+                listener.onServiceStop(service);
             } catch (Exception e) {
-                listener.onServiceException(targetClass, e.getMessage());
+                listener.onServiceException(service, e.getMessage());
                 e.printStackTrace();
             }
             return result;
@@ -125,4 +146,66 @@ public abstract class Template {
             this.cost = cost;
         }
     }
+
+    private class mServiceExecutionListener implements ServiceExecutionListener {
+
+        private ServiceExecutionListener listener;
+
+        public mServiceExecutionListener(ServiceExecutionListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onServiceStart(ConcreteService service, Object[] args) {
+            listener.onServiceStart(service, args);
+            if (service.isCrowd()) {
+                int latitude = service.latitudeArgIndex();
+                int longitude = service.longitudeArgIndex();
+                if (latitude > 0 && latitude < args.length && longitude > 0 && longitude < args.length) {
+                    service.setLocation((Long) args[longitude], (Long) args[latitude]);
+                }
+                String interfaceName = service.getServiceInterfacesName();
+                onShowMessage(interfaceName + " binds a CrowdService. Planning ");
+                planTimeCost(service);
+            }
+        }
+
+        @Override
+        public void onServiceStop(ConcreteService service) {
+            listener.onServiceStop(service);
+            serviceSequence.add(service.getClass().getName());
+        }
+
+        @Override
+        public void onServiceException(ConcreteService service, String reason) {
+            listener.onServiceException(service, reason);
+        }
+
+        @Override
+        public void onTemplateStop() {
+            listener.onTemplateStop();
+            instanceCount.destroyInstance();
+        }
+
+        @Override
+        public String onRequestUserInput(String msg) {
+            return listener.onRequestUserInput(msg);
+        }
+
+        @Override
+        public boolean onRequestUserConfirm(String msg) {
+            return listener.onRequestUserConfirm(msg);
+        }
+
+        @Override
+        public int onRequestUserChoose(String msg, String[] items) {
+            return listener.onRequestUserChoose(msg, items);
+        }
+
+        @Override
+        public void onShowMessage(String msg) {
+            listener.onShowMessage(msg);
+        }
+    }
+
 }

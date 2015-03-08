@@ -16,19 +16,21 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     private BundleContext bundleContext;
     private Context context;
     private Stack<ServiceReference> serviceReferences;
-    private AtomicInteger instanceCount;
+    private InstanceCount instanceCount;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
+    private ServiceResolver resolver;
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
         this.serviceReferences = new Stack<ServiceReference>();
-        this.instanceCount = new AtomicInteger();
+        this.instanceCount = new InstanceCount();
+        this.resolver = new ServiceResolver();
         log("Start Template Factory...");
         Hashtable properties = new Hashtable();
         properties.put(Constants.BUNDLE_SYMBOLICNAME, getTemplateClass().getSimpleName());
-        serviceReferences.push(this.bundleContext.registerService(TemplateFactory.class, this, properties).getReference());
+        this.serviceReferences.push(bundleContext.registerService(TemplateFactory.class, this, properties).getReference());
     }
 
     @Override
@@ -47,9 +49,9 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
         T template = null;
         try {
             template = getTemplateClass().newInstance();
-            template.setServiceExecutionListener(new TemplateStopListener(listener));
-            template.setServiceResolver(new ServiceResolver());
-            instanceCount.incrementAndGet();
+            template.setInstanceCount(instanceCount.createInstance());
+            template.setServiceResolver(resolver);
+            template.setServiceExecutionListener(listener);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,7 +79,9 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     class ServiceResolver {
         public <S> S resolveService(Class<S> serviceClass) {
             ServiceReference<S> serviceReference = bundleContext.getServiceReference(serviceClass);
-            serviceReferences.push(serviceReference);
+            if (!serviceReferences.contains(serviceReference)) {
+                serviceReferences.push(serviceReference);
+            }
             S service = bundleContext.getService(serviceReference);
             initConcreteService((ConcreteService) service);
             return service;
@@ -89,54 +93,18 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
         }
     }
 
-    private class TemplateStopListener implements ServiceExecutionListener {
-        private ServiceExecutionListener listener;
+    class InstanceCount {
+        private AtomicInteger count = new AtomicInteger();
 
-        public TemplateStopListener(ServiceExecutionListener listener) {
-            this.listener = listener;
+        private InstanceCount createInstance() {
+            count.incrementAndGet();
+            return this;
         }
 
-        @Override
-        public void onServiceStart(Class serviceClass) {
-            listener.onServiceStart(serviceClass);
-        }
-
-        @Override
-        public void onServiceStop(Class serviceClass) {
-            listener.onServiceStop(serviceClass);
-        }
-
-        @Override
-        public void onServiceException(Class serviceClass, String reason) {
-            listener.onServiceException(serviceClass, reason);
-        }
-
-        @Override
-        public void onTemplateStop() {
-            listener.onTemplateStop();
-            if (instanceCount.decrementAndGet() == 0) {
+        public void destroyInstance() {
+            if (count.decrementAndGet() == 0) {
                 uninstallTemplateFactory();
             }
-        }
-
-        @Override
-        public String onRequestUserInput(String msg) {
-            return listener.onRequestUserInput(msg);
-        }
-
-        @Override
-        public boolean onRequestUserConfirm(String msg) {
-            return listener.onRequestUserConfirm(msg);
-        }
-
-        @Override
-        public int onRequestUserChoose(String msg, String[] items) {
-            return listener.onRequestUserChoose(msg, items);
-        }
-
-        @Override
-        public void onShowMessage(String msg) {
-            listener.onShowMessage(msg);
         }
     }
 }
