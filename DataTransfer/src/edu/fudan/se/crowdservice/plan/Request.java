@@ -8,8 +8,17 @@ import java.util.Map;
 public class Request {
     private int globalTime;
     private int globalCost;
-    private Map<String,Integer> resultNumbers;
+    private Map<String, Integer> resultNumbers;
     private String templateName;
+    private String[] serviceSequence;
+
+    public String[] getServiceSequence() {
+        return serviceSequence;
+    }
+
+    public void setServiceSequence(String[] serviceSequence) {
+        this.serviceSequence = serviceSequence;
+    }
 
     public int getGlobalTime() {
         return globalTime;
