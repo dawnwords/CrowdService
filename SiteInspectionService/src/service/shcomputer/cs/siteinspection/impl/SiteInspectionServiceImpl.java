@@ -18,26 +18,24 @@ public class SiteInspectionServiceImpl extends ConcreteService implements SiteIn
     public static final String METHOD = "siteInspect";
 
     @Override
-    public ArrayList<KeyValueHolder> siteInspect(String brand, String series, String newness, String CPU, String memory, String hardDisk, String sellerAddress) {
-        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, time, context);
-
-        stub.addProperty("arg0", consumerId);
-        stub.addProperty("arg1", cost);
-        stub.addProperty("arg2", time);
-        stub.addProperty("arg3", brand);
-        stub.addProperty("arg4", series);
-        stub.addProperty("arg5", newness);
-        stub.addProperty("arg6", CPU);
-        stub.addProperty("arg7", memory);
-        stub.addProperty("arg8", hardDisk);
-        stub.addProperty("arg9", sellerAddress);
-        stub.addProperty("arg10", templateName);
-
-        return stub.sendSOAP();
+    protected boolean isCrowd() {
+        return true;
     }
 
     @Override
-    protected boolean isCrowd() {
-        return true;
+    public ArrayList<KeyValueHolder> siteInspect(long latitude, long longitude, String brand, String series, String newness,
+                                                 String CPU, String memory, String hardDisk, String sellerAddress) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, this);
+        stub.addProperty("arg7", brand);
+        stub.addProperty("arg8", series);
+        stub.addProperty("arg9", newness);
+        stub.addProperty("arg10", CPU);
+        stub.addProperty("arg11", memory);
+        stub.addProperty("arg12", hardDisk);
+        stub.addProperty("arg13", sellerAddress);
+        return stub.sendSOAP();
     }
 }

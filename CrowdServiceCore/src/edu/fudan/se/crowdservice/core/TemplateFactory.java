@@ -89,7 +89,7 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
 
         private void initConcreteService(ConcreteService service) {
             service.setContext(context);
-            service.setTemplateName(getTemplateClass().getSimpleName());
+            service.templateName = getTemplateClass().getSimpleName();
         }
     }
 

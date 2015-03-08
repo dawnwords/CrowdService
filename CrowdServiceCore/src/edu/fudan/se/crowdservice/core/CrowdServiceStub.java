@@ -1,7 +1,6 @@
 package edu.fudan.se.crowdservice.core;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.os.Build;
 import android.util.Base64;
 import edu.fudan.se.crowdservice.kv.ImageDisplay;
@@ -28,12 +27,23 @@ public class CrowdServiceStub {
     public static final int WAITING_TIME_SECOND = 20;
     private final SoapObject soapObject;
     private final HttpTransportSE http;
-    private Context context;
+    private ConcreteService service;
 
-    public CrowdServiceStub(String url, String namespace, String method, int waitingTime, Context context) {
-        this.http = new HttpTransportSE(url, (waitingTime + WAITING_TIME_SECOND) * 1000);
+    public CrowdServiceStub(String url, String namespace, String method, ConcreteService service) {
+        this.http = new HttpTransportSE(url, (service.time + WAITING_TIME_SECOND) * 1000);
         this.soapObject = new SoapObject(namespace, method);
-        this.context = context;
+        this.service = service;
+        addCommonProperty();
+    }
+
+    private void addCommonProperty() {
+        addProperty("arg0", service.latitude);
+        addProperty("arg1", service.longitude);
+        addProperty("arg2", service.consumerId);
+        addProperty("arg3", service.cost);
+        addProperty("arg4", service.time);
+        addProperty("arg5", service.templateName);
+        addProperty("arg6", service.resultNum);
     }
 
     public void addProperty(String name, Object value) {
@@ -61,9 +71,8 @@ public class CrowdServiceStub {
     }
 
     @TargetApi(Build.VERSION_CODES.FROYO)
-    private ArrayList<KeyValueHolder> xml2Obj(String template) {
-        template = template.replace("\n", "");
-        ByteArrayInputStream bais = new ByteArrayInputStream(template.getBytes());
+    private ArrayList<KeyValueHolder> xml2Obj(String response) {
+        ByteArrayInputStream bais = new ByteArrayInputStream(parseResponse(response).getBytes());
         ArrayList<KeyValueHolder> result = new ArrayList<KeyValueHolder>();
         try {
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(bais);
@@ -75,7 +84,7 @@ public class CrowdServiceStub {
                 String key = kv.item(0).getTextContent();
                 String value = kv.item(1).getTextContent();
                 if (ImageInput.class.getSimpleName().equals(node.getNodeName())) {
-                    result.add(new ImageDisplay(key, IOUtil.saveByteArray(Base64.decode(value, Base64.DEFAULT), context)));
+                    result.add(new ImageDisplay(key, IOUtil.saveByteArray(Base64.decode(value, Base64.DEFAULT), service.context)));
                 } else {
                     result.add(new TextDisplay(key, value));
                 }
@@ -84,5 +93,11 @@ public class CrowdServiceStub {
             e.printStackTrace();
         }
         return result;
+    }
+
+    private String parseResponse(String template) {
+        String[] tokens = template.split(":");
+        service.actualCost = Integer.parseInt(tokens[1]);
+        return tokens[0].replace("\n", "");
     }
 }

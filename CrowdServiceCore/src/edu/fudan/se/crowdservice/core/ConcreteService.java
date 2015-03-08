@@ -23,14 +23,13 @@ import java.util.logging.Level;
  */
 public abstract class ConcreteService implements BundleActivator {
     protected Context context;
-    protected String consumerId;
-    protected int time, cost;
     protected long longitude, latitude;
-    protected String templateName;
-    protected int resultNum;
+    String consumerId;
+    int time, cost, actualCost;
+    String templateName;
+    int resultNum;
     private Handler uiHandler;
     private Logger logger = Logger.getJADELogger(ConcreteService.class.getName());
-
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
@@ -51,27 +50,6 @@ public abstract class ConcreteService implements BundleActivator {
 
     String getServiceInterfacesName() {
         return getClass().getInterfaces()[0].getName();
-    }
-
-    void setLocation(long longitude, long latitude) {
-        this.longitude = longitude;
-        this.latitude = latitude;
-    }
-
-    void setTime(int time) {
-        this.time = time;
-    }
-
-    void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    void setTemplateName(String templateName) {
-        this.templateName = templateName;
-    }
-
-    void setResultNum(int resultNum) {
-        this.resultNum = resultNum;
     }
 
     protected Class<? extends ServiceActivity> getServiceActivity() {

@@ -72,9 +72,9 @@ public abstract class Template {
 
     private void planTimeCost(ConcreteService service) {
         // TODO invoke tfws2
-        service.setTime(30);
-        service.setCost(30);
-        service.setResultNum(resultNums.get(service.getClass().getName()));
+        service.time = 30;
+        service.cost = 30;
+        service.resultNum = resultNums.get(service.getClass().getName());
     }
 
     protected abstract void resolveService(ServiceResolver serviceResolver);
@@ -162,7 +162,8 @@ public abstract class Template {
                 int latitude = service.latitudeArgIndex();
                 int longitude = service.longitudeArgIndex();
                 if (latitude > 0 && latitude < args.length && longitude > 0 && longitude < args.length) {
-                    service.setLocation((Long) args[longitude], (Long) args[latitude]);
+                    service.longitude = (Long) args[longitude];
+                    service.latitude = (Long) args[latitude];
                 }
                 String interfaceName = service.getServiceInterfacesName();
                 onShowMessage(interfaceName + " binds a CrowdService. Planning ");

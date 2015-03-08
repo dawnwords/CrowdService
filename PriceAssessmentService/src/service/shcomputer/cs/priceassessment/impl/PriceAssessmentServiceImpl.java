@@ -20,19 +20,15 @@ public class PriceAssessmentServiceImpl extends ConcreteService implements Price
 
     @Override
     public ArrayList<KeyValueHolder> assessPrice(String brand, String series, String newness, String CPU, String memory, String hardDisk, String imagePath) {
-        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, time, context);
+        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, this);
 
-        stub.addProperty("arg0", consumerId);
-        stub.addProperty("arg1", cost);
-        stub.addProperty("arg2", time);
-        stub.addProperty("arg3", templateName);
-        stub.addProperty("arg4", brand);
-        stub.addProperty("arg5", series);
-        stub.addProperty("arg6", newness);
-        stub.addProperty("arg7", CPU);
-        stub.addProperty("arg8", memory);
-        stub.addProperty("arg9", hardDisk);
-        stub.addProperty("arg10", loadDataAsBase64ByPath(imagePath));
+        stub.addProperty("arg7", brand);
+        stub.addProperty("arg8", series);
+        stub.addProperty("arg9", newness);
+        stub.addProperty("arg10", CPU);
+        stub.addProperty("arg11", memory);
+        stub.addProperty("arg12", hardDisk);
+        stub.addProperty("arg13", loadDataAsBase64ByPath(imagePath));
 
         return stub.sendSOAP();
     }
