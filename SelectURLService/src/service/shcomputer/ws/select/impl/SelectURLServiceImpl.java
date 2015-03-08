@@ -14,11 +14,6 @@ public class SelectURLServiceImpl extends ConcreteService implements SelectURLSe
     public static final String START_URL = "START_URL";
 
     @Override
-    protected Class getServiceInterface() {
-        return SelectURLService.class;
-    }
-
-    @Override
     public String getSelectedURL(String sourceURL) {
         Bundle bundle = new Bundle();
         bundle.putString(START_URL, sourceURL);
@@ -28,5 +23,10 @@ public class SelectURLServiceImpl extends ConcreteService implements SelectURLSe
     @Override
     protected Class<? extends ServiceActivity> getServiceActivity() {
         return WebViewerActivity.class;
+    }
+
+    @Override
+    protected boolean isCrowd() {
+        return false;
     }
 }

@@ -20,11 +20,6 @@ public class TakePictureOfURLServiceImpl extends ConcreteService implements Take
         return loadBitmap(url);
     }
 
-    @Override
-    protected Class getServiceInterface() {
-        return TakePictureOfURLService.class;
-    }
-
     public String loadBitmap(String url) {
         BufferedInputStream in = null;
         FileOutputStream out = null;
@@ -47,5 +42,10 @@ public class TakePictureOfURLServiceImpl extends ConcreteService implements Take
             close(out);
         }
         return path;
+    }
+
+    @Override
+    protected boolean isCrowd() {
+        return false;
     }
 }

@@ -8,10 +8,6 @@ import service.shcomputer.ws.parselocation.interfaces.GetLocationFromURLService;
  * Created by Dawnwords on 2015/1/6.
  */
 public class GetLocationFromURLServiceImpl extends ConcreteService implements GetLocationFromURLService {
-    @Override
-    protected Class getServiceInterface() {
-        return GetLocationFromURLService.class;
-    }
 
     @Override
     public Location getLocationFromURL(String url) {
@@ -19,5 +15,10 @@ public class GetLocationFromURLServiceImpl extends ConcreteService implements Ge
         l.setLongitude(121.6004);
         l.setLatitude(31.1977);
         return l;
+    }
+
+    @Override
+    protected boolean isCrowd() {
+        return false;
     }
 }

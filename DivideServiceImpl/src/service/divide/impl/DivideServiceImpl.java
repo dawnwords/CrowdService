@@ -14,7 +14,7 @@ public class DivideServiceImpl extends ConcreteService implements DivideService 
     }
 
     @Override
-    protected Class getServiceInterface() {
-        return DivideService.class;
+    protected boolean isCrowd() {
+        return false;
     }
 }

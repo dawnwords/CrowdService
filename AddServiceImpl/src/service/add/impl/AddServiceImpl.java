@@ -1,7 +1,7 @@
 package service.add.impl;
 
-import service.add.interfaces.AddService;
 import edu.fudan.se.crowdservice.core.ConcreteService;
+import service.add.interfaces.AddService;
 
 /**
  * Created by Dawnwords on 2014/12/16.
@@ -13,7 +13,7 @@ public class AddServiceImpl extends ConcreteService implements AddService {
     }
 
     @Override
-    protected Class getServiceInterface() {
-        return AddService.class;
+    protected boolean isCrowd() {
+        return false;
     }
 }

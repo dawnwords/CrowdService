@@ -13,13 +13,13 @@ import service.shcomputer.ns.showpic.interfaces.ShowPictureService;
 public class ShowPictureServiceImpl extends ConcreteService implements ShowPictureService {
 
     @Override
-    protected Class getServiceInterface() {
-        return ShowPictureService.class;
+    protected Class<? extends ServiceActivity> getServiceActivity() {
+        return ShowBitmapActivity.class;
     }
 
     @Override
-    protected Class<? extends ServiceActivity> getServiceActivity() {
-        return ShowBitmapActivity.class;
+    protected boolean isCrowd() {
+        return false;
     }
 
     @Override

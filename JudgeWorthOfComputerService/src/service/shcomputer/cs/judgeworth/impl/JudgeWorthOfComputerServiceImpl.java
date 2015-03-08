@@ -8,12 +8,12 @@ import service.shcomputer.cs.judgeworth.interfaces.JudgeWorthOfComputerService;
  */
 public class JudgeWorthOfComputerServiceImpl extends ConcreteService implements JudgeWorthOfComputerService {
     @Override
-    protected Class getServiceInterface() {
-        return JudgeWorthOfComputerService.class;
+    public boolean judgeWorthOfComputer(String url) {
+        return true;
     }
 
     @Override
-    public boolean judgeWorthOfComputer(String url) {
-        return true;
+    protected boolean isCrowd() {
+        return false;
     }
 }

@@ -29,7 +29,8 @@ public class UIServiceImpl extends ConcreteService implements UIService {
     }
 
     @Override
-    protected Class getServiceInterface() {
-        return UIService.class;
+    protected boolean isCrowd() {
+        return false;
     }
+
 }

@@ -20,7 +20,7 @@ public class PriceAssessmentServiceImpl extends ConcreteService implements Price
 
     @Override
     public ArrayList<KeyValueHolder> assessPrice(String brand, String series, String newness, String CPU, String memory, String hardDisk, String imagePath) {
-        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, time, this);
+        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, time, context);
 
         stub.addProperty("arg0", consumerId);
         stub.addProperty("arg1", cost);
@@ -38,8 +38,7 @@ public class PriceAssessmentServiceImpl extends ConcreteService implements Price
     }
 
     @Override
-    protected Class getServiceInterface() {
-        return PriceAssessmentService.class;
+    protected boolean isCrowd() {
+        return true;
     }
-
 }

@@ -16,12 +16,12 @@ public class ItemSelectionServiceImpl extends ConcreteService implements ItemSel
     }
 
     @Override
-    protected Class getServiceInterface() {
-        return ItemSelectionService.class;
+    protected Class<? extends ServiceActivity> getServiceActivity() {
+        return SHComputerInfoActivity.class;
     }
 
     @Override
-    protected Class<? extends ServiceActivity> getServiceActivity() {
-        return SHComputerInfoActivity.class;
+    protected boolean isCrowd() {
+        return false;
     }
 }

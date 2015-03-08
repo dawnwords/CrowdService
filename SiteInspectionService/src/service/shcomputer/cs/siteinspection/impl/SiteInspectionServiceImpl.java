@@ -18,13 +18,8 @@ public class SiteInspectionServiceImpl extends ConcreteService implements SiteIn
     public static final String METHOD = "siteInspect";
 
     @Override
-    protected Class getServiceInterface() {
-        return SiteInspectionService.class;
-    }
-
-    @Override
     public ArrayList<KeyValueHolder> siteInspect(String brand, String series, String newness, String CPU, String memory, String hardDisk, String sellerAddress) {
-        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, time, this);
+        CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, time, context);
 
         stub.addProperty("arg0", consumerId);
         stub.addProperty("arg1", cost);
@@ -41,4 +36,8 @@ public class SiteInspectionServiceImpl extends ConcreteService implements SiteIn
         return stub.sendSOAP();
     }
 
+    @Override
+    protected boolean isCrowd() {
+        return true;
+    }
 }
