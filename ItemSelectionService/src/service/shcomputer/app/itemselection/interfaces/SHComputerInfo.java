@@ -16,8 +16,10 @@ public class SHComputerInfo {
     public final String seller;
     public final String location;
     public final Date saleTime;
+    public final double longitude;
+    public final double latitude;
 
-    public SHComputerInfo(String brand, String series, String cpu, String memory, String disk, String newness, double price, String seller, String location, Date saleTime) {
+    public SHComputerInfo(String brand, String series, String cpu, String memory, String disk, String newness, double price, String seller, String location, Date saleTime, double longitude, double latitude) {
         this.brand = brand;
         this.series = series;
         this.cpu = cpu;
@@ -28,5 +30,7 @@ public class SHComputerInfo {
         this.seller = seller;
         this.location = location;
         this.saleTime = saleTime;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 }

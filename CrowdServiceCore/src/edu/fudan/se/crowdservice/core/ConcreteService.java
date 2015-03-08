@@ -23,7 +23,7 @@ import java.util.logging.Level;
  */
 public abstract class ConcreteService implements BundleActivator {
     protected Context context;
-    protected long longitude, latitude;
+    protected double longitude, latitude;
     String consumerId;
     int time, cost, actualCost;
     String templateName;

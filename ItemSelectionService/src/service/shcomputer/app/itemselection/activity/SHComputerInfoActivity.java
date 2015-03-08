@@ -17,26 +17,26 @@ import java.util.Date;
 public class SHComputerInfoActivity extends ServiceActivity {
 
     private SHComputerInfo[] shComputerInfos = {
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller1", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller2", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller3", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller4", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller5", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller6", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller7", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller8", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller9", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller10", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller11", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller12", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller13", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller14", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller15", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller16", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller18", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller18", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller19", "#1159 Cailun Road", new Date()),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller20", "#1159 Cailun Road", new Date()),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller1", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller2", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller3", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller4", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller5", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller6", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller7", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller8", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller9", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller10", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller11", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller12", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller13", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller14", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller15", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller16", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller18", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller18", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller19", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller20", "#1159 Cailun Road", new Date(), 121.59968500, 31.19198500),
     };
 
 
@@ -76,6 +76,7 @@ public class SHComputerInfoActivity extends ServiceActivity {
                     wrapper.addView(createHorizontalLinearLayout("Price:", "" + info.price));
                     wrapper.addView(createHorizontalLinearLayout("Seller:", info.seller));
                     wrapper.addView(createHorizontalLinearLayout("Address:", info.location));
+                    wrapper.addView(createHorizontalLinearLayout("", "[" + info.longitude + "," + info.longitude + "]"));
                     wrapper.addView(createHorizontalLinearLayout("Sale Time:", new SimpleDateFormat("yyyy-MM-dd").format(info.saleTime)));
                     view = wrapper;
                 }

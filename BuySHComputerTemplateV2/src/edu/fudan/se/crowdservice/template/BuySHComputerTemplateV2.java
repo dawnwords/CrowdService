@@ -33,7 +33,8 @@ public class BuySHComputerTemplateV2 extends Template {
     @Override
     protected void execute() {
         SHComputerInfo compInfo = itemSelectionService.selectItem();
-        ArrayList<KeyValueHolder> result = siteInspectionService.siteInspect(compInfo.brand, compInfo.series, compInfo.newness, compInfo.cpu, compInfo.memory, compInfo.disk, compInfo.location);
+        ArrayList<KeyValueHolder> result = siteInspectionService.siteInspect(compInfo.latitude, compInfo.longitude, compInfo.brand, compInfo.series,
+                compInfo.newness, compInfo.cpu, compInfo.memory, compInfo.disk, compInfo.location);
         String computerImagePath = ((ImageDisplay) result.get(0)).imagePath;
         uiService.displayUI(result);
         System.out.println("computerImagePath:" + computerImagePath);

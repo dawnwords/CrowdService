@@ -8,6 +8,6 @@ import java.util.ArrayList;
  * Created by Jiahuan on 2015/1/25.
  */
 public interface SiteInspectionService {
-    ArrayList<KeyValueHolder> siteInspect(long latitude, long longitude, String brand, String series, String newness,
+    ArrayList<KeyValueHolder> siteInspect(double latitude, double longitude, String brand, String series, String newness,
                                           String CPU, String memory, String hardDisk, String sellerAddress);
 }

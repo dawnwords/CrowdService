@@ -23,7 +23,7 @@ public class SiteInspectionServiceImpl extends ConcreteService implements SiteIn
     }
 
     @Override
-    public ArrayList<KeyValueHolder> siteInspect(long latitude, long longitude, String brand, String series, String newness,
+    public ArrayList<KeyValueHolder> siteInspect(double latitude, double longitude, String brand, String series, String newness,
                                                  String CPU, String memory, String hardDisk, String sellerAddress) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -37,5 +37,15 @@ public class SiteInspectionServiceImpl extends ConcreteService implements SiteIn
         stub.addProperty("arg12", hardDisk);
         stub.addProperty("arg13", sellerAddress);
         return stub.sendSOAP();
+    }
+
+    @Override
+    protected int latitudeArgIndex() {
+        return 0;
+    }
+
+    @Override
+    protected int longitudeArgIndex() {
+        return 1;
     }
 }
