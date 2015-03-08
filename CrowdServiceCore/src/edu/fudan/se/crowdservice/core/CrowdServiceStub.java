@@ -1,9 +1,9 @@
 package edu.fudan.se.crowdservice.core;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.util.Base64;
-import android.widget.Toast;
 import edu.fudan.se.crowdservice.kv.ImageDisplay;
 import edu.fudan.se.crowdservice.kv.ImageInput;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
@@ -28,12 +28,12 @@ public class CrowdServiceStub {
     public static final int WAITING_TIME_SECOND = 20;
     private final SoapObject soapObject;
     private final HttpTransportSE http;
-    private ConcreteService service;
+    private Context context;
 
-    public CrowdServiceStub(String url, String namespace, String method, int waitingTime, ConcreteService service) {
+    public CrowdServiceStub(String url, String namespace, String method, int waitingTime, Context context) {
         this.http = new HttpTransportSE(url, (waitingTime + WAITING_TIME_SECOND) * 1000);
         this.soapObject = new SoapObject(namespace, method);
-        this.service = service;
+        this.context = context;
     }
 
     public void addProperty(String name, Object value) {
@@ -57,12 +57,6 @@ public class CrowdServiceStub {
             e.printStackTrace();
         }
 
-        service.postUIRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(service.context, "No one response you :<", Toast.LENGTH_LONG).show();
-            }
-        });
         return null;
     }
 
@@ -81,7 +75,7 @@ public class CrowdServiceStub {
                 String key = kv.item(0).getTextContent();
                 String value = kv.item(1).getTextContent();
                 if (ImageInput.class.getSimpleName().equals(node.getNodeName())) {
-                    result.add(new ImageDisplay(key, IOUtil.saveByteArray(Base64.decode(value, Base64.DEFAULT), service.context)));
+                    result.add(new ImageDisplay(key, IOUtil.saveByteArray(Base64.decode(value, Base64.DEFAULT), context)));
                 } else {
                     result.add(new TextDisplay(key, value));
                 }
