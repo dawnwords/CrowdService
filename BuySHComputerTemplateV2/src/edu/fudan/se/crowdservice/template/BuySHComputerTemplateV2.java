@@ -24,10 +24,10 @@ public class BuySHComputerTemplateV2 extends Template {
 
     @Override
     protected void resolveService(ServiceResolver serviceResolver) {
-        itemSelectionService = serviceResolver.resolveService(ItemSelectionService.class, 0.2, 0.2);
-        siteInspectionService = serviceResolver.resolveService(SiteInspectionService.class, 0.3, 0.3);
-        uiService = serviceResolver.resolveService(UIService.class, 0.2, 0.2);
-        priceAssessmentService = serviceResolver.resolveService(PriceAssessmentService.class, 0.3, 0.3);
+        itemSelectionService = serviceResolver.resolveService(ItemSelectionService.class);
+        siteInspectionService = serviceResolver.resolveService(SiteInspectionService.class);
+        uiService = serviceResolver.resolveService(UIService.class);
+        priceAssessmentService = serviceResolver.resolveService(PriceAssessmentService.class);
     }
 
     @Override
