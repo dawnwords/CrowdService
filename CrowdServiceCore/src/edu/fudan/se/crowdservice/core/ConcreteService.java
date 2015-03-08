@@ -25,13 +25,16 @@ public abstract class ConcreteService implements BundleActivator {
     protected Context context;
     protected String consumerId;
     protected int time, cost;
+    protected long longitude, latitude;
     protected String templateName;
+    protected int resultNum;
     private Handler uiHandler;
     private Logger logger = Logger.getJADELogger(ConcreteService.class.getName());
 
+
     @Override
     public void start(BundleContext bundleContext) throws Exception {
-        String serviceName = getServiceInterface().getName();
+        String serviceName = getServiceInterfacesName();
         this.uiHandler = new Handler(Looper.getMainLooper());
         logger.log(Level.INFO, "Register Service:" + serviceName);
         bundleContext.registerService(serviceName, this, null);
@@ -46,6 +49,15 @@ public abstract class ConcreteService implements BundleActivator {
         this.consumerId = context.getSharedPreferences(SavedProperty.CROWD_SERVICE, 0).getString(SavedProperty.AGENT_NAME, "");
     }
 
+    String getServiceInterfacesName() {
+        return getClass().getInterfaces()[0].getName();
+    }
+
+    void setLocation(long longitude, long latitude) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
     void setTime(int time) {
         this.time = time;
     }
@@ -58,7 +70,9 @@ public abstract class ConcreteService implements BundleActivator {
         this.templateName = templateName;
     }
 
-    protected abstract Class getServiceInterface();
+    void setResultNum(int resultNum) {
+        this.resultNum = resultNum;
+    }
 
     protected Class<? extends ServiceActivity> getServiceActivity() {
         return null;
@@ -66,6 +80,16 @@ public abstract class ConcreteService implements BundleActivator {
 
     protected void postUIRunnable(Runnable runnable) {
         uiHandler.post(runnable);
+    }
+
+    protected abstract boolean isCrowd();
+
+    protected int longitudeArgIndex() {
+        return -1;
+    }
+
+    protected int latitudeArgIndex() {
+        return -1;
     }
 
     protected <T> T startServiceActivity(final Bundle extraBundle) {
