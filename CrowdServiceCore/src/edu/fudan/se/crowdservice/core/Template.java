@@ -1,12 +1,18 @@
 package edu.fudan.se.crowdservice.core;
 
+import com.google.gson.Gson;
+import edu.fudan.se.crowdservice.plan.Request;
+import edu.fudan.se.crowdservice.plan.Response;
 import jade.util.Logger;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -14,13 +20,27 @@ import java.util.logging.Level;
  */
 public abstract class Template {
 
+    public static final String PLAN_SERVICE_IP = "10.131.253.211";
+    public static final int PLAN_SERVICE_PORT = 8885;
+    private static final String PLAN_SERVICE_URL =  String.format("http://%s:%d/globaloptimization?wsdl", PLAN_SERVICE_IP, PLAN_SERVICE_PORT);
+    private static final String PLAN_SERVICE_NAMESPACE = "http://ws.sutd.edu.sg/";
+    private static final String PLAN_SERVICE_METHOD = "globalOptimization";
+
+
     private ServiceExecutionListener listener;
     private TemplateFactory.ServiceResolver resolver;
     private TemplateFactory.InstanceCount instanceCount;
     private Map<String, Integer> resultNums;
     private List<String> serviceSequence;
+    private long deadline;
+    private int costRemain;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
+
+    Template() {
+        resultNums = new HashMap<String, Integer>();
+        serviceSequence = new LinkedList<String>();
+    }
 
     void setInstanceCount(TemplateFactory.InstanceCount instanceCount) {
         this.instanceCount = instanceCount;
@@ -47,12 +67,15 @@ public abstract class Template {
 
     private void requestTotalTimeCost() {
         double reliability;
+        int time, cost;
         do {
-            int time = intInput("Please input expected execution time for this template:(s)");
-            int cost = intInput("Please input expected cost for this template:(￠)");
+            time = intInput("Please input expected execution time for this template:(s)");
+            cost = intInput("Please input expected cost for this template:(￠)");
             showMessage("Given Execution Time:%d(s), Cost:%d￠, Assessing Reliability...", time, cost);
             reliability = assessReliability(time, cost);
         } while (requestUserConfirm(String.format("Reliability: %.2f%%. Reinput time and cost?", reliability)));
+        setDeadline(time);
+        this.costRemain = cost;
     }
 
     private int intInput(String msg) {
@@ -66,15 +89,60 @@ public abstract class Template {
     }
 
     private double assessReliability(int time, int cost) {
-        //TODO invoke tfws1
-        return 0;
+        Request request = new Request();
+        request.setGlobalTime(time);
+        request.setGlobalCost(cost);
+
+        Response response = invokePlanWS(request);
+        return response == null ? -1 : response.getGlobalReliability();
     }
 
     private void planTimeCost(ConcreteService service) {
-        // TODO invoke tfws2
-        service.time = 30;
-        service.cost = 30;
-        service.resultNum = resultNums.get(service.getClass().getName());
+        Request request = new Request();
+        request.setGlobalTime(getTimeRemain());
+        request.setGlobalCost(costRemain);
+
+        Response response = invokePlanWS(request);
+        if (response != null) {
+            service.time = response.getTime();
+            service.cost = response.getCost();
+            service.resultNum = resultNums.get(service.getClass().getName());
+        }
+    }
+
+    private void setDeadline(int time) {
+        this.deadline = new Date().getTime() + time * 1000;
+    }
+
+    private int getTimeRemain() {
+        return (int) ((deadline - new Date().getTime()) / 1000);
+    }
+
+    private Response invokePlanWS(Request request) {
+        request.setResultNumbers(resultNums);
+        request.setTemplateName(getClass().getSimpleName());
+        request.setServiceSequence(serviceSequence.toArray(new String[serviceSequence.size()]));
+
+        Gson gson = new Gson();
+        HttpTransportSE http = new HttpTransportSE(PLAN_SERVICE_URL, 10 * 1000);
+        SoapObject soapObject = new SoapObject(PLAN_SERVICE_NAMESPACE, PLAN_SERVICE_METHOD);
+        soapObject.addProperty("arg0", gson.toJson(request));
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = false;
+        envelope.bodyOut = soapObject;
+        try {
+            http.call(null, envelope);
+            if (envelope.getResponse() != null) {
+                SoapObject obj = (SoapObject) envelope.bodyIn;
+                String response = obj.getPropertyAsString(0);
+                if (response != null && !"".equals(response)) {
+                    return gson.fromJson(response, Response.class);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     protected abstract void resolveService(ServiceResolver serviceResolver);
@@ -138,15 +206,6 @@ public abstract class Template {
         }
     }
 
-    private class TimeCost {
-        final int time, cost;
-
-        public TimeCost(int time, int cost) {
-            this.time = time;
-            this.cost = cost;
-        }
-    }
-
     private class mServiceExecutionListener implements ServiceExecutionListener {
 
         private ServiceExecutionListener listener;
@@ -174,6 +233,7 @@ public abstract class Template {
         @Override
         public void onServiceStop(ConcreteService service) {
             listener.onServiceStop(service);
+            costRemain -= service.cost;
             serviceSequence.add(service.getClass().getName());
         }
 
