@@ -37,11 +37,6 @@ public abstract class Template {
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
 
-    Template() {
-        resultNums = new HashMap<String, Integer>();
-        serviceSequence = new LinkedList<String>();
-    }
-
     void setInstanceCount(TemplateFactory.InstanceCount instanceCount) {
         this.instanceCount = instanceCount;
     }
@@ -55,6 +50,8 @@ public abstract class Template {
     }
 
     public void executeTemplate() {
+        resultNums = new HashMap<String, Integer>();
+        serviceSequence = new LinkedList<String>();
         log("Resolve Service...");
         ServiceResolver resolver = new ServiceResolver();
         resolveService(resolver);
