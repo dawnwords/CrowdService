@@ -70,7 +70,7 @@ public abstract class Template {
             cost = intInput("Please input expected cost for this template:(￠)");
             showMessage("Given Execution Time:%d(s), Cost:%d￠, Assessing Reliability...", time, cost);
             reliability = assessReliability(time, cost);
-        } while (requestUserConfirm(String.format("Reliability: %.2f%%. Reinput time and cost?", reliability)));
+        } while (requestUserConfirm("Reliability: %.2f%%. Reinput time and cost?", reliability));
         setDeadline(time);
         this.costRemain = cost;
     }
