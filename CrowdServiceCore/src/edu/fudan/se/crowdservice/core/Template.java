@@ -24,7 +24,7 @@ public abstract class Template {
     public static final int PLAN_SERVICE_PORT = 8885;
     private static final String PLAN_SERVICE_URL = String.format("http://%s:%d/globaloptimization?wsdl", PLAN_SERVICE_IP, PLAN_SERVICE_PORT);
     private static final String PLAN_SERVICE_NAMESPACE = "http://ws.sutd.edu.sg/";
-    private static final String PLAN_SERVICE_METHOD = "globalOptimization";
+    private static final String PLAN_SERVICE_METHOD = "globalOptimize";
 
 
     private ServiceExecutionListener listener;
@@ -108,7 +108,7 @@ public abstract class Template {
         if (response != null) {
             service.time = response.getTime();
             service.cost = response.getCost();
-            service.resultNum = resultNums.get(service.getClass().getName());
+            service.resultNum = resultNums.get(service.getServiceInterfacesName());
         }
     }
 
@@ -126,15 +126,14 @@ public abstract class Template {
         request.setTemplateName(getClass().getSimpleName());
         request.setServiceSequence(serviceSequence.toArray(new String[serviceSequence.size()]));
 
-        Gson gson = new Gson();
-        HttpTransportSE http = new HttpTransportSE(PLAN_SERVICE_URL, 10 * 1000);
-        SoapObject soapObject = new SoapObject(PLAN_SERVICE_NAMESPACE, PLAN_SERVICE_METHOD);
-        soapObject.addProperty("arg0", gson.toJson(request));
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.dotNet = false;
-        envelope.bodyOut = soapObject;
         try {
-            http.call(null, envelope);
+            Gson gson = new Gson();
+            SoapObject soapObject = new SoapObject(PLAN_SERVICE_NAMESPACE, PLAN_SERVICE_METHOD);
+            soapObject.addProperty("arg0", gson.toJson(request));
+            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envelope.dotNet = false;
+            envelope.bodyOut = soapObject;
+            new HttpTransportSE(PLAN_SERVICE_URL, 10 * 1000).call(null, envelope);
             if (envelope.getResponse() != null) {
                 SoapObject obj = (SoapObject) envelope.bodyIn;
                 String response = obj.getPropertyAsString(0);
@@ -178,7 +177,7 @@ public abstract class Template {
             if (service.isCrowd()) {
                 int resultNum = intInput(service.getServiceInterfacesName()
                         + " binds a CrowdService.\nPlease input expected Result Number for this Service:");
-                resultNums.put(service.getClass().getName(), resultNum);
+                resultNums.put(service.getServiceInterfacesName(), resultNum);
             }
             return new ServiceHandler<S>().newProxyInstance((S) service);
         }
@@ -237,7 +236,7 @@ public abstract class Template {
         public void onServiceStop(ConcreteService service) {
             listener.onServiceStop(service);
             costRemain -= service.cost;
-            serviceSequence.add(service.getClass().getName());
+            serviceSequence.add(service.getServiceInterfacesName());
         }
 
         @Override
