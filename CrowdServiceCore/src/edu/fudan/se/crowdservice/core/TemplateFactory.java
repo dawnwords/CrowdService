@@ -1,6 +1,7 @@
 package edu.fudan.se.crowdservice.core;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import jade.util.Logger;
 import org.osgi.framework.*;
 
@@ -17,6 +18,7 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     private Context context;
     private Stack<ServiceReference> serviceReferences;
     private InstanceCount instanceCount;
+    private SharedPreferences settings;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
     private ServiceResolver resolver;
@@ -39,6 +41,7 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
 
     public void setContext(Context context) {
         this.context = context;
+        this.settings = context.getSharedPreferences(SavedProperty.CROWD_SERVICE, 0);
     }
 
     public String templateName() {
@@ -51,6 +54,7 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
             template = getTemplateClass().newInstance();
             template.setInstanceCount(instanceCount.createInstance());
             template.setServiceResolver(resolver);
+            template.setConsumerId(settings.getString(SavedProperty.AGENT_NAME, ""));
             template.setServiceExecutionListener(listener);
         } catch (Exception e) {
             e.printStackTrace();

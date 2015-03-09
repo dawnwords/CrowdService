@@ -22,7 +22,7 @@ public abstract class Template {
 
     public static final String PLAN_SERVICE_IP = "10.131.253.211";
     public static final int PLAN_SERVICE_PORT = 8885;
-    private static final String PLAN_SERVICE_URL =  String.format("http://%s:%d/globaloptimization?wsdl", PLAN_SERVICE_IP, PLAN_SERVICE_PORT);
+    private static final String PLAN_SERVICE_URL = String.format("http://%s:%d/globaloptimization?wsdl", PLAN_SERVICE_IP, PLAN_SERVICE_PORT);
     private static final String PLAN_SERVICE_NAMESPACE = "http://ws.sutd.edu.sg/";
     private static final String PLAN_SERVICE_METHOD = "globalOptimization";
 
@@ -34,6 +34,7 @@ public abstract class Template {
     private List<String> serviceSequence;
     private long deadline;
     private int costRemain;
+    private String consumerId;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
 
@@ -47,6 +48,10 @@ public abstract class Template {
 
     void setServiceResolver(TemplateFactory.ServiceResolver resolver) {
         this.resolver = resolver;
+    }
+
+    void setConsumerId(String consumerId) {
+        this.consumerId = consumerId;
     }
 
     public void executeTemplate() {
@@ -117,6 +122,7 @@ public abstract class Template {
 
     private Response invokePlanWS(Request request) {
         request.setResultNumbers(resultNums);
+        request.setConsumerId(consumerId);
         request.setTemplateName(getClass().getSimpleName());
         request.setServiceSequence(serviceSequence.toArray(new String[serviceSequence.size()]));
 
