@@ -2,11 +2,15 @@ package edu.fudan.se.crowdservice.fragment;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.Spinner;
+import android.widget.TextView;
 import edu.fudan.se.crowdservice.R;
 import edu.fudan.se.crowdservice.data.ConsumerSession;
 
@@ -112,13 +116,12 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
         TextView content = (TextView) convertView.findViewById(R.id.message_content);
         content.setText(message.content);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         if (message.type == ConsumerSession.MessageType.CONSUMER_INPUT) {
             content.setBackgroundResource(R.drawable.bubble_consumer);
-            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            params.gravity = Gravity.RIGHT;
         } else {
             content.setBackgroundResource(R.drawable.buble_system);
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+            params.gravity = Gravity.LEFT;
         }
         content.setLayoutParams(params);
 
