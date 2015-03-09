@@ -8,15 +8,21 @@ import edu.fudan.se.crowdservice.kv.ImageInput;
 import edu.fudan.se.crowdservice.kv.KeyValueHolder;
 import edu.fudan.se.crowdservice.kv.TextDisplay;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.Marshal;
+import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -51,9 +57,7 @@ public class CrowdServiceStub {
     }
 
     public ArrayList<KeyValueHolder> sendSOAP() {
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.dotNet = false;
-        envelope.bodyOut = soapObject;
+        SoapSerializationEnvelope envelope = getSoapSerializationEnvelope();
         try {
             http.call(null, envelope);
             if (envelope.getResponse() != null) {
@@ -68,6 +72,27 @@ public class CrowdServiceStub {
         }
 
         return null;
+    }
+
+    private SoapSerializationEnvelope getSoapSerializationEnvelope() {
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = false;
+        envelope.bodyOut = soapObject;
+        new Marshal() {
+            public Object readInstance(XmlPullParser parser, String namespace, String name,
+                                       PropertyInfo expected) throws IOException, XmlPullParserException {
+                return Double.parseDouble(parser.nextText());
+            }
+
+            public void register(SoapSerializationEnvelope cm) {
+                cm.addMapping(cm.xsd, "double", Double.class, this);
+            }
+
+            public void writeInstance(XmlSerializer writer, Object obj) throws IOException {
+                writer.text(obj.toString());
+            }
+        }.register(envelope);
+        return envelope;
     }
 
     @TargetApi(Build.VERSION_CODES.FROYO)

@@ -75,7 +75,7 @@ public abstract class Template {
             cost = intInput("Please input expected cost for this template:(￠)");
             showMessage("Given Execution Time:%d(s), Cost:%d￠, Assessing Reliability...", time, cost);
             reliability = assessReliability(time, cost);
-        } while (requestUserConfirm("Reliability: %.2f%%. Reinput time and cost?", reliability));
+        } while (requestUserConfirm("Reliability: %.2f%%. Reinput time and cost?", reliability * 100));
         setDeadline(time);
         this.costRemain = cost;
     }
@@ -223,11 +223,10 @@ public abstract class Template {
                 int latitude = service.latitudeArgIndex();
                 int longitude = service.longitudeArgIndex();
                 if (latitude > 0 && latitude < args.length && longitude > 0 && longitude < args.length) {
-                    service.longitude = (Long) args[longitude];
-                    service.latitude = (Long) args[latitude];
+                    service.longitude = (Double) args[longitude];
+                    service.latitude = (Double) args[latitude];
                 }
-                String interfaceName = service.getServiceInterfacesName();
-                onShowMessage(interfaceName + " binds a CrowdService. Planning ");
+                onShowMessage(service.getServiceInterfacesName() + " binds a CrowdService. Planning ");
                 planTimeCost(service);
             }
         }
