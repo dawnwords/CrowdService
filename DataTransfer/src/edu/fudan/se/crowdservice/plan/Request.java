@@ -1,5 +1,6 @@
 package edu.fudan.se.crowdservice.plan;
 
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -11,6 +12,15 @@ public class Request {
     private Map<String, Integer> resultNumbers;
     private String templateName;
     private String[] serviceSequence;
+    private String consumerId;
+
+    public String getConsumerId() {
+        return consumerId;
+    }
+
+    public void setConsumerId(String consumerId) {
+        this.consumerId = consumerId;
+    }
 
     public String[] getServiceSequence() {
         return serviceSequence;
@@ -50,5 +60,17 @@ public class Request {
 
     public void setTemplateName(String templateName) {
         this.templateName = templateName;
+    }
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "globalTime=" + globalTime +
+                ", globalCost=" + globalCost +
+                ", resultNumbers=" + resultNumbers +
+                ", templateName='" + templateName + '\'' +
+                ", serviceSequence=" + Arrays.toString(serviceSequence) +
+                ", consumerId='" + consumerId + '\'' +
+                '}';
     }
 }
