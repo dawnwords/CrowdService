@@ -103,6 +103,8 @@ public abstract class Template {
         Request request = new Request();
         request.setGlobalTime(getTimeRemain());
         request.setGlobalCost(costRemain);
+        request.setTargetLatitude(service.latitude);
+        request.setTargetLongitude(service.longitude);
 
         Response response = invokePlanWS(request);
         if (response != null) {

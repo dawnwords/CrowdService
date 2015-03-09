@@ -13,6 +13,7 @@ public class Request {
     private String templateName;
     private String[] serviceSequence;
     private String consumerId;
+    private double targetLongitude, targetLatitude;
 
     public String getConsumerId() {
         return consumerId;
@@ -62,6 +63,22 @@ public class Request {
         this.templateName = templateName;
     }
 
+    public double getTargetLongitude() {
+        return targetLongitude;
+    }
+
+    public void setTargetLongitude(double targetLongitude) {
+        this.targetLongitude = targetLongitude;
+    }
+
+    public double getTargetLatitude() {
+        return targetLatitude;
+    }
+
+    public void setTargetLatitude(double targetLatitude) {
+        this.targetLatitude = targetLatitude;
+    }
+
     @Override
     public String toString() {
         return "Request{" +
@@ -71,6 +88,8 @@ public class Request {
                 ", templateName='" + templateName + '\'' +
                 ", serviceSequence=" + Arrays.toString(serviceSequence) +
                 ", consumerId='" + consumerId + '\'' +
+                ", targetLongitude=" + targetLongitude +
+                ", targetLatitude=" + targetLatitude +
                 '}';
     }
 }
