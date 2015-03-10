@@ -11,6 +11,7 @@ import edu.fudan.se.crowdservice.wrapper.OfferWrapper;
 import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.ThreadedBehaviourFactory;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -47,10 +48,15 @@ public class DaemonAgent extends Agent implements AgentInterface {
     @Override
     public void sendCapacity(String capacity) {
         addBehaviour(new SendCapacityBehaviour(capacity));
-        addBehaviour(new TickerBehaviour(this, HEARTBEAT_FREQUENCY) {
+        addBehaviour(new CyclicBehaviour(this) {
             @Override
-            protected void onTick() {
+            public void action() {
                 sendHeartbeat();
+                try {
+                    Thread.sleep(HEARTBEAT_FREQUENCY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
