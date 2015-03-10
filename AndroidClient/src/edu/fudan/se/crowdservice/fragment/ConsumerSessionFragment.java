@@ -120,7 +120,7 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
             content.setBackgroundResource(R.drawable.bubble_consumer);
             params.gravity = Gravity.RIGHT;
         } else {
-            content.setBackgroundResource(R.drawable.buble_system);
+            content.setBackgroundResource(R.drawable.bubble_system);
             params.gravity = Gravity.LEFT;
         }
         content.setLayoutParams(params);

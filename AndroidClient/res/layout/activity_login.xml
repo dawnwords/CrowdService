@@ -13,10 +13,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/agent_name"
+                android:singleLine="true"
                 android:id="@+id/agent_name"/>
         <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:hint="@string/capacity"
                 android:id="@+id/capacity"/>
         <LinearLayout android:layout_width="match_parent"
@@ -27,6 +29,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="7"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
                     android:hint="@string/jade_ip"
                     android:id="@+id/jade_ip"/>
             <EditText
@@ -34,6 +37,7 @@
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
                     android:hint="@string/port"
+                    android:singleLine="true"
                     android:id="@+id/jade_port"/>
         </LinearLayout>
 
@@ -45,12 +49,14 @@
                     android:layout_weight="7"
                     android:layout_height="wrap_content"
                     android:hint="@string/obr_ip"
+                    android:singleLine="true"
                     android:id="@+id/obr_ip"/>
             <EditText
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
                     android:hint="@string/port"
+                    android:singleLine="true"
                     android:id="@+id/obr_port"/>
         </LinearLayout>
         <Button

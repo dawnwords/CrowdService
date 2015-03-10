@@ -16,6 +16,7 @@
                       android:layout_width="0dp"
                       android:focusable="true"
                       android:layout_height="wrap_content"
+                      android:singleLine="true"
                       android:layout_weight="1"/>
 
             <Button android:id="@+id/user_input_submit"
