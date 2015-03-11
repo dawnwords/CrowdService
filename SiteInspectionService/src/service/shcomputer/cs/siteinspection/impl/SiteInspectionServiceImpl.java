@@ -24,10 +24,7 @@ public class SiteInspectionServiceImpl extends ConcreteService implements SiteIn
 
     @Override
     public ArrayList<KeyValueHolder> siteInspect(double latitude, double longitude, String brand, String series, String newness,
-                                                 String CPU, String memory, String hardDisk, String sellerAddress) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-
+                                                 String CPU, String memory, String hardDisk, String sellerAddress) throws Exception {
         CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, this);
         stub.addProperty("arg7", brand);
         stub.addProperty("arg8", series);

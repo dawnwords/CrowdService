@@ -31,7 +31,7 @@ public class BuySHComputerTemplateV2 extends Template {
     }
 
     @Override
-    protected void execute() {
+    protected void execute() throws Exception{
         SHComputerInfo compInfo = itemSelectionService.selectItem();
         ArrayList<KeyValueHolder> result = siteInspectionService.siteInspect(compInfo.latitude, compInfo.longitude, compInfo.brand, compInfo.series,
                 compInfo.newness, compInfo.cpu, compInfo.memory, compInfo.disk, compInfo.location);

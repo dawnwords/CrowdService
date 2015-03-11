@@ -56,21 +56,16 @@ public class CrowdServiceStub {
         soapObject.addProperty(name, value);
     }
 
-    public ArrayList<KeyValueHolder> sendSOAP() {
+    public ArrayList<KeyValueHolder> sendSOAP() throws Exception {
         SoapSerializationEnvelope envelope = getSoapSerializationEnvelope();
-        try {
-            http.call(null, envelope);
-            if (envelope.getResponse() != null) {
-                SoapObject obj = (SoapObject) envelope.bodyIn;
-                String crowdServiceResult = obj.getPropertyAsString(0);
-                if (crowdServiceResult != null && !"".equals(crowdServiceResult)) {
-                    return xml2Obj(crowdServiceResult);
-                }
+        http.call(null, envelope);
+        if (envelope.getResponse() != null) {
+            SoapObject obj = (SoapObject) envelope.bodyIn;
+            String crowdServiceResult = obj.getPropertyAsString(0);
+            if (crowdServiceResult != null && !"".equals(crowdServiceResult)) {
+                return xml2Obj(crowdServiceResult);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
         return null;
     }
 

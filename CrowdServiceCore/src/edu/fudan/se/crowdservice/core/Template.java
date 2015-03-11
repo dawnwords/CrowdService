@@ -60,9 +60,14 @@ public abstract class Template {
         log("Resolve Service...");
         ServiceResolver resolver = new ServiceResolver();
         resolveService(resolver);
-        requestTotalTimeCost();
+        if (resultNums.size() > 0) {
+            requestTotalTimeCost();
+        }
         log("Execute Template");
-        execute();
+        try {
+            execute();
+        } catch (Exception ignored) {
+        }
         log("Stop Template");
         listener.onTemplateStop();
     }
@@ -112,6 +117,7 @@ public abstract class Template {
             service.cost = response.getCost();
             service.resultNum = resultNums.get(service.getServiceInterfacesName());
         }
+        listener.onShowMessage(String.format("Planning Result: time:%ds, cost:%d￠", response.getTime(), response.getCost()));
     }
 
     private void setDeadline(int time) {
@@ -151,7 +157,7 @@ public abstract class Template {
 
     protected abstract void resolveService(ServiceResolver serviceResolver);
 
-    protected abstract void execute();
+    protected abstract void execute() throws Exception;
 
     protected void log(String msg) {
         logger.log(Level.INFO, msg);
@@ -190,8 +196,7 @@ public abstract class Template {
 
         public T newProxyInstance(T target) {
             this.target = target;
-            return (T) Proxy.newProxyInstance(target.getClass().getClassLoader(),
-                    target.getClass().getInterfaces(), this);
+            return (T) Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), this);
         }
 
         @Override
@@ -220,7 +225,6 @@ public abstract class Template {
 
         @Override
         public void onServiceStart(ConcreteService service, Object[] args) {
-            listener.onServiceStart(service, args);
             if (service.isCrowd()) {
                 int latitude = service.latitudeArgIndex();
                 int longitude = service.longitudeArgIndex();
@@ -231,6 +235,7 @@ public abstract class Template {
                 onShowMessage(service.getServiceInterfacesName() + " binds a CrowdService. Planning ");
                 planTimeCost(service);
             }
+            listener.onServiceStart(service, args);
         }
 
         @Override

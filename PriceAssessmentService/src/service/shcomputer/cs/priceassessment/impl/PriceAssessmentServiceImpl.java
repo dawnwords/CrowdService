@@ -19,7 +19,7 @@ public class PriceAssessmentServiceImpl extends ConcreteService implements Price
 
 
     @Override
-    public ArrayList<KeyValueHolder> assessPrice(String brand, String series, String newness, String CPU, String memory, String hardDisk, String imagePath) {
+    public ArrayList<KeyValueHolder> assessPrice(String brand, String series, String newness, String CPU, String memory, String hardDisk, String imagePath) throws Exception {
         CrowdServiceStub stub = new CrowdServiceStub(URL, NS, METHOD, this);
 
         stub.addProperty("arg7", brand);
