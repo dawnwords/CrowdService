@@ -39,6 +39,11 @@ public class ConsumerSessionFragment extends ChildFragment<ConsumerSession.Messa
         return view;
     }
 
+    @Override
+    protected boolean isItemEnabled() {
+        return false;
+    }
+
     private void addViewByLastMessage() {
         final ConsumerSession.Message lastMessage = session.getLastMessage();
         if (lastMessage == null) {
