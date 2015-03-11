@@ -23,6 +23,10 @@ import edu.fudan.se.crowdservice.view.LoadingDialog;
  * Created by Jiahuan on 2015/1/22.
  */
 public class LoginActivity extends Activity {
+    public static final String DEFAULT_JADE_IP = "10.131.253.211";
+    public static final String DEFAULT_OBR_IP = "10.131.252.156";
+    public static final int DEFAULT_JADE_PORT = 1099;
+    public static final int DEFAULT_OBR_PORT = 8080;
     private EditText agentNameEditText, capacityEditText, jadeIPEditText,
             jadePortEditText, obrIPEditText, obrPortEditText;
     private SharedPreferences settings;
@@ -92,10 +96,10 @@ public class LoginActivity extends Activity {
 
         agentNameEditText.setText(settings.getString(SavedProperty.AGENT_NAME, ""));
         capacityEditText.setText(settings.getString(SavedProperty.CAPACITY, ""));
-        jadeIPEditText.setText(settings.getString(SavedProperty.JADE_IP, ""));
-        jadePortEditText.setText(String.valueOf(settings.getInt(SavedProperty.JADE_PORT, 1099)));
-        obrIPEditText.setText(settings.getString(SavedProperty.OBR_IP, ""));
-        obrPortEditText.setText(String.valueOf(settings.getInt(SavedProperty.OBR_PORT, 80)));
+        jadeIPEditText.setText(settings.getString(SavedProperty.JADE_IP, DEFAULT_JADE_IP));
+        jadePortEditText.setText(String.valueOf(settings.getInt(SavedProperty.JADE_PORT, DEFAULT_JADE_PORT)));
+        obrIPEditText.setText(settings.getString(SavedProperty.OBR_IP, DEFAULT_OBR_IP));
+        obrPortEditText.setText(String.valueOf(settings.getInt(SavedProperty.OBR_PORT, DEFAULT_OBR_PORT)));
     }
 
     public void doLogin(View v) {
