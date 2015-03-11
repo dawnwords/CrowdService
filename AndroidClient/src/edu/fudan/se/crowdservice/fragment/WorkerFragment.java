@@ -100,16 +100,20 @@ public class WorkerFragment extends BaseFragment<Wrapper> {
                 .setClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final EditText input = (EditText) LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
+                        View offerView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_task_offer, null);
+                        final EditText time = (EditText) offerView.findViewById(R.id.task_time);
+                        final EditText cost = (EditText) offerView.findViewById(R.id.task_cost);
                         String title = getResources().getString(R.string.offer_price);
                         new AlertDialog.Builder(getActivity()).setTitle(title).setCancelable(false)
-                                .setView(input).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                                .setView(offerView).setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
                                 try {
-                                    int offer = Integer.parseInt(input.getText().toString());
-                                    addMessageWrapper(new WaitingWrapper(request.taskId, offer));
-                                    agent.sendOffer(new OfferWrapper(request.taskId, offer));
+                                    //todo check input
+                                    int costValue = Integer.parseInt(cost.getText().toString());
+                                    int timeValue = Integer.parseInt(time.getText().toString());
+                                    addMessageWrapper(new WaitingWrapper(request.taskId, costValue));
+                                    agent.sendOffer(new OfferWrapper(request.taskId, costValue, timeValue));
                                     dialog.dismiss();
                                     holder.offer.stop();
                                 } catch (Exception e) {

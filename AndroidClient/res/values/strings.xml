@@ -35,4 +35,6 @@
     <string name="task_waiting">Waiting for Response</string>
     <string name="task_complete">Task Completed</string>
     <string name="time_up">Time is up!</string>
+    <string name="time_estimated">Time Estimated:</string>
+    <string name="cost_estimated">Cost Estimated:</string>
 </resources>
