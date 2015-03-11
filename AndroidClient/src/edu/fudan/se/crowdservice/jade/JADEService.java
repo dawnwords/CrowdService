@@ -107,7 +107,7 @@ public class JADEService extends Service {
                             AgentInterface agent = MicroRuntime.getAgent(agentName).getO2AInterface(AgentInterface.class);
                             info("agent interface=" + agent);
                             agentManager.setAgent(agent);
-                            locator.enableGPS(JADEService.this, agent);
+                            locator.enableGPS(JADEService.this, agentManager);
                             agent.setContext(JADEService.this);
                             agent.sendCapacity(getTextStored(SavedProperty.CAPACITY));
                         } catch (ControllerException e) {
