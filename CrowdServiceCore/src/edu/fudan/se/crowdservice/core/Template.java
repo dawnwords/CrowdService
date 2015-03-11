@@ -55,7 +55,7 @@ public abstract class Template {
     }
 
     public void executeTemplate() {
-        resultNums = new HashMap<String, Integer>();
+        resultNums = new LinkedHashMap<String, Integer>();
         serviceSequence = new LinkedList<String>();
         log("Resolve Service...");
         ServiceResolver resolver = new ServiceResolver();
@@ -224,7 +224,7 @@ public abstract class Template {
             if (service.isCrowd()) {
                 int latitude = service.latitudeArgIndex();
                 int longitude = service.longitudeArgIndex();
-                if (latitude > 0 && latitude < args.length && longitude > 0 && longitude < args.length) {
+                if (latitude >= 0 && latitude < args.length && longitude >= 0 && longitude < args.length) {
                     service.longitude = (Double) args[longitude];
                     service.latitude = (Double) args[latitude];
                 }
