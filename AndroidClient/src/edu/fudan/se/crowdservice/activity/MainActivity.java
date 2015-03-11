@@ -3,6 +3,9 @@ package edu.fudan.se.crowdservice.activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -33,6 +36,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
 
     private NavigationFragment navigationFragment;
     private Fragment lastFragment;
+    private Ringtone notificationRingTone;
     private ServiceConnection felixConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -59,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
         @Override
         public void handleMessage(Message msg) {
             UIMessage message = new UIMessage(msg);
+            notificationRingTone.play();
             switch (message.what()) {
                 case TaskMessage.WHAT:
                     taskMessage(message);
@@ -69,7 +74,6 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
             }
         }
     };
-
     private ServiceConnection jadeConnection = new ServiceConnection() {
 
         @Override
@@ -113,6 +117,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);//系统自带提示音
+        notificationRingTone = RingtoneManager.getRingtone(getApplicationContext(), uri);
         initUI();
         bindService(new Intent(getApplicationContext(), JADEService.class), jadeConnection, BIND_AUTO_CREATE);
         bindService(new Intent(getApplicationContext(), FelixService.class), felixConnection, BIND_AUTO_CREATE);
