@@ -33,8 +33,8 @@ public class FelixService extends Service {
 
     @Override
     public synchronized void onDestroy() {
-        super.onDestroy();
         shutdownApplication();
+        super.onDestroy();
     }
 
     @Override

@@ -25,6 +25,7 @@ public abstract class Template {
     private static final String PLAN_SERVICE_URL = String.format("http://%s:%d/globaloptimization?wsdl", PLAN_SERVICE_IP, PLAN_SERVICE_PORT);
     private static final String PLAN_SERVICE_NAMESPACE = "http://ws.sutd.edu.sg/";
     private static final String PLAN_SERVICE_METHOD = "globalOptimize";
+    public static final int GLOBAL_OPTIMIZATION = 120;
 
 
     private ServiceExecutionListener listener;
@@ -141,7 +142,7 @@ public abstract class Template {
             SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
             envelope.dotNet = false;
             envelope.bodyOut = soapObject;
-            new HttpTransportSE(PLAN_SERVICE_URL, 10 * 1000).call(null, envelope);
+            new HttpTransportSE(PLAN_SERVICE_URL, GLOBAL_OPTIMIZATION * 1000).call(null, envelope);
             if (envelope.getResponse() != null) {
                 SoapObject obj = (SoapObject) envelope.bodyIn;
                 String response = obj.getPropertyAsString(0);
