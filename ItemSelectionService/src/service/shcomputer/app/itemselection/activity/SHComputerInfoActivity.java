@@ -17,9 +17,9 @@ import java.util.Date;
 public class SHComputerInfoActivity extends ServiceActivity {
 
     private SHComputerInfo[] shComputerInfos = {
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller1", "Library of Zhangjiang Campus", new Date(), 121.596753, 31.189714),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller2", "No.2 School Building", new Date(), 121.598361, 31.191066),
-            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 3000, "seller3", "SoftWare Building", new Date(), 121.59953, 31.191707),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 4000, "seller1", "Room 314, Computer Building", new Date(), 121.597862,31.191006),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 5000, "seller2", "Room 104, No.2 School Building", new Date(), 121.598361, 31.191066),
+            new SHComputerInfo("Thinkpad", "X240", "Intel Core i5", "8G DDR3", "256G SSD", "90%", 6000, "seller3", "Room 401, SoftWare Building", new Date(), 121.59953, 31.191707),
     };
 
 

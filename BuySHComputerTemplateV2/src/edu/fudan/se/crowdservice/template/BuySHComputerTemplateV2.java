@@ -41,6 +41,7 @@ public class BuySHComputerTemplateV2 extends Template {
         if (requestUserConfirm("Do you want to assess this price of this computer?")) {
             result = priceAssessmentService.assessPrice(compInfo.brand, compInfo.series, compInfo.newness, compInfo.cpu, compInfo.memory, compInfo.disk, computerImagePath);
             double assessPrice = Double.valueOf(((TextDisplay) result.get(0)).getValue());
+            showMessage("");
             if (compInfo.price < assessPrice * 1.1) {
                 showMessage("Payment succeeded!");
             } else {
