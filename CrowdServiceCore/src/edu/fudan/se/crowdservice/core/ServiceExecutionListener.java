@@ -4,7 +4,7 @@ package edu.fudan.se.crowdservice.core;
  * Created by Dawnwords on 2015/3/6.
  */
 public interface ServiceExecutionListener {
-    void onServiceStart(ConcreteService serviceClass, Object[] args);
+    boolean onServiceStart(ConcreteService serviceClass, Object[] args);
 
     void onServiceStop(ConcreteService serviceClass);
 

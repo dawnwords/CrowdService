@@ -37,8 +37,9 @@ public class TemplateExecutingBehaviour extends OneShotBehaviour {
         }
 
         @Override
-        public void onServiceStart(ConcreteService service, Object[] objects) {
+        public boolean onServiceStart(ConcreteService service, Object[] objects) {
             sendConsumerSessionMessage(ConsumerSession.buildServiceStartMessage(sessionID, service.getClass()));
+            return true;
         }
 
         @Override

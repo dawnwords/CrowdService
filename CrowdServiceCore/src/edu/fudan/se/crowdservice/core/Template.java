@@ -22,12 +22,10 @@ public abstract class Template {
 
     public static final String PLAN_SERVICE_IP = "10.131.253.211";
     public static final int PLAN_SERVICE_PORT = 8885;
+    public static final int GLOBAL_OPTIMIZATION = 120;
     private static final String PLAN_SERVICE_URL = String.format("http://%s:%d/globaloptimization?wsdl", PLAN_SERVICE_IP, PLAN_SERVICE_PORT);
     private static final String PLAN_SERVICE_NAMESPACE = "http://ws.sutd.edu.sg/";
     private static final String PLAN_SERVICE_METHOD = "globalOptimize";
-    public static final int GLOBAL_OPTIMIZATION = 120;
-
-
     private ServiceExecutionListener listener;
     private TemplateFactory.ServiceResolver resolver;
     private TemplateFactory.InstanceCount instanceCount;
@@ -105,7 +103,7 @@ public abstract class Template {
         return response == null ? -1 : response.getGlobalReliability();
     }
 
-    private void planTimeCost(ConcreteService service) {
+    private Response planTimeCost(ConcreteService service) {
         Request request = new Request();
         request.setGlobalTime(getTimeRemain());
         request.setGlobalCost(costRemain);
@@ -118,7 +116,7 @@ public abstract class Template {
             service.cost = response.getCost();
             service.resultNum = resultNums.get(service.getServiceInterfacesName());
         }
-        listener.onShowMessage(String.format("Planning Result: time:%ds, cost:%d￠", response.getTime(), response.getCost()));
+        return response;
     }
 
     private void setDeadline(int time) {
@@ -204,13 +202,14 @@ public abstract class Template {
         public synchronized Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             Object result = null;
             ConcreteService service = (ConcreteService) target;
-            listener.onServiceStart(service, args);
-            try {
-                result = method.invoke(target, args);
-                listener.onServiceStop(service);
-            } catch (Exception e) {
-                listener.onServiceException(service, e.getMessage());
-                e.printStackTrace();
+            if (listener.onServiceStart(service, args)) {
+                try {
+                    result = method.invoke(target, args);
+                    listener.onServiceStop(service);
+                } catch (Exception e) {
+                    listener.onServiceException(service, e.getMessage());
+                    e.printStackTrace();
+                }
             }
             return result;
         }
@@ -225,7 +224,7 @@ public abstract class Template {
         }
 
         @Override
-        public void onServiceStart(ConcreteService service, Object[] args) {
+        public boolean onServiceStart(ConcreteService service, Object[] args) {
             if (service.isCrowd()) {
                 int latitude = service.latitudeArgIndex();
                 int longitude = service.longitudeArgIndex();
@@ -234,9 +233,17 @@ public abstract class Template {
                     service.latitude = (Double) args[latitude];
                 }
                 onShowMessage(service.getServiceInterfacesName() + " binds a CrowdService. Planning ");
-                planTimeCost(service);
+                Response response = planTimeCost(service);
+                if (response!= null && response.getTime() > 0) {
+                    onShowMessage(String.format("Planning Result: time:%ds, cost:%d￠", response.getTime(), response.getCost()));
+                } else {
+                    onServiceException(service, String.format("According to the result of Planning, unable to finish %s for result number=%d",
+                            service.getServiceInterfacesName(), resultNums.get(service.getServiceInterfacesName())));
+                    return false;
+                }
             }
             listener.onServiceStart(service, args);
+            return true;
         }
 
         @Override
