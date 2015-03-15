@@ -15,13 +15,13 @@ import edu.fudan.se.crowdservice.wrapper.ResponseWrapper;
 public class AgentManager extends Binder implements AgentInterface {
     private AgentInterface agent;
     private OnAgentReadyInterface isAgentReady;
-    private boolean locationSuccessfully;
 
     public void setAgent(AgentInterface agent) {
         if (agent == null) {
             isAgentReady.onAgentFail();
         } else {
             this.agent = agent;
+            isAgentReady.onAgentReady();
         }
     }
 
@@ -46,10 +46,6 @@ public class AgentManager extends Binder implements AgentInterface {
 
     @Override
     public void setLocation(Location myLocation) {
-        if (!locationSuccessfully) {
-            isAgentReady.onAgentReady();
-            locationSuccessfully = true;
-        }
         agent.setLocation(myLocation);
     }
 

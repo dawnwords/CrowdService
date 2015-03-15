@@ -21,14 +21,12 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     private SharedPreferences settings;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
-    private ServiceResolver resolver;
 
     @Override
     public void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
         this.serviceReferences = new Stack<ServiceReference>();
         this.instanceCount = new InstanceCount();
-        this.resolver = new ServiceResolver();
         log("Start Template Factory...");
         Hashtable properties = new Hashtable();
         properties.put(Constants.BUNDLE_SYMBOLICNAME, getTemplateClass().getSimpleName());
@@ -52,8 +50,8 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
         T template = null;
         try {
             template = getTemplateClass().newInstance();
-            template.setInstanceCount(instanceCount.createInstance());
-            template.setServiceResolver(resolver);
+            template.setInstanceCount(instanceCount);
+            template.setServiceResolver(new ServiceResolver(instanceCount.count.incrementAndGet()));
             template.setConsumerId(settings.getString(SavedProperty.AGENT_NAME, ""));
             template.setServiceExecutionListener(listener);
         } catch (Exception e) {
@@ -81,6 +79,12 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     protected abstract Class<T> getTemplateClass();
 
     class ServiceResolver {
+        private int templateCount;
+
+        public ServiceResolver(int templateCount) {
+            this.templateCount = templateCount;
+        }
+
         public <S> S resolveService(Class<S> serviceClass) {
             ServiceReference<S> serviceReference = bundleContext.getServiceReference(serviceClass);
             if (!serviceReferences.contains(serviceReference)) {
@@ -93,17 +97,12 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
 
         private void initConcreteService(ConcreteService service) {
             service.setContext(context);
-            service.templateName = getTemplateClass().getSimpleName();
+            service.templateName = getTemplateClass().getSimpleName() + "-" + templateCount;
         }
     }
 
     class InstanceCount {
         private AtomicInteger count = new AtomicInteger();
-
-        private InstanceCount createInstance() {
-            count.incrementAndGet();
-            return this;
-        }
 
         public void destroyInstance() {
             if (count.decrementAndGet() == 0) {
