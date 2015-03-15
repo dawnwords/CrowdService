@@ -9,6 +9,8 @@ import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -34,6 +36,7 @@ public abstract class Template {
     private long deadline;
     private int costRemain;
     private String consumerId;
+    private String templateName;
 
     private Logger logger = Logger.getJADELogger(this.getClass().getName());
 
@@ -51,6 +54,10 @@ public abstract class Template {
 
     void setConsumerId(String consumerId) {
         this.consumerId = consumerId;
+    }
+
+    void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 
     public void executeTemplate() {
@@ -130,7 +137,7 @@ public abstract class Template {
     private Response invokePlanWS(Request request) {
         request.setResultNumbers(resultNums);
         request.setConsumerId(consumerId);
-        request.setTemplateName(getClass().getSimpleName());
+        request.setTemplateName(templateName);
         request.setServiceSequence(serviceSequence.toArray(new String[serviceSequence.size()]));
 
         try {
@@ -207,8 +214,11 @@ public abstract class Template {
                     result = method.invoke(target, args);
                     listener.onServiceStop(service);
                 } catch (Exception e) {
-                    listener.onServiceException(service, e.getMessage());
-                    e.printStackTrace();
+                    StringWriter reason = new StringWriter();
+                    PrintWriter writer = new PrintWriter(reason);
+                    e.printStackTrace(writer);
+                    listener.onServiceException(service, reason.toString());
+                    throw e;
                 }
             }
             return result;
@@ -234,7 +244,7 @@ public abstract class Template {
                 }
                 onShowMessage(service.getServiceInterfacesName() + " binds a CrowdService. Planning ");
                 Response response = planTimeCost(service);
-                if (response!= null && response.getTime() > 0) {
+                if (response != null && response.getTime() > 0) {
                     onShowMessage(String.format("Planning Result: time:%ds, cost:%d￠", response.getTime(), response.getCost()));
                 } else {
                     onServiceException(service, String.format("According to the result of Planning, unable to finish %s for result number=%d",
@@ -249,7 +259,7 @@ public abstract class Template {
         @Override
         public void onServiceStop(ConcreteService service) {
             listener.onServiceStop(service);
-            costRemain -= service.cost;
+            costRemain -= service.actualCost;
             serviceSequence.add(service.getServiceInterfacesName());
         }
 

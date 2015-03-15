@@ -50,9 +50,11 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     public synchronized T createTemplateInstance(ServiceExecutionListener listener) {
         T template = null;
         try {
+            String templateName = getTemplateClass().getName() + "-" + new Date().getTime();
             template = getTemplateClass().newInstance();
+            template.setTemplateName(templateName);
             template.setInstanceCount(instanceCount.createInstance());
-            template.setServiceResolver(new ServiceResolver());
+            template.setServiceResolver(new ServiceResolver(templateName));
             template.setConsumerId(settings.getString(SavedProperty.AGENT_NAME, ""));
             template.setServiceExecutionListener(listener);
         } catch (Exception e) {
@@ -80,7 +82,11 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     protected abstract Class<T> getTemplateClass();
 
     class ServiceResolver {
-        private long time = new Date().getTime();
+        private String templateName;
+
+        public ServiceResolver(String templateName) {
+            this.templateName = templateName;
+        }
 
         public <S> S resolveService(Class<S> serviceClass) {
             ServiceReference<S> serviceReference = bundleContext.getServiceReference(serviceClass);
@@ -94,7 +100,7 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
 
         private void initConcreteService(ConcreteService service) {
             service.setContext(context);
-            service.templateName = getTemplateClass().getSimpleName() + "-" + time;
+            service.templateName = templateName;
         }
     }
 
