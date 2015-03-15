@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import jade.util.Logger;
 import org.osgi.framework.*;
 
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -50,8 +51,8 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
         T template = null;
         try {
             template = getTemplateClass().newInstance();
-            template.setInstanceCount(instanceCount);
-            template.setServiceResolver(new ServiceResolver(instanceCount.count.incrementAndGet()));
+            template.setInstanceCount(instanceCount.createInstance());
+            template.setServiceResolver(new ServiceResolver());
             template.setConsumerId(settings.getString(SavedProperty.AGENT_NAME, ""));
             template.setServiceExecutionListener(listener);
         } catch (Exception e) {
@@ -79,11 +80,7 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
     protected abstract Class<T> getTemplateClass();
 
     class ServiceResolver {
-        private int templateCount;
-
-        public ServiceResolver(int templateCount) {
-            this.templateCount = templateCount;
-        }
+        private long time = new Date().getTime();
 
         public <S> S resolveService(Class<S> serviceClass) {
             ServiceReference<S> serviceReference = bundleContext.getServiceReference(serviceClass);
@@ -97,12 +94,17 @@ public abstract class TemplateFactory<T extends Template> implements BundleActiv
 
         private void initConcreteService(ConcreteService service) {
             service.setContext(context);
-            service.templateName = getTemplateClass().getSimpleName() + "-" + templateCount;
+            service.templateName = getTemplateClass().getSimpleName() + "-" + time;
         }
     }
 
     class InstanceCount {
         private AtomicInteger count = new AtomicInteger();
+
+        public InstanceCount createInstance() {
+            count.incrementAndGet();
+            return this;
+        }
 
         public void destroyInstance() {
             if (count.decrementAndGet() == 0) {
